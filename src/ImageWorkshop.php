@@ -39,28 +39,28 @@ class ImageWorkshop
     /**
      * @var layersLevels
      * 
-     * Levels positions of the layers (or groups) in the document
+     * Levels positions of the sublayers in the stack
      */
     protected $layersLevels;
     
     /**
      * @var layersPositions
      * 
-     * Positions (x and y) of the layers (or groups) in the document
+     * Positions (x and y) of the sublayers in the stack
      */
     protected $layersPositions;
     
     /**
      * @var lastLayerId
      * 
-     * Id of the last indexes layer (or group)
+     * Id of the last indexes sublayer
      */
     protected $lastLayerId;
     
     /**
      * @var highestLayerLevel
      * 
-     * The highest layer (or group) level
+     * The highest sublayer level
      */
     protected $highestLayerLevel;
     
@@ -194,7 +194,7 @@ class ImageWorkshop
     }
     
     /**
-     * TODO: revoir le imagecopy (transparence ?)
+     * @todo revoir le imagecopy (transparence ?)
      * 
      * Paste an image on the layer
      * You can specify the position left (in pixels) and the position top (in pixels) of the added image relatives to the layer
@@ -237,8 +237,9 @@ class ImageWorkshop
         return $this->indexLayer($layerLevel, $layer, $positionX, $positionY, $position);
     }
     
-    /* TODO */
     /**
+     * @todo
+     * 
      * Merge a layer with another layer under it on the stack
      * Note: the result layer will conserve the given id 
      * Return true if success or false if layer isn't found or don't has a layer under it
@@ -282,8 +283,9 @@ class ImageWorkshop
         $this->clearStack();
     }
     
-    /* TODO */
     /**
+     * @todo
+     * 
      * Move a sublayer on the top of a group stack
      * Return layer level if success or false otherwise
      * 
@@ -311,8 +313,9 @@ class ImageWorkshop
         return $this->moveTo($layerId, 1, true);
     }
     
-    /* TODO */
     /**
+     * @todo
+     * 
      * Move a sublayer to the level $level of a group stack
      * Return layer level if success or false if layer isn't found
      * 
@@ -475,8 +478,9 @@ class ImageWorkshop
         return false;
     }
     
-    /* TODO */
     /**
+     * @todo
+     * 
      * Delete a layer
      * 
      * @param integer $layerId
@@ -547,7 +551,7 @@ class ImageWorkshop
      * 
      * @return boolean
      */
-    public function  isLayerInIndex($layerId)
+    public function isLayerInIndex($layerId)
     {
         // if the layer exists in document
         if (array_key_exists($layerId, $this->layers)) {
@@ -1871,6 +1875,26 @@ class ImageWorkshop
     public function getLayersPositions()
     {
         return $this->layersPositions;
+    }
+    
+    /**
+     * Getter highestLayerLevel
+     * 
+     * @return array
+     */
+    public function getHighestLayerLevel()
+    {
+        return $this->highestLayerLevel;
+    }
+    
+    /**
+     * Getter lastLayerId
+     * 
+     * @return array
+     */
+    public function getLastLayerId()
+    {
+        return $this->lastLayerId;
     }
 }
 ?>
