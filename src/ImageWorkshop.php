@@ -159,7 +159,6 @@ class ImageWorkshop
             } elseif ($tmpName) {
                 
                 $imageFromPath = $tmpName;
-                
             }
             
             $this->initializeImageFrom($imageFromPath);
