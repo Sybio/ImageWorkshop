@@ -251,7 +251,7 @@ class ImageWorkshop
     public function mergeDown($layerId)
     {
         // if the layer exists in document
-        if ($this->isLayerInIndex($layerId)) {
+        /*if ($this->isLayerInIndex($layerId)) {
         
             // If there is a layer under it
             if ($subLayer = todo) {
@@ -269,7 +269,7 @@ class ImageWorkshop
                 return true;
             }
         
-        }
+        }*/
         
         return false;
     }
@@ -284,11 +284,8 @@ class ImageWorkshop
     }
     
     /**
-     * @todo
-     * 
      * Move a sublayer on the top of a group stack
      * Return layer level if success or false otherwise
-     * 
      * 
      * @param integer $layerId
      * @return mixed
@@ -302,7 +299,6 @@ class ImageWorkshop
      * Move a sublayer to the level 1 of a group stack
      * Return layer level if success or false otherwise
      * 
-     * 
      * @param integer $layerId
      * @param integer $level
      * 
@@ -314,14 +310,11 @@ class ImageWorkshop
     }
     
     /**
-     * @todo
-     * 
      * Move a sublayer to the level $level of a group stack
      * Return layer level if success or false if layer isn't found
      * 
-     * Set $insertUnderTargetedLayer if you want to insert the layer under the other sublayer at the targeted level,
-     * or to true to insert on the other sublayer at the targeted level
-     * 
+     * Set $insertUnderTargetedLayer true if you want to insert the layer under the other sublayer at the targeted level,
+     * or false to insert on the top of other sublayer at the targeted level
      * 
      * @param integer $layerId
      * @param integer $level
@@ -335,70 +328,91 @@ class ImageWorkshop
         if ($this->isLayerInIndex($layerId)) {
             
             $layerOldLevel = $this->getLayerLevel($layerId);
-            
-            $layerLevels = $this->layersLevels;
-            
-            if ($insertUnderTargetedLayer) { // Under level
+ 
+            if ($level < 1) {
+                $level = 1;
+                $insertUnderTargetedLayer = true;
+            }
+ 
+            if ($level > $this->highestLayerLevel) {
                 
-                if ($level < 1) {
-                    $level = 1;
-                }
+                $level = $this->highestLayerLevel;
+                $insertUnderTargetedLayer = false;
+            }
+            
+            // Not the same level than the current level
+            if ($layerOldLevel != $level) {
                 
-                if ($layerOldLevel != $level) {
+                $isUnderAndNewLevelHigher = false;
+                $isUnderAndNewLevelLower = false;
+                $isOnTopAndNewLevelHigher = false;
+                $isOnTopAndNewLevelLower = false;
+                
+                if ($insertUnderTargetedLayer) { // Under level
                     
                     if ($level > $layerOldLevel) { // new level higher
                         
-                        if ($level <= $this->highestLayerLevel) {
-                            
-                            ksort($this->layersLevels);
-                            $layersLevelsTmp = $this->layersLevels;
-                            
-                            for ($i = $layerOldLevel; $i < $level; $i++) {
-                                
-                                $this->layersLevels[$i] = $layersLevelsTmp[$i + 1];
-                                
-                            }
-                            
-                            unset($layersLevelsTmp);
-                            
-                            $level--;
-                            
-                            $this->layersLevels[$level] = $layerId;
-                            
-                            return $level;
-                            
-                        } else {
-                            
-                            /* A TESTER ICIIIIIIIIIIIIII*/
-                            $this->moveTo($layerId, $this->highestLayerLevel, false);
-                            
-                        }
+                        $incrementorStartingValue = $layerOldLevel;
+                        $stopLoopWhenSmallerThan = $level;
+                        $isUnderAndNewLevelHigher = true;
                         
                     } else { // new level lower
                         
-                        ksort($this->layersLevels);
-                        $layersLevelsTmp = $this->layersLevels;
-                        
-                        for ($i = $level; $i < $layerOldLevel; $i++) {
-                            
-                            $this->layersLevels[$i + 1] = $layersLevelsTmp[$i];
-                            
-                        }
-                        
-                        unset($layersLevelsTmp);
-                        
-                        $this->layersLevels[$level] = $layerId;
-                        
-                        return $level;
-                        
+                        $incrementorStartingValue = $level;
+                        $stopLoopWhenSmallerThan = $layerOldLevel;
+                        $isUnderAndNewLevelLower = true;
                     }
-                
+                    
+                } else { // on the top
+                    
+                    if ($level > $layerOldLevel) { // new level higher
+                        
+                        $incrementorStartingValue = $layerOldLevel;
+                        $stopLoopWhenSmallerThan = $level;
+                        $isOnTopAndNewLevelHigher = true;
+                        
+                    } else { // new level lower
+                        
+                        $incrementorStartingValue = $level;
+                        $stopLoopWhenSmallerThan = $layerOldLevel;
+                        $isOnTopAndNewLevelLower = true;
+                    }
                 }
                 
+                ksort($this->layersLevels);
+                $layersLevelsTmp = $this->layersLevels;
+                
+                if ($isOnTopAndNewLevelLower) {
+                    $level++;
+                }
+                
+                for ($i = $incrementorStartingValue; $i < $stopLoopWhenSmallerThan; $i++) {
+                    
+                    if ($isUnderAndNewLevelHigher || $isOnTopAndNewLevelHigher) {
+                        
+                        $this->layersLevels[$i] = $layersLevelsTmp[$i + 1];
+                        
+                    } else {
+                        
+                        $this->layersLevels[$i + 1] = $layersLevelsTmp[$i];
+                        
+                    }
+                }
+                
+                unset($layersLevelsTmp);
+                
+                if ($isUnderAndNewLevelHigher) {
+                    $level--;
+                }
+                
+                $this->layersLevels[$level] = $layerId;
+                
+                return $level;
+ 
             } else {
-                
-                
-                
+ 
+                return $level;
+ 
             }
         }
         
@@ -406,9 +420,8 @@ class ImageWorkshop
     }
     
     /**
-     * Move up a layer in the stack
+     * Move up a layer in the stack (level +1)
      * Return layer level if success, false otherwise
-     * 
      * 
      * @param integer $layerId
      * 
@@ -416,34 +429,19 @@ class ImageWorkshop
      */
     public function moveUp($layerId)
     {   
-        // if the layer exists in document
+        // if the sublayer exists in the stack
         if ($this->isLayerInIndex($layerId)) {
             
             $layerOldLevel = $this->getLayerLevel($layerId);
             
-            $newLevel = $layerOldLevel;
-            
-            // If the layer don't have the highest level
-            if ($layerOldLevel < $this->highestLayerLevel) {
-                
-                $newLevel = $layerOldLevel + 1;
-                
-                $layerIdToInverseWith = $this->layersLevels[$newLevel];
-                
-                // Reverse
-                $this->layersLevels[$newLevel] = $layerId;
-                $this->layersLevels[$layerOldLevel] = $layerIdToInverseWith;
-                
-            }
-            
-            return $newLevel;
+            return $this->moveTo($layerId, $layerOldLevel + 1, false);
         }
         
         return false;
     }
     
     /**
-     * Move down a layer in the stack
+     * Move down a layer in the stack (level -1)
      * Return layer level if success, false otherwise
      * 
      * @param integer $layerId
@@ -452,27 +450,12 @@ class ImageWorkshop
      */
     public function moveDown($layerId)
     {
-        // if the layer exists in document
+        // if the sublayer exists in the stack
         if ($this->isLayerInIndex($layerId)) {
             
             $layerOldLevel = $this->getLayerLevel($layerId);
             
-            $newLevel = $layerOldLevel;
-            
-            // If the layer don't have the lowest level
-            if ($layerOldLevel > 1) {
-                
-                $newLevel = $layerOldLevel - 1;
-                
-                $layerIdToInverseWith = $this->layersLevels[$newLevel];
-                
-                // Reverse
-                $this->layersLevels[$newLevel] = $layerId;
-                $this->layersLevels[$layerOldLevel] = $layerIdToInverseWith;
-                
-            }
-            
-            return $newLevel;
+            return $this->moveTo($layerId, $layerOldLevel - 1, true);
         }
         
         return false;
@@ -1729,58 +1712,65 @@ class ImageWorkshop
     /**
      * Return dimension of a text
      * 
-     * @param $font_size
-     * @param $font_angle
-     * @param $font_file
+     * @param $fontSize
+     * @param $fontAngle
+     * @param $fontFile
      * @param $text
      * 
      * @return array
      */
-    public static function getTextBoxDimension($font_size, $font_angle, $font_file, $text)
+    public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)
     {
-        $box   = imagettfbbox($font_size, $font_angle, $font_file, $text); 
-        if( !$box ) 
-            return false; 
-        $min_x = min( array($box[0], $box[2], $box[4], $box[6]) ); 
-        $max_x = max( array($box[0], $box[2], $box[4], $box[6]) ); 
-        $min_y = min( array($box[1], $box[3], $box[5], $box[7]) ); 
-        $max_y = max( array($box[1], $box[3], $box[5], $box[7]) ); 
-        $width  = ( $max_x - $min_x ); 
-        $height = ( $max_y - $min_y ); 
-        $left   = abs( $min_x ) + $width; 
-        $top    = abs( $min_y ) + $height; 
+        $box = imagettfbbox($fontSize, $fontAngle, $fontFile, $text); 
+        
+		if(!$box) {
+			return false;
+		}
+		
+        $minX = min(array($box[0], $box[2], $box[4], $box[6])); 
+        $maxX = max(array($box[0], $box[2], $box[4], $box[6])); 
+        $minY = min(array($box[1], $box[3], $box[5], $box[7])); 
+        $maxY = max(array($box[1], $box[3], $box[5], $box[7])); 
+        $width = ($maxX - $minX); 
+        $height = ($maxY - $minY); 
+        $left = abs($minX) + $width; 
+        $top = abs($minY) + $height; 
+		
         // to calculate the exact bounding box i write the text in a large image 
-        $img     = @imagecreatetruecolor( $width << 2, $height << 2 ); 
-        $white   =  imagecolorallocate( $img, 255, 255, 255 ); 
-        $black   =  imagecolorallocate( $img, 0, 0, 0 ); 
-        imagefilledrectangle($img, 0, 0, imagesx($img), imagesy($img), $black); 
+        $img = @imagecreatetruecolor($width << 2, $height << 2); 
+        $white = imagecolorallocate($img, 255, 255, 255); 
+        $black = imagecolorallocate($img, 0, 0, 0); 
+        imagefilledrectangle($img, 0, 0, imagesx($img), imagesy($img), $black);
+		
         // for sure the text is completely in the image! 
-        imagettftext( $img, $font_size, 
-                $font_angle, $left, $top, 
-                $white, $font_file, $text); 
+        imagettftext($img, $fontSize, $fontAngle, $left, $top, $white, $fontFile, $text); 
+		
         // start scanning (0=> black => empty) 
-        $rleft  = $w4 = $width<<2; 
+        $rleft = $w4 = $width<<2; 
         $rright = 0; 
-        $rbottom   = 0; 
+        $rbottom = 0; 
         $rtop = $h4 = $height<<2; 
-        for( $x = 0; $x < $w4; $x++ ) 
-        for( $y = 0; $y < $h4; $y++ ) 
-        if( imagecolorat( $img, $x, $y ) ){ 
-        $rleft   = min( $rleft, $x ); 
-        $rright  = max( $rright, $x ); 
-        $rtop    = min( $rtop, $y ); 
-        $rbottom = max( $rbottom, $y ); 
-        } 
+        for ($x = 0; $x < $w4; $x++) {
+			for ($y = 0; $y < $h4; $y++) {
+				if (imagecolorat( $img, $x, $y )) {
+					$rleft = min( $rleft, $x ); 
+					$rright = max( $rright, $x ); 
+					$rtop = min( $rtop, $y ); 
+					$rbottom = max( $rbottom, $y ); 
+				}
+			}
+		}
+		
         // destroy img and serve the result 
-        imagedestroy( $img );
+        imagedestroy($img);
         
         return array(
             "left" => $left - $rleft, 
-            "top"    => $top  - $rtop, 
-            "width"  => $rright - $rleft + 1, 
-            "height" => $rbottom - $rtop + 1
-        ); 
-    }    
+            "top" => $top - $rtop, 
+            "width" => $rright - $rleft + 1, 
+            "height" => $rbottom - $rtop + 1,
+        );
+    }
     
     /**
      * Create a new background image var from the old background image var
