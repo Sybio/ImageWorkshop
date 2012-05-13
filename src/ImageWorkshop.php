@@ -837,7 +837,7 @@ class ImageWorkshop
      */
     public function cropMaximumByPixel($positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        $this->cropMaximum("pixel", $smallestSideWidth, $smallestSideWidth, $positionX, $positionY, $position, $backgroundColor);
+        $this->cropMaximum("pixel", $positionX, $positionY, $position, $backgroundColor);
     }
     
     /**
@@ -902,14 +902,12 @@ class ImageWorkshop
     }
     
     /**
-     * @todo refactoring but works fine
-     * 
      * Rotate the layer (in degree)
      * 
      * @param float $degrees
      */
     public function rotate($degrees)
-    {   
+    {
         if ($degrees != 0) {
             
             if ($degrees < -360 || $degrees > 360) {
@@ -922,8 +920,8 @@ class ImageWorkshop
                 $degrees = 360 + $degrees;
             }
             
+			// Rotate the layer background image
             $imageRotated = imagerotate($this->image, -$degrees, -1);
-    
             imagealphablending($imageRotated, true);
             imagesavealpha($imageRotated, true);
             
@@ -937,36 +935,23 @@ class ImageWorkshop
             $this->width = imagesx($this->image);
             $this->height = imagesy($this->image);
             
-            $centreGrandeImage = array(
-                "x" => 0,
-                "y" => 0,
-            );
-            
-            $centreNouvelleGrandeImage = array(
-                "x" => 0,
-                "y" => 0,
-            );
-            
             foreach ($this->layers as $layerId => $layer) {
-                
-                $ancienneLargeur = $layer->width;
-                $ancienneHauteur = $layer->height;
                 
                 $layerSelfOldCenterPosition = array(
                     "x" => $layer->width / 2,
                     "y" => $layer->height / 2,
                 );
                 
-                $centrePetiteImage = array(
+                $smallImageCenter = array(
                     "x" => $layerSelfOldCenterPosition["x"] + $this->layersPositions[$layerId]["x"],
                     "y" => $layerSelfOldCenterPosition["y"] + $this->layersPositions[$layerId]["y"],
                 );
                 
                 $this->layers[$layerId]->rotate($degrees);
                 
-                $ro = sqrt(pow($centrePetiteImage["x"], 2) + pow($centrePetiteImage["y"], 2));
+                $ro = sqrt(pow($smallImageCenter["x"], 2) + pow($smallImageCenter["y"], 2));
                 
-                $teta = (acos($centrePetiteImage["x"] / $ro)) * 180 / pi();
+                $teta = (acos($smallImageCenter["x"] / $ro)) * 180 / pi();
                 
                 $a = $ro * cos(($teta + $degrees) * pi() / 180);
                 $b = $ro * sin(($teta + $degrees) * pi() / 180);
@@ -1874,4 +1859,3 @@ class ImageWorkshop
         return $this->lastLayerId;
     }
 }
-?>

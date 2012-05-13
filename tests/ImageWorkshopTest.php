@@ -747,4 +747,3 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         return $layer;
     }
 }
-?>
