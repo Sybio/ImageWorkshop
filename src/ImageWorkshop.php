@@ -190,7 +190,7 @@ class ImageWorkshop
     }
     
     /**
-     * @todo revoir le imagecopy (transparence ?)
+     * @todo imagecopy transparency ?
      * 
      * Paste an image on the layer
      * You can specify the position left (in pixels) and the position top (in pixels) of the added image relatives to the layer
@@ -213,12 +213,11 @@ class ImageWorkshop
     }
     
     /**
-     * Add an existing ImageWorkshop and set it in the document for a given level
-     * Return an array containing the generated layer Id for the indexed layer and its corrected level:
+     * Add an existing ImageWorkshop sublayer and set it in the stack at a given level
+     * Return an array containing the generated sublayer id in the stack and its corrected level:
      * array("layerLevel" => integer, "id" => integer)
      * 
-     * $position: LT ($positionX pixels from the left and $positionY pixels from the top), RT (Right top), LB (Left bottom), RB (Right bottom)
-     * MM (Place the layer center in the middle of the document)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param integer $layerLevel
      * @param ImageWorkshop $layer
@@ -236,9 +235,9 @@ class ImageWorkshop
     /**
      * @todo
      * 
-     * Merge a layer with another layer under it on the stack
+     * Merge a sublayer with another sublayer under it in the stack
      * Note: the result layer will conserve the given id 
-     * Return true if success or false if layer isn't found or don't has a layer under it
+     * Return true if success or false if layer isn't found or doesn't have a layer under it in the stack
      * 
      * @param integer $layerId
      * 
@@ -271,7 +270,7 @@ class ImageWorkshop
     }
     
     /**
-     * Merge sublayers on the layer background
+     * Merge sublayers in the stack on the layer background
      */
     public function mergeAll()
     {
@@ -281,7 +280,7 @@ class ImageWorkshop
     
     /**
      * Move a sublayer on the top of a group stack
-     * Return layer level if success or false otherwise
+     * Return new sublayer level if success or false otherwise
      * 
      * @param integer $layerId
      * @return mixed
@@ -293,7 +292,7 @@ class ImageWorkshop
     
     /**
      * Move a sublayer to the level 1 of a group stack
-     * Return layer level if success or false otherwise
+     * Return new sublayer level if success or false otherwise
      * 
      * @param integer $layerId
      * @param integer $level
@@ -307,10 +306,10 @@ class ImageWorkshop
     
     /**
      * Move a sublayer to the level $level of a group stack
-     * Return layer level if success or false if layer isn't found
+     * Return new sublayer level if success or false if layer isn't found
      * 
-     * Set $insertUnderTargetedLayer true if you want to insert the layer under the other sublayer at the targeted level,
-     * or false to insert on the top of other sublayer at the targeted level
+     * Set $insertUnderTargetedLayer true if you want to move the sublayer under the other sublayer at the targeted level,
+     * or false to insert it on the top of the other sublayer at the targeted level
      * 
      * @param integer $layerId
      * @param integer $level
@@ -414,8 +413,8 @@ class ImageWorkshop
     }
     
     /**
-     * Move up a layer in the stack (level +1)
-     * Return layer level if success, false otherwise
+     * Move up a sublayer in the stack (level +1)
+     * Return new sublayer level if success, false otherwise
      * 
      * @param integer $layerId
      * 
@@ -435,8 +434,8 @@ class ImageWorkshop
     }
     
     /**
-     * Move down a layer in the stack (level -1)
-     * Return layer level if success, false otherwise
+     * Move down a sublayer in the stack (level -1)
+     * Return new sublayer level if success, false otherwise
      * 
      * @param integer $layerId
      * 
@@ -488,6 +487,7 @@ class ImageWorkshop
                     if ($levelTmp > $layerToDeleteLevel) {
                         $this->layersLevels[($levelTmp - 1)] = $layerIdTmp;
                     }
+                    
                     $maxOldestLevel++;
                 }
                 unset($layersLevelsTmp);
@@ -498,13 +498,12 @@ class ImageWorkshop
             if ($layerToDeleteLevel == $this->highestLayerLevel) {
                 $this->highestLayerLevel -= 1;
             }
-            
         }
     }
     
     /**
-     * Get the level of a layer
-     * Return layer level if success or false if layer isn't found
+     * Get the level of a sublayer
+     * Return sublayer level if success or false if layer isn't found
      * 
      * @param integer $layerId
      * 
@@ -521,7 +520,7 @@ class ImageWorkshop
     }
     
     /**
-     * Check if a layer exists for a given id
+     * Check if a sublayer exists in the stack for a given id
      * 
      * @param integer $layerId
      * 
@@ -562,7 +561,7 @@ class ImageWorkshop
     /**
      * Resize the layer by specifying pixel
      * 
-     * If you choose to conserve the proportion but you give $newWidth AND $newHeight, proportion will be still conserve
+     * Note: If you choose to conserve the proportion but you give $newWidth AND $newHeight, proportion will be still conserve
      * and the resize will use $newWidth to determine the $newHeight
      * 
      * @param integer $newWidth
@@ -723,7 +722,8 @@ class ImageWorkshop
     /**
      * Crop the document by specifying pixels
      * 
-     * $backgroundColor can be set transparent (but script could be long to execute)
+     * $backgroundColor: can be set transparent (The script will be longer to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param integer $width
      * @param integer $height
@@ -741,6 +741,7 @@ class ImageWorkshop
      * Crop the document by specifying pourcent
      * 
      * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param float $pourcentWidth
      * @param float $pourcentHeight
@@ -758,6 +759,7 @@ class ImageWorkshop
      * Crop the document
      * 
      * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param string $unit
      * @param float $width
@@ -824,6 +826,7 @@ class ImageWorkshop
      * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pixel
      * 
      * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param integer $width
      * @param integer $height
@@ -841,6 +844,7 @@ class ImageWorkshop
      * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pourcent
      * 
      * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param integer $width
      * @param integer $height
@@ -858,6 +862,7 @@ class ImageWorkshop
      * Crop the maximum possible from left top
      * 
      * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param string $unit
      * @param integer $width
@@ -896,8 +901,9 @@ class ImageWorkshop
         $this->layers[$layerId]->rotate($degree);
     }
     
-    /* REFACTO à faire mais fonctionnne */
     /**
+     * @todo refactoring but works fine
+     * 
      * Rotate the layer (in degree)
      * 
      * @param float $degrees
@@ -996,6 +1002,7 @@ class ImageWorkshop
     
     /**
      * Change the opacity of a layer
+     * $recursive: apply it on sublayers
      * 
      * @param integer $layerId
      * @param integer $opacity
@@ -1008,6 +1015,7 @@ class ImageWorkshop
     
     /**
      * Change the opacity of the layer
+     * $recursive: apply it on sublayers
      * 
      * @param integer $opacity
      * @param boolean $recursive
@@ -1033,7 +1041,10 @@ class ImageWorkshop
     }
     
     /**
-     * Add a text on the background image of the layer using a default font
+     * @todo add $position parameter
+     * 
+     * Add a text on the background image of the layer using a default font registered in GD
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param string $text
      * @param integer $font
@@ -1055,8 +1066,10 @@ class ImageWorkshop
     }
     
     /**
-     * Add a text on the background image of the layer
+     * @todo add $position parameter
      * 
+     * Add a text on the background image of the layer using a font localized at $fontPath
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * Return the text coordonates
      * 
      * @param string $text
@@ -1080,7 +1093,7 @@ class ImageWorkshop
     /**
      * Return a merged resource image
      * 
-     * $backgroundColor is really usefull if you want to save a JPG, because the transparency of the background
+     * $backgroundColor is really usefull if you want to save a JPG or GIF, because the transparency of the background
      * would be remove for a colored background, so you should choose a color like "ffffff" (white)
      * 
      * @param string $backgroundColor
@@ -1109,7 +1122,6 @@ class ImageWorkshop
             }
             
             unset($virginLayoutImageTmp);
-            
         }
         
         $iterator = 1;
@@ -1136,7 +1148,7 @@ class ImageWorkshop
     /**
      * Save the resulting image at the specified path
      * 
-     * $backgroundColor is really usefull if you want to save a JPG, because the transparency of the background
+     * $backgroundColor is really usefull if you want to save a JPG or GIF, because the transparency of the background
      * would be remove for a colored background, so you should choose a color like "ffffff" (white)
      * 
      * If the file already exists, it will be override !
@@ -1199,13 +1211,12 @@ class ImageWorkshop
                     unset($image);
                 }
             }
-            
         }
     }
     
     /**
      * Apply a filter on the layer
-     * Be careful, some filters can damage transparent images, use it sparingly ! (A good pratice is to mergeAll layers before applying a filter)
+     * Be careful: some filters can damage transparent images, use it sparingly ! (A good pratice is to use mergeAll on your layer before applying a filter)
      * 
      * @param int $filterType (http://www.php.net/manual/en/function.imagefilter.php)
      * @param int $arg1
@@ -1226,7 +1237,6 @@ class ImageWorkshop
                 
                 $this->layers[$layerId]->applyFilter($filterType, $arg1, $arg2, $arg3, $arg4, true);
             }
-        
         }
     }
 
@@ -1254,13 +1264,13 @@ class ImageWorkshop
                 "x" => $newLayerPosX,
                 "y" => $newLayerPosY,
             );
-            
         }
     }
     
     /**
      * Crop the background of a layer
      * $backgroundColor: "ffffff", "transparent"
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param integer $newWidth
      * @param integer $newHeight
@@ -1303,8 +1313,7 @@ class ImageWorkshop
             
             unset($this->image);
             $this->image = $virginLayoutImage;
-        
-        }       
+        }
     }
     
     /**
@@ -1330,7 +1339,7 @@ class ImageWorkshop
     }
     
     /**
-     * Called to initialize the image var
+     * Called to initialize a virgin image var
      * 
      * @param string $backgroundColor
      */
@@ -1350,6 +1359,7 @@ class ImageWorkshop
     
     /**
      * Called to initialize the image var from a given path
+     * (Update layer width and height)
      * 
      * @param String $path
      */
@@ -1383,8 +1393,7 @@ class ImageWorkshop
                 
                 default:
                     echo 'Not an image file (jpeg/png/gif) at "'.$path.'"'; exit;
-                break;
-                                
+                break;  
             }
             
         } else {
@@ -1394,6 +1403,7 @@ class ImageWorkshop
     
     /**
      * Called to initialize the image var from a php image var
+     * (Update layer width and height)
      * 
      * @param resource $image
      */
@@ -1412,6 +1422,7 @@ class ImageWorkshop
     
     /**
      * Called to initialize a text layer
+     * (Update layer width and height)
      * 
      * @param string $text
      * @param string $fontPath
@@ -1442,8 +1453,8 @@ class ImageWorkshop
     }
     
     /**
-     * Index a layer
-     * Return an array containing the generated layer Id for the indexed layer and its corrected level:
+     * Index a sublayer in the layer stack
+     * Return an array containing the generated sublayer id and its corrected level:
      * array("layerLevel" => integer, "id" => integer)
      * 
      * @param integer $layerLevel
@@ -1584,7 +1595,6 @@ class ImageWorkshop
     }
     
     /**
-     * A REVOIR
      * Merge two image var
      * 
      * @param resource $destinationImage
@@ -1617,6 +1627,8 @@ class ImageWorkshop
     }
     
     /**
+     * @todo refactoring
+     * 
      * Copy an image on another one and converse transparency
      */
     public static function imagecopymergealpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct = 0)
