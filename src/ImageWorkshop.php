@@ -3,7 +3,8 @@
 /**
  * ImageWorkshop class
  * 
- * (ImageWorkshop can be used as a layer, a group or a document)
+ * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
+ * ImageWorkshop can be used as a layer, a group or a document.
  * 
  * @version 1.0
  * @link http://phpimageworkshop.com
@@ -174,7 +175,6 @@ class ImageWorkshop
         } else {
             
             $this->initializeImage($backgroundColor);
-            
         }
     }
     
@@ -183,10 +183,7 @@ class ImageWorkshop
     /**
      * Clone method: use it if you want to reuse an existing ImageWorkshop object in another variable
      * This is important because img resource var references all the same image in PHP.
-     * So if you have another object $b copied from the variable $a without using the clone method ($b = $a;),
-     * if you modify the image of the variable $a, image $b will be affected !
-     * Clone method is here to manage this problem !
-     * Example: $b = clone $a;
+     * Example: $b = clone $a; (never do $b = $a;)
      */
     public function __clone()
     {
@@ -395,7 +392,6 @@ class ImageWorkshop
                     } else {
                         
                         $this->layersLevels[$i + 1] = $layersLevelsTmp[$i];
-                        
                     }
                 }
                 
@@ -412,7 +408,6 @@ class ImageWorkshop
             } else {
  
                 return $level;
- 
             }
         }
         
@@ -512,7 +507,6 @@ class ImageWorkshop
      * Get the level of a layer
      * Return layer level if success or false if layer isn't found
      * 
-     * 
      * @param integer $layerId
      * 
      * @return mixed
@@ -528,7 +522,7 @@ class ImageWorkshop
     }
     
     /**
-     * Test if a layer exists for a given id
+     * Check if a layer exists for a given id
      * 
      * @param integer $layerId
      * 
@@ -545,7 +539,7 @@ class ImageWorkshop
     }
     
     /**
-     * Usefull function to get an empty transparent image
+     * Generate a new image resource var
      * 
      * @param integer $width
      * @param integer $height
@@ -616,7 +610,6 @@ class ImageWorkshop
                     
                     $widthResizePourcent = 100;
                     $newWidth = $this->width;
-                    
                 }
                 
             } else { // New width AND new height are given
@@ -626,7 +619,6 @@ class ImageWorkshop
                 
                 $heightPourcentScale = $this->height / 100;
                 $heightResizePourcent = $newHeight / $heightPourcentScale;
-                
             }
             
             // Update the layer positions in the stack
@@ -652,7 +644,6 @@ class ImageWorkshop
                 
                 $layer->resizeByPourcent($widthResizePourcent, $heightResizePourcent);
                 $this->layers[$key] = $layer;
-                
             }
             
             // Resize the layer
@@ -681,7 +672,6 @@ class ImageWorkshop
                 } else {
                     
                     $pourcentWidth = $pourcentHeight;
-                    
                 }
                 
             } elseif (($pourcentWidth && !$pourcentHeight) || (!$pourcentWidth && $pourcentHeight)) { // $pourcentWidth OR $pourcentHeight is given
@@ -693,7 +683,6 @@ class ImageWorkshop
                 } else {
                     
                     $pourcentWidth = 100;
-                    
                 }
                 
             }
@@ -724,7 +713,6 @@ class ImageWorkshop
                 
                 $layer->resizeByPourcent(null, $pourcentWidth, $pourcentHeight);
                 $this->layers[$key] = $layer;
-                
             }
             
             // Resize the layer
@@ -826,7 +814,6 @@ class ImageWorkshop
             
             $positionX = $this->getWidth() - $width - $positionX;
             $positionY = (($this->getHeight() - $height) / 2) + $positionY;
-            
         }
         
         $this->updateLayerPositionsAfterCropping($positionX, $positionY);
@@ -894,7 +881,6 @@ class ImageWorkshop
             
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
-            
         }
                 
         $this->cropByPixel($smallestSideWidth, $smallestSideWidth, $positionX, $positionY, $position, $backgroundColor);
@@ -929,7 +915,6 @@ class ImageWorkshop
             if ($degrees < 0 && $degrees >= -360) {
                 
                 $degrees = 360 + $degrees;
-                
             }
             
             $imageRotated = imagerotate($this->image, -$degrees, -1);
@@ -1000,7 +985,6 @@ class ImageWorkshop
                     
                     $newPositionX = $a - ($this->layers[$layerId]->width / 2);
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2) + $oldWidth * (-sin(($degrees) * pi() / 180));
-                    
                 }
                 
                 $this->layersPositions[$layerId] = array(
@@ -1214,7 +1198,6 @@ class ImageWorkshop
                     
                     imagepng($image, $filename, $imageQuality);
                     unset($image);
-                    
                 }
             }
             
@@ -1243,7 +1226,6 @@ class ImageWorkshop
             foreach($layers as $layerId => $layer) {
                 
                 $this->layers[$layerId]->applyFilter($filterType, $arg1, $arg2, $arg3, $arg4, true);
-                
             }
         
         }
@@ -1311,7 +1293,6 @@ class ImageWorkshop
                     $virginLayoutImage = self::generateImage($this->width, $this->height, $backgroundColor, 0);
                     
                     self::imagecopymergealpha($virginLayoutImage, $this->image, 0, 0, $positionX, $positionY, $oldWidth, $oldHeight, 100);
-                    
                 }
                 
             } else {
@@ -1319,7 +1300,6 @@ class ImageWorkshop
                 $virginLayoutImage = self::generateImage($this->width, $this->height);
                     
                 imagecopymerge($virginLayoutImage, $this->image, 0, 0, $positionX, $positionY, $oldWidth, $oldHeight, 100);
-                    
             }
             
             unset($this->image);
@@ -1366,7 +1346,6 @@ class ImageWorkshop
         } else {
             
             $this->image = self::generateImage($this->width, $this->height);
-            
         }
     }
     
@@ -1458,7 +1437,6 @@ class ImageWorkshop
         } else {
             
             $this->image = self::generateImage($this->width, $this->height);
-            
         }
         
         $this->write($text, $fontPath, $fontSize, $fontColor, $textDimensions["left"], $textDimensions["top"], $textRotation);
@@ -1527,7 +1505,6 @@ class ImageWorkshop
             
             $positionX = $this->getWidth() - $layer->getWidth() - $positionX;
             $positionY = (($this->getHeight() - $layer->getHeight()) / 2) + $positionY;
-            
         }
         
         $this->layersPositions[$layerId] = array(
@@ -1570,8 +1547,8 @@ class ImageWorkshop
                 if ($levelTmp >= $layerLevel) {
                     $this->layersLevels[$levelTmp + 1] = $layerIdTmp;
                 }
-                
             }
+            
             unset($layersLevelsTmp);
             
         } else { // Level isn't taken
@@ -1790,7 +1767,6 @@ class ImageWorkshop
         foreach($layers as $layerId => $layer) {
             
             $this->layers[$layerId] = clone $this->layers[$layerId];
-            
         }
     }
     
