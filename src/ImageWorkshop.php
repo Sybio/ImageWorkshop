@@ -1584,6 +1584,12 @@ class ImageWorkshop
      * 
      * @param resource $destinationImage
      * @param resource $sourceImage
+     * @param integer $destinationPosX
+     * @param integer $destinationPosY
+     * @param integer $sourcePosX
+     * @param integer $sourcePosY
+     * 
+     * @return resource
      */
     public function mergeTwoImages($destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
     {
@@ -1695,61 +1701,6 @@ class ImageWorkshop
     }
     
     /**
-     * @deprecated
-     * 
-     * Copy an image on another one and converse transparency
-     */
-    /*public static function imagecopymergealpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct = 0)
-    {
-        $dst_x = (int) $dst_x;
-        $dst_y = (int) $dst_y;
-        $src_x = (int) $src_x;
-        $src_y = (int) $src_y;
-        $src_w = (int) $src_w;
-        $src_h = (int) $src_h;
-        $pct   = (int) $pct;
-        $dst_w = imagesx($dst_im);
-        $dst_h = imagesy($dst_im);
-
-        for ($y = 0; $y < $src_h + $src_y; $y++) {
-            for ($x = 0; $x < $src_w + $src_x; $x++) {
-
-                if ($x + $dst_x >= 0 && $x + $dst_x < $dst_w && $x + $src_x >= 0 && $x + $src_x < $src_w
-                 && $y + $dst_y >= 0 && $y + $dst_y < $dst_h && $y + $src_y >= 0 && $y + $src_y < $src_h) {
-
-                    $dst_pixel = imagecolorsforindex($dst_im, imagecolorat($dst_im, $x + $dst_x, $y + $dst_y));
-                    $src_pixel = imagecolorsforindex($src_im, imagecolorat($src_im, $x + $src_x, $y + $src_y));
-
-                    $src_alpha = 1 - ($src_pixel['alpha'] / 127);
-                    $dst_alpha = 1 - ($dst_pixel['alpha'] / 127);
-                    $opacity = $src_alpha * $pct / 100;
-                    if ($dst_alpha >= $opacity) $alpha = $dst_alpha;
-                    if ($dst_alpha < $opacity)  $alpha = $opacity;
-                    if ($alpha > 1) $alpha = 1;
-
-                    if ($opacity > 0) {
-                        $dst_red   = round(( ($dst_pixel['red']   * $dst_alpha * (1 - $opacity)) ) );
-                        $dst_green = round(( ($dst_pixel['green'] * $dst_alpha * (1 - $opacity)) ) );
-                        $dst_blue  = round(( ($dst_pixel['blue']  * $dst_alpha * (1 - $opacity)) ) );
-                        $src_red   = round((($src_pixel['red']   * $opacity)) );
-                        $src_green = round((($src_pixel['green'] * $opacity)) );
-                        $src_blue  = round((($src_pixel['blue']  * $opacity)) );
-                        $red   = round(($dst_red   + $src_red  ) / ($dst_alpha * (1 - $opacity) + $opacity));
-                        $green = round(($dst_green + $src_green) / ($dst_alpha * (1 - $opacity) + $opacity));
-                        $blue  = round(($dst_blue  + $src_blue ) / ($dst_alpha * (1 - $opacity) + $opacity));
-                        if ($red   > 255) $red   = 255;
-                        if ($green > 255) $green = 255;
-                        if ($blue  > 255) $blue  = 255;
-                        $alpha =  round((1 - $alpha) * 127);
-                        $color = imagecolorallocatealpha($dst_im, $red, $green, $blue, $alpha);
-                        imagesetpixel($dst_im, $x + $dst_x, $y + $dst_y, $color);
-                    }
-                }
-            }
-        }
-    }*/
-    
-    /**
      * Reset the layer stack
      */
     public function clearStack()
@@ -1766,8 +1717,6 @@ class ImageWorkshop
     }
     
     /**
-     * @todo refactoring
-     * 
      * Return dimension of a text
      * 
      * @param $fontSize
@@ -1794,32 +1743,36 @@ class ImageWorkshop
         $left = abs($minX) + $width; 
         $top = abs($minY) + $height; 
 		
-        // to calculate the exact bounding box i write the text in a large image 
+        // to calculate the exact bounding box, we write the text in a large image 
         $img = @imagecreatetruecolor($width << 2, $height << 2); 
         $white = imagecolorallocate($img, 255, 255, 255); 
         $black = imagecolorallocate($img, 0, 0, 0); 
         imagefilledrectangle($img, 0, 0, imagesx($img), imagesy($img), $black);
 		
-        // for sure the text is completely in the image! 
+        // for ensure that the text is completely in the image
         imagettftext($img, $fontSize, $fontAngle, $left, $top, $white, $fontFile, $text); 
 		
         // start scanning (0=> black => empty) 
         $rleft = $w4 = $width<<2; 
         $rright = 0; 
         $rbottom = 0; 
-        $rtop = $h4 = $height<<2; 
+        $rtop = $h4 = $height<<2;
+		
         for ($x = 0; $x < $w4; $x++) {
+		
 			for ($y = 0; $y < $h4; $y++) {
-				if (imagecolorat( $img, $x, $y )) {
-					$rleft = min( $rleft, $x ); 
-					$rright = max( $rright, $x ); 
-					$rtop = min( $rtop, $y ); 
-					$rbottom = max( $rbottom, $y ); 
+			
+				if (imagecolorat($img, $x, $y)) {
+				
+					$rleft = min($rleft, $x); 
+					$rright = max($rright, $x); 
+					$rtop = min($rtop, $y); 
+					$rbottom = max($rbottom, $y); 
 				}
 			}
 		}
 		
-        // destroy img and serve the result 
+        // destroy img
         imagedestroy($img);
         
         return array(
