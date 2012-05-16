@@ -568,7 +568,7 @@ class ImageWorkshop
      * @param integer $newHeight
      * @param boolean $converseProportion
      */
-    public function resizeByPixel($newWidth = null, $newHeight = null, $converseProportion = false)
+    public function resizeInPixel($newWidth = null, $newHeight = null, $converseProportion = false)
     {
         if ($newWidth || $newHeight) {
             
@@ -640,7 +640,7 @@ class ImageWorkshop
                  
             foreach ($layers as $key => $layer) {
                 
-                $layer->resizeByPourcent($widthResizePourcent, $heightResizePourcent);
+                $layer->resizeInPourcent($widthResizePourcent, $heightResizePourcent);
                 $this->layers[$key] = $layer;
             }
             
@@ -657,7 +657,7 @@ class ImageWorkshop
      * @param float $pourcentHeight
      * @param boolean $converseProportion
      */
-    public function resizeByPourcent($pourcentWidth = null, $pourcentHeight = null, $converseProportion = false)
+    public function resizeInPourcent($pourcentWidth = null, $pourcentHeight = null, $converseProportion = false)
     {
         if ($pourcentWidth || $pourcentHeight) {
             
@@ -709,7 +709,7 @@ class ImageWorkshop
                         
             foreach ($layers as $key => $layer) {
                 
-                $layer->resizeByPourcent(null, $pourcentWidth, $pourcentHeight);
+                $layer->resizeInPourcent(null, $pourcentWidth, $pourcentHeight);
                 $this->layers[$key] = $layer;
             }
             
@@ -732,7 +732,7 @@ class ImageWorkshop
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropByPixel($width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropInPixel($width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         $this->crop("pixel", $width, $height, $positionX, $positionY, $position, $backgroundColor);
     }
@@ -750,7 +750,7 @@ class ImageWorkshop
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropByPourcent($pourcentWidth = 0, $pourcentHeight = 0, $positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropInPourcent($pourcentWidth = 0, $pourcentHeight = 0, $positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         $this->crop("pourcent", $pourcentWidth, $pourcentHeight, $positionXPourcent, $positionYPourcent, $position, $backgroundColor);
     }
@@ -835,7 +835,7 @@ class ImageWorkshop
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropMaximumByPixel($positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropMaximumInPixel($positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         $this->cropMaximum("pixel", $positionX, $positionY, $position, $backgroundColor);
     }
@@ -853,7 +853,7 @@ class ImageWorkshop
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropMaximumByPourcent($positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropMaximumInPourcent($positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         $this->cropMaximum("pourcent", $positionXPourcent, $positionYPourcent, $position, $backgroundColor);
     }
@@ -887,7 +887,7 @@ class ImageWorkshop
             $positionY = round(($positionY / 100) * $this->height);
         }
                 
-        $this->cropByPixel($smallestSideWidth, $smallestSideWidth, $positionX, $positionY, $position, $backgroundColor);
+        $this->cropInPixel($smallestSideWidth, $smallestSideWidth, $positionX, $positionY, $position, $backgroundColor);
     }
     
     /**
@@ -1612,11 +1612,94 @@ class ImageWorkshop
     }
     
     /**
-     * @todo refactoring
+     * Copy an image on another one and converse transparency
+     * 
+     * @param resource $destImg
+     * @param resource $srcImg
+     * @param integer $destX
+     * @param integer $destY
+     * @param integer $srcX
+     * @param integer $srcY
+     * @param integer $srcW
+     * @param integer $srcH
+     * @param integer $pct
+     */
+    public static function imagecopymergealpha(&$destImg, &$srcImg, $destX, $destY, $srcX, $srcY, $srcW, $srcH, $pct = 0)
+    {
+        $destX = (int) $destX;
+        $destY = (int) $destY;
+        $srcX = (int) $srcX;
+        $srcY = (int) $srcY;
+        $srcW = (int) $srcW;
+        $srcH = (int) $srcH;
+        $pct = (int) $pct;
+        $destW = imagesx($destImg);
+        $destH = imagesy($destImg);
+
+        for ($y = 0; $y < $srcH + $srcY; $y++) {
+		
+            for ($x = 0; $x < $srcW + $srcX; $x++) {
+
+                if ($x + $destX >= 0 && $x + $destX < $destW && $x + $srcX >= 0 && $x + $srcX < $srcW && $y + $destY >= 0 && $y + $destY < $destH && $y + $srcY >= 0 && $y + $srcY < $srcH) {
+
+                    $destPixel = imagecolorsforindex($destImg, imagecolorat($destImg, $x + $destX, $y + $destY));
+                    $srcPixel = imagecolorsforindex($srcImg, imagecolorat($srcImg, $x + $srcX, $y + $srcY));
+
+                    $srcAlpha = 1 - ($srcPixel['alpha'] / 127);
+                    $destAlpha = 1 - ($destPixel['alpha'] / 127);
+                    $opacity = $srcAlpha * $pct / 100;
+					
+                    if ($destAlpha >= $opacity) {
+						$alpha = $destAlpha;
+					}
+					
+                    if ($destAlpha < $opacity) {
+						$alpha = $opacity;
+					}
+					
+                    if ($alpha > 1) {
+						$alpha = 1;
+					}
+
+                    if ($opacity > 0) {
+					
+                        $destRed = round((($destPixel['red'] * $destAlpha * (1 - $opacity))));
+                        $destGreen = round((($destPixel['green'] * $destAlpha * (1 - $opacity))));
+                        $destBlue = round((($destPixel['blue'] * $destAlpha * (1 - $opacity))));
+                        $srcRed = round((($srcPixel['red'] * $opacity)));
+                        $srcGreen = round((($srcPixel['green'] * $opacity)));
+                        $srcBlue = round((($srcPixel['blue'] * $opacity)));
+                        $red = round(($destRed + $srcRed  ) / ($destAlpha * (1 - $opacity) + $opacity));
+                        $green = round(($destGreen + $srcGreen) / ($destAlpha * (1 - $opacity) + $opacity));
+                        $blue = round(($destBlue + $srcBlue ) / ($destAlpha * (1 - $opacity) + $opacity));
+						
+                        if ($red   > 255) {
+							$red   = 255;
+						}
+						
+                        if ($green > 255) {
+							$green = 255;
+                        }
+						
+						if ($blue  > 255) {
+							$blue  = 255;
+						}
+						
+                        $alpha = round((1 - $alpha) * 127);
+                        $color = imagecolorallocatealpha($destImg, $red, $green, $blue, $alpha);
+                        imagesetpixel($destImg, $x + $destX, $y + $destY, $color);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * @deprecated
      * 
      * Copy an image on another one and converse transparency
      */
-    public static function imagecopymergealpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct = 0)
+    /*public static function imagecopymergealpha(&$dst_im, &$src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct = 0)
     {
         $dst_x = (int) $dst_x;
         $dst_y = (int) $dst_y;
@@ -1664,7 +1747,7 @@ class ImageWorkshop
                 }
             }
         }
-    }
+    }*/
     
     /**
      * Reset the layer stack
@@ -1683,6 +1766,8 @@ class ImageWorkshop
     }
     
     /**
+     * @todo refactoring
+     * 
      * Return dimension of a text
      * 
      * @param $fontSize
