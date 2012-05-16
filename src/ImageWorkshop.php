@@ -1091,22 +1091,20 @@ class ImageWorkshop
         
         $layoutImage = $this->image;
         
-        $virginLayoutImage = self::generateImage($this->width, $this->height);
-        
         ksort($this->layersLevels);
         
         foreach ($this->layersLevels as $layerLevel => $layerId) {
-            
-            $virginLayoutImageTmp = $virginLayoutImage;
-                        
+
             $imagesToMerge[$layerLevel] = $this->layers[$layerId]->getResult();
             
-            // Layer position
+            // Layer positions
             if ($this->layersPositions[$layerId]["x"] != 0 || $this->layersPositions[$layerId]["y"] != 0) {
-                $imagesToMerge[$layerLevel] = $this->mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layersPositions[$layerId]["x"], $this->layersPositions[$layerId]["y"], 0, 0);
+                
+                $virginLayoutImageTmp = self::generateImage($this->width, $this->height);
+                self::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layersPositions[$layerId]["x"], $this->layersPositions[$layerId]["y"], 0, 0);
+                $imagesToMerge[$layerLevel] = $virginLayoutImageTmp;
+                unset($virginLayoutImageTmp);
             }
-            
-            unset($virginLayoutImageTmp);
         }
         
         $iterator = 1;
@@ -1115,7 +1113,7 @@ class ImageWorkshop
         
         foreach ($imagesToMerge as $imageLevel => $image) {
             
-            $mergedImage = $this->mergeTwoImages($mergedImage, $image);
+            self::mergeTwoImages($mergedImage, $image);
             
             $iterator++;
         }
@@ -1123,7 +1121,8 @@ class ImageWorkshop
         if ($backgroundColor) {
             
             $backgroundImage = self::generateImage($this->width, $this->height, $backgroundColor, 0);
-            $mergedImage = $this->mergeTwoImages($backgroundImage, $mergedImage);
+            self::mergeTwoImages($backgroundImage, $mergedImage);
+            $mergedImage = $backgroundImage;
             unset($backgroundImage);
         }
         
@@ -1588,17 +1587,13 @@ class ImageWorkshop
      * @param integer $destinationPosY
      * @param integer $sourcePosX
      * @param integer $sourcePosY
-     * 
-     * @return resource
      */
-    public function mergeTwoImages($destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
+    public static function mergeTwoImages(&$destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
     {
         $sourceImageX = imagesx($sourceImage);
         $sourceImageY = imagesy($sourceImage);
         
-        imagecopy($destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, $sourceImageX, $sourceImageY);
-        
-        return $destinationImage;
+        imagecopy(&$destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, $sourceImageX, $sourceImageY);
     }
     
     /**
@@ -1791,10 +1786,11 @@ class ImageWorkshop
         // Creation of a new background image
         $virginImage = self::generateImage($this->getWidth(), $this->getHeight());
         
-        $virginImage = $this->mergeTwoImages($virginImage, $this->image, 0, 0, 0, 0);
+        self::mergeTwoImages($virginImage, $this->image, 0, 0, 0, 0);
         unset($this->image);
         
         $this->image = $virginImage;
+        unset($virginImage);
         
         $layers = $this->layers;
         
