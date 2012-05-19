@@ -87,6 +87,9 @@ class ImageWorkshop
     {
         $this->width = 800;
         $this->height = 600;
+        $this->layers = array();
+        $this->layerLevels = array();
+        $this->layerPositions = array();
         $imageFromPath = null;
         $imageVar = null;
         $backgroundColor = null;
@@ -532,8 +535,6 @@ class ImageWorkshop
     }
     
     /**
-     * @todo
-     * 
      * Delete a layer (return true if success, false if no sublayer is found)
      * 
      * @param integer $layerId
@@ -860,46 +861,11 @@ class ImageWorkshop
             $positionY = round(($positionY / 100) * $this->height);
         }
         
-        if ($position == "RT") {
-            
-            $positionX = $this->getWidth() - $width - $positionX;
-            
-        } elseif ($position == "LB") {
-            
-            $positionY = $this->getHeight() - $height - $positionY;
-            
-        } elseif ($position == "RB") {
-            
-            $positionX = $this->getWidth() - $width - $positionX;
-            $positionY = $this->getHeight() - $height - $positionY;
-            
-        } elseif ($position == "MM") {
-            
-            $positionX = (($this->getWidth() - $width) / 2) + $positionX;
-            $positionY = (($this->getHeight() - $height) / 2) + $positionY;
-            
-        } elseif ($position == "MT") {
-            
-            $positionX = (($this->getWidth() - $width) / 2) + $positionX;
-            
-        } elseif ($position == "MB") {
-            
-            $positionX = (($this->getWidth() - $width) / 2) + $positionX;
-            $positionY = $this->getHeight() - $height - $positionY;
-            
-        } elseif ($position == "LM") {
-            
-            $positionY = (($this->getHeight() - $height) / 2) + $positionY;
-            
-        } elseif ($position == "RM") {
-            
-            $positionX = $this->getWidth() - $width - $positionX;
-            $positionY = (($this->getHeight() - $height) / 2) + $positionY;
-        }
+        $updatedPositions = self::calculatePositions($this->getWidth(), $this->getHeight(), $width, $height, $positionX, $positionY, $position);
         
-        $this->updateLayerPositionsAfterCropping($positionX, $positionY);
+        $this->updateLayerPositionsAfterCropping($updatedPositions["x"], $updatedPositions["y"]);
         
-        $this->cropBackground($width, $height, $positionX, $positionY, $position, $backgroundColor);
+        $this->cropBackground($width, $height, $updatedPositions["x"], $updatedPositions["y"], $position, $backgroundColor);
     }
 
     /**
@@ -1540,50 +1506,7 @@ class ImageWorkshop
         $this->layers[$layerId] = $layer;
         
         // Add the layer positions in the main layer
-        
-        $position = strtolower($position);
-        
-        if ($position == "rt") {
-            
-            $positionX = $this->getWidth() - $layer->getWidth() - $positionX;
-            
-        } elseif ($position == "lb") {
-            
-            $positionY = $this->getHeight() - $layer->getHeight() - $positionY;
-            
-        } elseif ($position == "rb") {
-            
-            $positionX = $this->getWidth() - $layer->getWidth() - $positionX;
-            $positionY = $this->getHeight() - $layer->getHeight() - $positionY;
-            
-        } elseif ($position == "mm") {
-            
-            $positionX = (($this->getWidth() - $layer->getWidth()) / 2) + $positionX;
-            $positionY = (($this->getHeight() - $layer->getHeight()) / 2) + $positionY;
-            
-        } elseif ($position == "mt") {
-            
-            $positionX = (($this->getWidth() - $layer->getWidth()) / 2) + $positionX;
-            
-        } elseif ($position == "mb") {
-            
-            $positionX = (($this->getWidth() - $layer->getWidth()) / 2) + $positionX;
-            $positionY = $this->getHeight() - $layer->getHeight() - $positionY;
-            
-        } elseif ($position == "lm") {
-            
-            $positionY = (($this->getHeight() - $layer->getHeight()) / 2) + $positionY;
-            
-        } elseif ($position == "rm") {
-            
-            $positionX = $this->getWidth() - $layer->getWidth() - $positionX;
-            $positionY = (($this->getHeight() - $layer->getHeight()) / 2) + $positionY;
-        }
-        
-        $this->layerPositions[$layerId] = array(
-            "x" => $positionX,
-            "y" => $positionY
-        );
+        $this->layerPositions[$layerId] = self::calculatePositions($this->getWidth(), $this->getHeight(), $layer->getWidth(), $layer->getHeight(), $positionX, $positionY, $position);
         
         // Update the lastLayerId of the workshop
         $this->lastLayerId = $layerId;
@@ -1886,6 +1809,67 @@ class ImageWorkshop
     public function getLayer($layerId)
     {
         return $this->layers[$layerId];
+    }
+    
+    /**
+     * Calculate the right positions of a layer in a parent container (layer)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * @param integer $containerWidth
+     * @param integer $containerHeight
+     * @param integer $layerWidth
+     * @param integer $layerHeight
+     * @param integer $layerPositionX
+     * @param integer $layerPositionY
+     * @param string $position
+     * 
+     * @return array
+     */
+    public static function calculatePositions($containerWidth, $containerHeight, $layerWidth, $layerHeight, $layerPositionX, $layerPositionY, $position = "LT")
+    {
+        $position = strtolower($position);
+        
+        if ($position == "rt") {
+            
+            $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
+            
+        } elseif ($position == "lb") {
+            
+            $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
+            
+        } elseif ($position == "rb") {
+            
+            $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
+            $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
+            
+        } elseif ($position == "mm") {
+            
+            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
+            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
+            
+        } elseif ($position == "mt") {
+            
+            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
+            
+        } elseif ($position == "mb") {
+            
+            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
+            $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
+            
+        } elseif ($position == "lm") {
+            
+            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
+            
+        } elseif ($position == "rm") {
+            
+            $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
+            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
+        }
+        
+        return array(
+            "x" => $layerPositionX,
+            "y" => $layerPositionY,
+        );
     }
     
     // Getter / Setter
