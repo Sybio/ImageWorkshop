@@ -534,9 +534,11 @@ class ImageWorkshop
     /**
      * @todo
      * 
-     * Delete a layer
+     * Delete a layer (return true if success, false if no sublayer is found)
      * 
      * @param integer $layerId
+     * 
+     * @return boolean
      */
     public function remove($layerId)
     {
@@ -571,11 +573,12 @@ class ImageWorkshop
                 unset($this->layerLevels[$maxOldestLevel]);
             }
             
-            // If the deleted layer has the highest level
-            if ($layerToDeleteLevel == $this->highestLayerLevel) {
-                $this->highestLayerLevel -= 1;
-            }
+            $this->highestLayerLevel--;
+            
+            return true;
         }
+        
+        return false;
     }
     
     /**
@@ -1642,16 +1645,8 @@ class ImageWorkshop
      */
     public function delete()
     {
-        $this->deleteImage();
+        imagedestroy($this->image);
         $this->clearStack();
-    }
-    
-    /**
-     * Delete the resulting image
-     */
-    public function deleteImage()
-    {
-        unset($this->image);
     }
     
     /**
@@ -1776,6 +1771,10 @@ class ImageWorkshop
      */
     public function clearStack()
     {
+        foreach ($this->layers as $layer) {
+            $layer->delete();
+        }
+        
         unset($this->layers);
         unset($this->layerLevels);
         unset($this->layerPositions);

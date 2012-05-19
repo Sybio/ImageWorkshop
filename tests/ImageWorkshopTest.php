@@ -35,10 +35,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     }*/
     
     /**
-     * @todo
-     * 
      * Test mergeDown
-     * 
      */
     public function testMergeDown()
     {       
@@ -49,7 +46,8 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         $callback = $layer->mergeDown(3);
         
         $layerLevels = $layer->getLayerLevels();
-        
+        $layers = $layer->getLayers();
+                
         $array = array(
             1 => 1,
             2 => 2,
@@ -57,6 +55,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
+        $this->assertTrue(count($layers) == 3, 'Expect to have 3 registered sublayers');
         $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test mergeDown on a sublayer positionned at level 1
@@ -66,6 +65,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         $callback = $layer->mergeDown(1);
         
         $layerLevels = $layer->getLayerLevels();
+        $layers = $layer->getLayers();
         
         $array = array(
             1 => 2,
@@ -74,6 +74,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
+        $this->assertTrue(count($layers) == 3, 'Expect to have 3 registered sublayers');
         $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test mergeDown on a non-existing sublayer
@@ -83,6 +84,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         $callback = $layer->mergeDown(5);
         
         $layerLevels = $layer->getLayerLevels();
+        $layers = $layer->getLayers();
         
         $array = array(
             1 => 1,
@@ -92,6 +94,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === false, 'Expect $callback to be false (boolean)');
+        $this->assertTrue(count($layers) == 4, 'Expect to have 4 registered sublayers');
         $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
     }
     
@@ -108,16 +111,15 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         $layerLevels = $layer->getLayerLevels();
         $highestLayerLevel = $layer->getHighestLayerLevel();
         $lastLayerId = $layer->getLastLayerId();
+        $layers = $layer->getLayers();
         
         $array = array();
         
         $this->assertEquals($layerPositions, $array, 'Expect $layerPositions to be an empty array');
-        
         $this->assertEquals($layerPositions, $array, 'Expect $layerLevels to be an empty array');
-        
         $this->assertTrue($highestLayerLevel === 0, 'Expect $highestLayerLevel to be 0');
-        
         $this->assertTrue($lastLayerId === 0, 'Expect $lastLayerId to be 0');
+        $this->assertTrue(count($layers) == 0, 'Expect to have 0 registered sublayer');
     }
     
     /**
@@ -229,7 +231,6 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @todo test all callback positions
      * Test moveTo
      */
     public function testMoveTo()
@@ -545,7 +546,6 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     
     /**
      * Test moveUp
-     * 
      */
     public function testMoveUp()
     {
@@ -605,8 +605,6 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @todo
-     * 
      * Test moveDown
      * 
      */
@@ -668,15 +666,53 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @todo
-     * 
      * Test remove
-     * 
      */
-    /*public function testRemove()
+    public function testRemove()
     {
-        $this->assertTrue(false);
-    }*/
+        // Test remove on an existing sublayer
+        
+        $layer = $this->initializeLayer(2);
+        
+        $callback = $layer->remove(3);
+        
+        $layerLevels = $layer->getLayerLevels();
+        $layers = $layer->getLayers();
+        $highestLevel = $layer->getHighestLayerLevel();
+        
+        $array = array(
+            1 => 1,
+            2 => 2,
+            3 => 4,
+        );
+        
+        $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
+        $this->assertTrue($highestLevel == 3, 'Expect the highest level to be 3');
+        $this->assertTrue(count($layers) == 3, 'Expect to have 3 registered sublayers');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
+        
+        // Test remove on a non-existing sublayer
+        
+        $layer = $this->initializeLayer(2);
+        
+        $callback = $layer->remove(5);
+        
+        $layers = $layer->getLayers();
+        $highestLevel = $layer->getHighestLayerLevel();
+        $layerLevels = $layer->getLayerLevels();
+        
+        $array = array(
+            1 => 1,
+            2 => 2,
+            3 => 3,
+            4 => 4,
+        );
+        
+        $this->assertTrue($callback === false, 'Expect $callback to be true (boolean)');
+        $this->assertTrue(count($layers) == 4, 'Expect to have 4 registered sublayers');
+        $this->assertTrue($highestLevel == 4, 'Expect the highest level to be 4');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
+    }
     
     /**
      * @todo
@@ -697,7 +733,6 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         $layer = $this->initializeLayer(2);
         
         $this->assertTrue($layer->isLayerInIndex(3) === true, 'Layer of id 3 must be in the stack');
-        
         $this->assertTrue($layer->isLayerInIndex(5) === false, 'Layer of id 5 would not exist in the stack');
     }
     
