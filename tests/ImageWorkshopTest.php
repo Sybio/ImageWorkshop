@@ -31,13 +31,13 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
      * Test mergeDown
      * 
      */
-    /*public function testMergeDown()
+    public function testMergeDown()
     {       
-        // Test moveDown on a sublayer not positionned at the lowest level
+        // Test mergeDown on a sublayer not positionned at level 1
         
         $layer = $this->initializeLayer(2);
         
-        $layer->mergeDown(3);
+        $callback = $layer->mergeDown(3);
         
         $layersLevels = $layer->getLayersLevels();
         
@@ -47,13 +47,31 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
             3 => 4,
         );
         
+        $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
         $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
         
-        // Test moveDown on a sublayer positionned at the lowest level
+        // Test mergeDown on a sublayer positionned at level 1
         
         $layer = $this->initializeLayer(2);
         
-        $layer->mergeDown(1);
+        $callback = $layer->mergeDown(1);
+        
+        $layersLevels = $layer->getLayersLevels();
+        
+        $array = array(
+            1 => 2,
+            2 => 3,
+            3 => 4,
+        );
+        
+        $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
+        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        
+        // Test mergeDown on a non-existing sublayer
+        
+        $layer = $this->initializeLayer(2);
+        
+        $callback = $layer->mergeDown(5);
         
         $layersLevels = $layer->getLayersLevels();
         
@@ -64,8 +82,9 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
             4 => 4,
         );
         
+        $this->assertTrue($callback === false, 'Expect $callback to be false (boolean)');
         $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
-    }*/
+    }
     
     /**
      * Test mergeAll

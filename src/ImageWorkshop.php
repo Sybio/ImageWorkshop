@@ -233,9 +233,7 @@ class ImageWorkshop
     }
     
     /**
-     * @todo
-     * 
-     * Merge a sublayer with another sublayer under it in the stack
+     * Merge a sublayer with another sublayer below it in the stack
      * Note: the result layer will conserve the given id 
      * Return true if success or false if layer isn't found or doesn't have a layer under it in the stack
      * 
@@ -246,25 +244,98 @@ class ImageWorkshop
     public function mergeDown($layerId)
     {
         // if the layer exists in document
-        /*if ($this->isLayerInIndex($layerId)) {
-        
-            // If there is a layer under it
-            if ($subLayer = todo) {
+        if ($this->isLayerInIndex($layerId)) {
+            
+            $layerLevel = $this->getLayerLevel($layerId);
+            $layerPositions = $this->getLayersPositions($layerId);
+            
+            $layer = $this->getLayer($layerId);
+            $layerWidth = $layer->getWidth();
+            $layerHeight = $layer->getHeight();
+            $layerPositionX = $this->layersPositions[$layerId]["x"];
+            $layerPositionY = $this->layersPositions[$layerId]["y"];
                 
-                $this->layers[$layerId]->merge();
+            if ($layerLevel > 1) {
                 
-                $subLayer->merge();
+                $underLayerId = $this->layersLevels[$layerLevel - 1];
+                $underLayer = $this->getLayer($underLayerId);
+                $underLayerWidth = $underLayer->getWidth();
+                $underLayerHeight = $underLayer->getHeight();
+                $underLayerPositionX = $this->layersPositions[$underLayerId]["x"];
+                $underLayerPositionY = $this->layersPositions[$underLayerId]["y"];
                 
-                // merge $layer with $subLayer 
-                // TODO
+                $totalWidthLayer = $layerWidth + $layerPositionX;
+                $totalHeightLayer = $layerHeight + $layerPositionY;
                 
-                // remove $subLayer from index and from level index
-                // TODO
+                $totalWidthUnderLayer = $underLayerWidth + $underLayerPositionX;
+                $totalHeightUnderLayer = $underLayerHeight + $underLayerPositionY;
+              
+                $minLayerPositionX = $layerPositionX;
                 
-                return true;
+                if ($layerPositionX > $underLayerPositionX) {
+                    
+                    $minLayerPositionX = $underLayerPositionX;
+                }
+                
+                $minLayerPositionY = $layerPositionY;
+                
+                if ($layerPositionY > $underLayerPositionY) {
+                    
+                    $minLayerPositionY = $underLayerPositionY;
+                }
+                
+                if ($totalWidthLayer > $totalWidthUnderLayer) {
+                    
+                    $layerTmpWidth = $totalWidthLayer - $minLayerPositionX;
+                    
+                } else {
+                    
+                    $layerTmpWidth = $totalWidthUnderLayer - $minLayerPositionX;
+                }
+                
+                if ($totalHeightLayer > $totalHeightUnderLayer) {
+                    
+                    $layerTmpHeight = $totalHeightLayer - $minLayerPositionY;
+                    
+                } else {
+                    
+                    $layerTmpHeight = $totalHeightUnderLayer - $minLayerPositionY;
+                }
+                
+                $layerTmp = new self(array(
+                    "width" => $layerTmpWidth,
+                    "height" => $layerTmpHeight,
+                ));
+                
+                $layerTmp->addLayer(1, $underLayer, $underLayerPositionX - $minLayerPositionX, $underLayerPositionY - $minLayerPositionY);
+                $layerTmp->addLayer(2, $layer, $layerPositionX - $minLayerPositionX, $layerPositionY - $minLayerPositionY);
+                
+                // Update layers
+                $layerTmp->mergeAll();
+                
+                $this->layers[$underLayerId] = clone $layerTmp;
+                $this->layersPositions[$underLayerId]["x"] = $minLayerPositionX;
+                $this->layersPositions[$underLayerId]["y"] = $minLayerPositionX;
+            
+            } else {
+                
+                $layerTmp = new self(array(
+                    "imageVar" => $this->image,
+                ));
+                
+                $layerTmp->addLayer(1, $layer, $layerPositionX, $layerPositionY);
+                
+                // Update background image
+                $this->image = $layerTmp->getResult();
             }
-        
-        }*/
+            
+            unset($layerTmp);
+            
+            // Remove the merged layer from the stack
+            $this->remove($layerId);
+            
+            return true;
+        }
         
         return false;
     }
@@ -1089,8 +1160,6 @@ class ImageWorkshop
     {
         $imagesToMerge = array();
         
-        $layoutImage = $this->image;
-        
         ksort($this->layersLevels);
         
         foreach ($this->layersLevels as $layerLevel => $layerId) {
@@ -1108,7 +1177,7 @@ class ImageWorkshop
         }
         
         $iterator = 1;
-        $mergedImage = $layoutImage;
+        $mergedImage = $this->image;
         ksort($imagesToMerge);                
         
         foreach ($imagesToMerge as $imageLevel => $image) {
