@@ -240,8 +240,44 @@ class ImageWorkshop
     }
     
     /**
-     * @todo Paste on the background parent layer ?
+     * Add an existing ImageWorkshop sublayer and set it in the stack at the highest level
+     * Return an array containing the generated sublayer id in the stack and the highest level:
+     * array("layerLevel" => integer, "id" => integer)
      * 
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * @param ImageWorkshop $layer
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     * 
+     * @return array
+     */
+    public function addLayerOnTop($layer, $positionX = 0, $positionY = 0, $position = "LT")
+    {
+        return $this->indexLayer($this->highestLayerLevel + 1, $layer, $positionX, $positionY, $position);
+    }
+    
+    /**
+     * Add an existing ImageWorkshop sublayer and set it in the stack at level 1
+     * Return an array containing the generated sublayer id in the stack and level 1:
+     * array("layerLevel" => integer, "id" => integer)
+     * 
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * @param ImageWorkshop $layer
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     * 
+     * @return array
+     */
+    public function addLayerBelow($layer, $positionX = 0, $positionY = 0, $position = "LT")
+    {
+        return $this->indexLayer(1, $layer, $positionX, $positionY, $position);
+    }
+    
+    /**
      * Merge a sublayer with another sublayer below it in the stack
      * Note: the result layer will conserve the given id 
      * Return true if success or false if layer isn't found or doesn't have a layer under it in the stack
@@ -1072,10 +1108,7 @@ class ImageWorkshop
     }
     
     /**
-     * @todo add $position parameter
-     * 
      * Add a text on the background image of the layer using a default font registered in GD
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * 
      * @param string $text
      * @param integer $font
@@ -1097,10 +1130,7 @@ class ImageWorkshop
     }
     
     /**
-     * @todo add $position parameter
-     * 
      * Add a text on the background image of the layer using a font localized at $fontPath
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      * Return the text coordonates
      * 
      * @param string $text
@@ -1717,7 +1747,7 @@ class ImageWorkshop
      * @param $fontFile
      * @param $text
      * 
-     * @return array
+     * @return array or boolean
      */
     public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)
     {
