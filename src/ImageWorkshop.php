@@ -14,6 +14,9 @@
  */
 class ImageWorkshop
 {
+    // Properties
+    // ===================================================================================
+    
     /**
      * @var width
      * 
@@ -33,23 +36,23 @@ class ImageWorkshop
     /**
      * @var layers
      * 
-     * Layers and Groups
+     * Layers (and groups)
      */
     public $layers;
     
     /**
-     * @var layersLevels
+     * @var layerLevels
      * 
-     * Levels positions of the sublayers in the stack
+     * Levels of the sublayers in the stack
      */
-    protected $layersLevels;
+    protected $layerLevels;
     
     /**
-     * @var layersPositions
+     * @var layerPositions
      * 
      * Positions (x and y) of the sublayers in the stack
      */
-    protected $layersPositions;
+    protected $layerPositions;
     
     /**
      * @var lastLayerId
@@ -71,6 +74,9 @@ class ImageWorkshop
      * Background Image
      */
     protected $image;
+    
+    // Methods
+    // ===================================================================================
     
     /**
      * Constructor
@@ -177,8 +183,6 @@ class ImageWorkshop
         }
     }
     
-    // Methods ##################################################################################
-    
     /**
      * Clone method: use it if you want to reuse an existing ImageWorkshop object in another variable
      * This is important because img resource var references all the same image in PHP.
@@ -233,6 +237,8 @@ class ImageWorkshop
     }
     
     /**
+     * @todo Paste on the background parent layer ?
+     * 
      * Merge a sublayer with another sublayer below it in the stack
      * Note: the result layer will conserve the given id 
      * Return true if success or false if layer isn't found or doesn't have a layer under it in the stack
@@ -247,22 +253,22 @@ class ImageWorkshop
         if ($this->isLayerInIndex($layerId)) {
             
             $layerLevel = $this->getLayerLevel($layerId);
-            $layerPositions = $this->getLayersPositions($layerId);
+            $layerPositions = $this->getLayerPositions($layerId);
             
             $layer = $this->getLayer($layerId);
             $layerWidth = $layer->getWidth();
             $layerHeight = $layer->getHeight();
-            $layerPositionX = $this->layersPositions[$layerId]["x"];
-            $layerPositionY = $this->layersPositions[$layerId]["y"];
+            $layerPositionX = $this->layerPositions[$layerId]["x"];
+            $layerPositionY = $this->layerPositions[$layerId]["y"];
                 
             if ($layerLevel > 1) {
                 
-                $underLayerId = $this->layersLevels[$layerLevel - 1];
+                $underLayerId = $this->layerLevels[$layerLevel - 1];
                 $underLayer = $this->getLayer($underLayerId);
                 $underLayerWidth = $underLayer->getWidth();
                 $underLayerHeight = $underLayer->getHeight();
-                $underLayerPositionX = $this->layersPositions[$underLayerId]["x"];
-                $underLayerPositionY = $this->layersPositions[$underLayerId]["y"];
+                $underLayerPositionX = $this->layerPositions[$underLayerId]["x"];
+                $underLayerPositionY = $this->layerPositions[$underLayerId]["y"];
                 
                 $totalWidthLayer = $layerWidth + $layerPositionX;
                 $totalHeightLayer = $layerHeight + $layerPositionY;
@@ -314,8 +320,8 @@ class ImageWorkshop
                 $layerTmp->mergeAll();
                 
                 $this->layers[$underLayerId] = clone $layerTmp;
-                $this->layersPositions[$underLayerId]["x"] = $minLayerPositionX;
-                $this->layersPositions[$underLayerId]["y"] = $minLayerPositionX;
+                $this->layerPositions[$underLayerId]["x"] = $minLayerPositionX;
+                $this->layerPositions[$underLayerId]["y"] = $minLayerPositionX;
             
             } else {
                 
@@ -445,8 +451,8 @@ class ImageWorkshop
                     }
                 }
                 
-                ksort($this->layersLevels);
-                $layersLevelsTmp = $this->layersLevels;
+                ksort($this->layerLevels);
+                $layerLevelsTmp = $this->layerLevels;
                 
                 if ($isOnTopAndNewLevelLower) {
                     $level++;
@@ -456,21 +462,21 @@ class ImageWorkshop
                     
                     if ($isUnderAndNewLevelHigher || $isOnTopAndNewLevelHigher) {
                         
-                        $this->layersLevels[$i] = $layersLevelsTmp[$i + 1];
+                        $this->layerLevels[$i] = $layerLevelsTmp[$i + 1];
                         
                     } else {
                         
-                        $this->layersLevels[$i + 1] = $layersLevelsTmp[$i];
+                        $this->layerLevels[$i + 1] = $layerLevelsTmp[$i];
                     }
                 }
                 
-                unset($layersLevelsTmp);
+                unset($layerLevelsTmp);
                 
                 if ($isUnderAndNewLevelHigher) {
                     $level--;
                 }
                 
-                $this->layersLevels[$level] = $layerId;
+                $this->layerLevels[$level] = $layerId;
                 
                 return $level;
  
@@ -542,27 +548,27 @@ class ImageWorkshop
             // delete
             $this->layers[$layerId]->delete();
             unset($this->layers[$layerId]);
-            unset($this->layersLevels[$layerToDeleteLevel]);
-            unset($this->layersPositions[$layerId]);
+            unset($this->layerLevels[$layerToDeleteLevel]);
+            unset($this->layerPositions[$layerId]);
                   
             // One or plural layers are sub of the deleted layer
-            if (array_key_exists(($layerToDeleteLevel + 1), $this->layersLevels)) {
+            if (array_key_exists(($layerToDeleteLevel + 1), $this->layerLevels)) {
                 
-                ksort($this->layersLevels);
+                ksort($this->layerLevels);
                 
-                $layersLevelsTmp = $this->layersLevels;
+                $layerLevelsTmp = $this->layerLevels;
                 
                 $maxOldestLevel = 1;
-                foreach ($layersLevelsTmp as $levelTmp => $layerIdTmp) {
+                foreach ($layerLevelsTmp as $levelTmp => $layerIdTmp) {
                     
                     if ($levelTmp > $layerToDeleteLevel) {
-                        $this->layersLevels[($levelTmp - 1)] = $layerIdTmp;
+                        $this->layerLevels[($levelTmp - 1)] = $layerIdTmp;
                     }
                     
                     $maxOldestLevel++;
                 }
-                unset($layersLevelsTmp);
-                unset($this->layersLevels[$maxOldestLevel]);
+                unset($layerLevelsTmp);
+                unset($this->layerLevels[$maxOldestLevel]);
             }
             
             // If the deleted layer has the highest level
@@ -584,7 +590,7 @@ class ImageWorkshop
     {
         // if the layer exists in document
         if ($this->isLayerInIndex($layerId)) {
-            return array_search($layerId, $this->layersLevels);
+            return array_search($layerId, $this->layerLevels);
         }
         
         return false;
@@ -692,14 +698,14 @@ class ImageWorkshop
             
             // Update the layer positions in the stack
             
-            $layersPositions = $this->layersPositions;
+            $layerPositions = $this->layerPositions;
             
-            foreach ($layersPositions as $layerId => $layerPositions) {
+            foreach ($layerPositions as $layerId => $layerPosition) {
                 
-                $newPosX = round(($widthResizePourcent / 100) * $layerPositions['x']);
-                $newPosY = round(($heightResizePourcent / 100) * $layerPositions['y']);
+                $newPosX = round(($widthResizePourcent / 100) * $layerPosition['x']);
+                $newPosY = round(($heightResizePourcent / 100) * $layerPosition['y']);
                 
-                $this->layersPositions[$layerId] = array(
+                $this->layerPositions[$layerId] = array(
                     "x" => $newPosX,
                     "y" => $newPosY,
                 );
@@ -761,14 +767,14 @@ class ImageWorkshop
             
             // Update the layer positions in the stack
             
-            $layersPositions = $this->layersPositions;
+            $layerPositions = $this->layerPositions;
             
-            foreach ($layersPositions as $layerId => $layerPositions) {
+            foreach ($layerPositions as $layerId => $layerPosition) {
                 
-                $newPosX = round(($pourcentWidth / 100) * $layerPositions['x']);
-                $newPosY = round(($pourcentHeight / 100) * $layerPositions['y']);
+                $newPosX = round(($pourcentWidth / 100) * $layerPosition['x']);
+                $newPosY = round(($pourcentHeight / 100) * $layerPosition['y']);
                 
-                $this->layersPositions[$layerId] = array(
+                $this->layerPositions[$layerId] = array(
                     "x" => $newPosX,
                     "y" => $newPosY,
                 );
@@ -1014,8 +1020,8 @@ class ImageWorkshop
                 );
                 
                 $smallImageCenter = array(
-                    "x" => $layerSelfOldCenterPosition["x"] + $this->layersPositions[$layerId]["x"],
-                    "y" => $layerSelfOldCenterPosition["y"] + $this->layersPositions[$layerId]["y"],
+                    "x" => $layerSelfOldCenterPosition["x"] + $this->layerPositions[$layerId]["x"],
+                    "y" => $layerSelfOldCenterPosition["y"] + $this->layerPositions[$layerId]["y"],
                 );
                 
                 $this->layers[$layerId]->rotate($degrees);
@@ -1048,7 +1054,7 @@ class ImageWorkshop
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2) + $oldWidth * (-sin(($degrees) * pi() / 180));
                 }
                 
-                $this->layersPositions[$layerId] = array(
+                $this->layerPositions[$layerId] = array(
                     "x" => $newPositionX,
                     "y" => $newPositionY,
                 );
@@ -1160,17 +1166,17 @@ class ImageWorkshop
     {
         $imagesToMerge = array();
         
-        ksort($this->layersLevels);
+        ksort($this->layerLevels);
         
-        foreach ($this->layersLevels as $layerLevel => $layerId) {
+        foreach ($this->layerLevels as $layerLevel => $layerId) {
 
             $imagesToMerge[$layerLevel] = $this->layers[$layerId]->getResult();
             
             // Layer positions
-            if ($this->layersPositions[$layerId]["x"] != 0 || $this->layersPositions[$layerId]["y"] != 0) {
+            if ($this->layerPositions[$layerId]["x"] != 0 || $this->layerPositions[$layerId]["y"] != 0) {
                 
                 $virginLayoutImageTmp = self::generateImage($this->width, $this->height);
-                self::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layersPositions[$layerId]["x"], $this->layersPositions[$layerId]["y"], 0, 0);
+                self::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layerPositions[$layerId]["x"], $this->layerPositions[$layerId]["y"], 0, 0);
                 $imagesToMerge[$layerLevel] = $virginLayoutImageTmp;
                 unset($virginLayoutImageTmp);
             }
@@ -1293,7 +1299,8 @@ class ImageWorkshop
         }
     }
 
-    // Internal methods ##################################################################################
+    // Internals
+    // ===================================================================================
     
     /**
      * Update the positions of layers in the stack after cropping
@@ -1305,15 +1312,15 @@ class ImageWorkshop
     {
         foreach ($this->layers as $layerId => $layer) {
             
-            $oldLayerPosX = $this->layersPositions[$layerId]["x"];
-            $oldLayerPosY = $this->layersPositions[$layerId]["y"];
+            $oldLayerPosX = $this->layerPositions[$layerId]["x"];
+            $oldLayerPosY = $this->layerPositions[$layerId]["y"];
             
             $newLayerPosX = $oldLayerPosX - $positionX;
             $newLayerPosY = $oldLayerPosY - $positionY;
             
-            unset($this->layersPositions[$layerId]);
+            unset($this->layerPositions[$layerId]);
             
-            $this->layersPositions[$layerId] = array(
+            $this->layerPositions[$layerId] = array(
                 "x" => $newLayerPosX,
                 "y" => $newLayerPosY,
             );
@@ -1570,7 +1577,7 @@ class ImageWorkshop
             $positionY = (($this->getHeight() - $layer->getHeight()) / 2) + $positionY;
         }
         
-        $this->layersPositions[$layerId] = array(
+        $this->layerPositions[$layerId] = array(
             "x" => $positionX,
             "y" => $positionY
         );
@@ -1599,20 +1606,20 @@ class ImageWorkshop
     protected function indexLevelInDocument($layerLevel, $layerId)
     {
         // Level already exists
-        if (array_key_exists($layerLevel, $this->layersLevels)) {
+        if (array_key_exists($layerLevel, $this->layerLevels)) {
             
             // All layers after this level and the layer which have this level are updated
-            ksort($this->layersLevels);
-            $layersLevelsTmp = $this->layersLevels;
+            ksort($this->layerLevels);
+            $layerLevelsTmp = $this->layerLevels;
             
-            foreach ($layersLevelsTmp as $levelTmp => $layerIdTmp) {
+            foreach ($layerLevelsTmp as $levelTmp => $layerIdTmp) {
                 
                 if ($levelTmp >= $layerLevel) {
-                    $this->layersLevels[$levelTmp + 1] = $layerIdTmp;
+                    $this->layerLevels[$levelTmp + 1] = $layerIdTmp;
                 }
             }
             
-            unset($layersLevelsTmp);
+            unset($layerLevelsTmp);
             
         } else { // Level isn't taken
             
@@ -1622,10 +1629,10 @@ class ImageWorkshop
             }
         }
         
-        $this->layersLevels[$layerLevel] = $layerId;
+        $this->layerLevels[$layerLevel] = $layerId;
         
         // Update $highestLayerLevel
-        $this->highestLayerLevel = max(array_flip($this->layersLevels));
+        $this->highestLayerLevel = max(array_flip($this->layerLevels));
         
         return $layerLevel;
     }
@@ -1770,13 +1777,13 @@ class ImageWorkshop
     public function clearStack()
     {
         unset($this->layers);
-        unset($this->layersLevels);
-        unset($this->layersPositions);
+        unset($this->layerLevels);
+        unset($this->layerPositions);
         
         $this->lastLayerId = 0;
         $this->layers = array();
-        $this->layersLevels = array();
-        $this->layersPositions = array();
+        $this->layerLevels = array();
+        $this->layerPositions = array();
         $this->highestLayerLevel = 0;
     }
     
@@ -1882,6 +1889,9 @@ class ImageWorkshop
         return $this->layers[$layerId];
     }
     
+    // Getter / Setter
+    // ===================================================================================
+    
     /**
      * Getter width
      * 
@@ -1923,23 +1933,23 @@ class ImageWorkshop
     }
     
     /**
-     * Getter layersLevels
+     * Getter layerLevels
      * 
      * @return array
      */
-    public function getLayersLevels()
+    public function getLayerLevels()
     {
-        return $this->layersLevels;
+        return $this->layerLevels;
     }
     
     /**
-     * Getter layersPositions
+     * Getter layerPositions
      * 
      * @return array
      */
-    public function getLayersPositions()
+    public function getLayerPositions()
     {
-        return $this->layersPositions;
+        return $this->layerPositions;
     }
     
     /**

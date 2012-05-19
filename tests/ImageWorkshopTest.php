@@ -1,8 +1,17 @@
 <?php
 require_once('../src/ImageWorkshop.php');
  
+/**
+ * ImageWorkshopTest class
+ * 
+ * Tests the class ImageWorkshop
+ * 
+ */
 class ImageWorkshopTest extends PHPUnit_Framework_TestCase
 {
+    // Tests
+    // ===================================================================================
+    
     /**
      * @todo
      * 
@@ -39,7 +48,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $callback = $layer->mergeDown(3);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -48,7 +57,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test mergeDown on a sublayer positionned at level 1
         
@@ -56,7 +65,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $callback = $layer->mergeDown(1);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 2,
@@ -65,7 +74,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === true, 'Expect $callback to be true (boolean)');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test mergeDown on a non-existing sublayer
         
@@ -73,7 +82,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $callback = $layer->mergeDown(5);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -83,7 +92,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($callback === false, 'Expect $callback to be false (boolean)');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -95,8 +104,8 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $layer->mergeAll();
         
-        $layerPositions = $layer->getLayersPositions();
-        $layersLevels = $layer->getLayersLevels();
+        $layerPositions = $layer->getLayerPositions();
+        $layerLevels = $layer->getLayerLevels();
         $highestLayerLevel = $layer->getHighestLayerLevel();
         $lastLayerId = $layer->getLastLayerId();
         
@@ -104,7 +113,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals($layerPositions, $array, 'Expect $layerPositions to be an empty array');
         
-        $this->assertEquals($layerPositions, $array, 'Expect $layersLevels to be an empty array');
+        $this->assertEquals($layerPositions, $array, 'Expect $layerLevels to be an empty array');
         
         $this->assertTrue($highestLayerLevel === 0, 'Expect $highestLayerLevel to be 0');
         
@@ -130,7 +139,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTop on a layer positionned at the level 1
         
@@ -146,7 +155,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTop on a layer positionned at the highest level
         
@@ -162,7 +171,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -184,7 +193,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveBottom on a layer positionned at the level 1
         
@@ -200,7 +209,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveBottom on a layer positionned at the highest level
         
@@ -216,7 +225,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layer->getLayersLevels() == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layer->getLayerLevels() == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -233,7 +242,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 4, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -244,7 +253,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 3, 'Expect $returnedPosition to be 3');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of the position at level -10
         
@@ -252,7 +261,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, -10, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 3,
@@ -263,7 +272,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of the position at level 0
         
@@ -271,7 +280,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 0, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 3,
@@ -282,7 +291,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
                         
         // Test moveTo: move a sublayer on the bottom of the position at level x - 1
         
@@ -290,7 +299,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 2, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -301,7 +310,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 2, 'Expect $returnedPosition to be 2');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of the position at level x - 2
         
@@ -309,7 +318,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(4, 2, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -320,7 +329,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 2, 'Expect $returnedPosition to be 2');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of the first level
         
@@ -328,7 +337,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 1, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 3,
@@ -339,7 +348,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of a higher level
         
@@ -347,7 +356,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 5, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -358,7 +367,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of a level highest the highest level
         
@@ -366,7 +375,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 6, true);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -377,7 +386,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 5, 'Expect $returnedPosition to be 5');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Move on the top of a level _____________________
         
@@ -387,7 +396,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 4, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -398,7 +407,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the bottom of the position at level 0
         
@@ -406,7 +415,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 0, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 3,
@@ -417,7 +426,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of the position at level -10
         
@@ -425,7 +434,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, -10, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 3,
@@ -436,7 +445,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of the position at level x - 1 (same position)
         
@@ -444,7 +453,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 2, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -455,7 +464,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 3, 'Expect $returnedPosition to be 3');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of the position at level x - 2
         
@@ -463,7 +472,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(4, 2, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -474,7 +483,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 3, 'Expect $returnedPosition to be 3');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of the highest position
         
@@ -482,7 +491,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 5, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -493,7 +502,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 5, 'Expect $returnedPosition to be 5');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of another position
         
@@ -501,7 +510,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 1, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -512,7 +521,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 2, 'Expect $returnedPosition to be 2');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveTo: move a sublayer on the top of a level highest the highest level
         
@@ -520,7 +529,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveTo(3, 6, false);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -531,7 +540,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 5, 'Expect $returnedPosition to be 5');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -546,7 +555,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveUp(1);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 2,
@@ -556,7 +565,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 2, 'Expect $returnedPosition to be 2');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveUp on a sublayer not positionned at the highest level
         
@@ -564,7 +573,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveUp(2);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -574,7 +583,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 3, 'Expect $returnedPosition to be 3');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveUp on a the sublayer at the highest level
         
@@ -582,7 +591,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveUp(4);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -592,7 +601,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 4, 'Expect $returnedPosition to be 4');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -609,7 +618,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveDown(3);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -619,7 +628,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 2, 'Expect $returnedPosition to be 2');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveDown on a sublayer at the level 1
         
@@ -627,7 +636,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveDown(1);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -637,7 +646,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 1, 'Expect $returnedPosition to be 1');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
         
         // Test moveDown on a sublayer at the highest level
         
@@ -645,7 +654,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         
         $returnedPosition = $layer->moveDown(4);
         
-        $layersLevels = $layer->getLayersLevels();
+        $layerLevels = $layer->getLayerLevels();
         
         $array = array(
             1 => 1,
@@ -655,7 +664,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
         );
         
         $this->assertTrue($returnedPosition === 3, 'Expect $returnedPosition to be 3');
-        $this->assertTrue($layersLevels == $array, 'Expect $layersLevels to be the array $array');
+        $this->assertTrue($layerLevels == $array, 'Expect $layerLevels to be the array $array');
     }
     
     /**
@@ -724,6 +733,9 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(false);
     }*/
+    
+    // Internals
+    // ===================================================================================
     
     /**
      * Initialize a layer
