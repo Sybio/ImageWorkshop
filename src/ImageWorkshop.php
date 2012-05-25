@@ -6,7 +6,7 @@
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  * 
- * @version 1.1
+ * @version 1.0.1
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
