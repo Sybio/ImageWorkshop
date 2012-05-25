@@ -6,7 +6,7 @@
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  * 
- * @version 1.0
+ * @version 1.1
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -197,8 +197,6 @@ class ImageWorkshop
     }
     
     /**
-     * @todo imagecopy transparency ?
-     * 
      * Paste an image on the layer
      * You can specify the position left (in pixels) and the position top (in pixels) of the added image relatives to the layer
      * Otherwise, it will be set at 0 and 0
@@ -1617,7 +1615,7 @@ class ImageWorkshop
         $sourceImageX = imagesx($sourceImage);
         $sourceImageY = imagesy($sourceImage);
         
-        imagecopy(&$destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, $sourceImageX, $sourceImageY);
+        imagecopy($destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, $sourceImageX, $sourceImageY);
     }
     
     /**
