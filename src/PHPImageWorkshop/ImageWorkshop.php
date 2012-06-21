@@ -6,7 +6,7 @@
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.0.1
+ * @version 1.1.0
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -60,7 +60,7 @@ class ImageWorkshop
     /**
      * @var lastLayerId
      *
-     * Id of the last indexes sublayer
+     * Id of the last indexed sublayer in the stack
      */
     protected $lastLayerId;
 
@@ -838,6 +838,98 @@ class ImageWorkshop
     }
 
     /**
+     * Resize the layer by its largest side by specifying pixel
+     *
+     * @param integer $newLargestSideWidth
+     * @param boolean $converseProportion
+     */
+    public function resizeByLargestSideInPixel($newLargestSideWidth, $converseProportion = false)
+    {
+        $this->resizeByLargestSide('pixel', $newLargestSideWidth, $converseProportion);
+    }
+
+    /**
+     * Resize the layer by its largest side by specifying pourcent
+     *
+     * @param integer $newLargestSideWidth pourcent
+     * @param boolean $converseProportion
+     */
+    public function resizeByLargestSideInPourcent($newLargestSideWidth, $converseProportion = false)
+    {
+        $this->resizeByLargestSide('pourcent', $newLargestSideWidth, $converseProportion);
+    }
+
+    /**
+     * Resize the layer by its largest side
+     *
+     * @param string $unit
+     * @param integer $newLargestSideWidth pourcent
+     * @param boolean $converseProportion
+     */
+    public function resizeByLargestSide($unit = "pixel", $newLargestSideWidth, $converseProportion = false)
+    {
+        if ($unit == 'pourcent') {
+
+            $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
+        }
+
+        if ($this->getWidth() > $this->getHeight()) {
+
+            $this->resizeInPixel($newLargestSideWidth, null, $converseProportion);
+
+        } else {
+
+            $this->resizeInPixel(null, $newLargestSideWidth, $converseProportion);
+        }
+    }
+
+    /**
+     * Resize the layer by its narrow side by specifying pixel
+     *
+     * @param integer $newNarrowSideWidth
+     * @param boolean $converseProportion
+     */
+    public function resizeByNarrowSideInPixel($newNarrowSideWidth, $converseProportion = false)
+    {
+        $this->resizeByNarrowSide('pixel', $newNarrowSideWidth, $converseProportion);
+    }
+
+    /**
+     * Resize the layer by its narrow side by specifying pourcent
+     *
+     * @param integer $newNarrowSideWidth pourcent
+     * @param boolean $converseProportion
+     */
+    public function resizeByNarrowSideInPourcent($newNarrowSideWidth, $converseProportion = false)
+    {
+        $this->resizeByNarrowSide('pourcent', $newNarrowSideWidth, $converseProportion);
+    }
+
+    /**
+     * Resize the layer by its narrow side
+     *
+     * @param string $unit
+     * @param integer $newNarrowSideWidth
+     * @param boolean $converseProportion
+     */
+    public function resizeByNarrowSide($unit = "pixel", $newNarrowSideWidth, $converseProportion = false)
+    {
+        if ($unit == 'pourcent') {
+
+            $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
+        }
+
+        if ($this->getWidth() < $this->getHeight()) {
+
+            $this->resizeInPixel($newNarrowSideWidth, null, $converseProportion);
+
+        } else {
+
+            $this->resizeInPixel(null, $newNarrowSideWidth, $converseProportion);
+        }
+    }
+
+    /**
      * Crop the document by specifying pixels
      *
      * $backgroundColor: can be set transparent (The script will be longer to execute)
@@ -957,20 +1049,14 @@ class ImageWorkshop
      */
     public function cropMaximum($unit = "pixel", $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        // We determine the smallest side
-        $smallestSideWidth = $this->getWidth();
-
-        if ($this->getHeight() < $smallestSideWidth) {
-            $smallestSideWidth = $this->getHeight();
-        }
-
+        $narrowSide = $this->getNarrowSideWidth();
         if ($unit == "pourcent") {
 
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
         }
 
-        $this->cropInPixel($smallestSideWidth, $smallestSideWidth, $positionX, $positionY, $position, $backgroundColor);
+        $this->cropInPixel($narrowSide, $narrowSide, $positionX, $positionY, $position, $backgroundColor);
     }
 
     /**
@@ -1091,9 +1177,11 @@ class ImageWorkshop
     public function opacity($opacity, $recursive = true)
     {
         if ($recursive) {
+
             $layers = $this->layers;
 
             foreach ($layers as $key => $layer) {
+
                 $layer->opacity($opacity, true);
                 $this->layers[$key] = $layer;
             }
@@ -1124,8 +1212,11 @@ class ImageWorkshop
         $textColor = imagecolorallocate($this->image, $RGBTextColor["R"], $RGBTextColor["G"], $RGBTextColor["B"]);
 
         if ($align == "horizontal") {
+
             imagestring($this->image, $font, $positionX, $positionY, $text, $textColor);
+
         } else {
+
             imagestringup($this->image, $font, $positionX, $positionY, $text, $textColor);
         }
     }
@@ -1297,6 +1388,40 @@ class ImageWorkshop
                 $this->layers[$layerId]->applyFilter($filterType, $arg1, $arg2, $arg3, $arg4, true);
             }
         }
+    }
+
+    /**
+     * Return the narrow side width of the layer
+     *
+     * @return integer
+     */
+    public function getNarrowSideWidth()
+    {
+        $narrowSideWidth = $this->getWidth();
+
+        if ($this->getHeight() < $narrowSideWidth) {
+
+            $narrowSideWidth = $this->getHeight();
+        }
+
+        return $narrowSideWidth;
+    }
+
+    /**
+     * Return the largest side width of the layer
+     *
+     * @return integer
+     */
+    public function getLargestSideWidth()
+    {
+        $largestSideWidth = $this->getWidth();
+
+        if ($this->getHeight() > $largestSideWidth) {
+
+            $largestSideWidth = $this->getHeight();
+        }
+
+        return $largestSideWidth;
     }
 
     // Internals
@@ -1754,7 +1879,8 @@ class ImageWorkshop
     {
         $box = imagettfbbox($fontSize, $fontAngle, $fontFile, $text);
 
-		if(!$box) {
+		if (!$box) {
+
 			return false;
 		}
 
