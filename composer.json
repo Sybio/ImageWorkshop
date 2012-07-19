@@ -1,5 +1,5 @@
 {
-    "name": "Sybio/ImageWorkshop",
+    "name": "sybio/image-workshop",
     "require": {
         "php": ">=5.3.0"
     }
