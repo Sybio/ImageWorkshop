@@ -1,0 +1,6 @@
+{
+    "name": "Sybio/ImageWorkshop",
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
