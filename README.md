@@ -24,8 +24,8 @@ You will find all the documentation here: http://phpimageworkshop.com/documentat
 - Adding a method to add easily borders to a layer (external, inside and middle border)
 
 ### Contributors
-#### Main contributors
+Main contributors:
 - Clément - Freelance [Sybio / @Sybio01]
-#### And also
+And also:
 - Cédric Spalvieri - Novaway [skwi69]
 - Elton Minetto - Coderockr [eminetto]
