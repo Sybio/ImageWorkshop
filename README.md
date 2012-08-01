@@ -25,7 +25,7 @@ You will find all the documentation here: http://phpimageworkshop.com/documentat
 
 ### Contributors
 Main contributors:
-- Clément - Freelance [Sybio / @Sybio01]
+- Clément Guillemain - Freelance [Sybio / @Sybio01]
           
 And also:
 - Cédric Spalvieri - Novaway [skwi69]
