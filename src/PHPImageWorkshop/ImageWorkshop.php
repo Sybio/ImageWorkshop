@@ -1,20 +1,19 @@
 <?php
 
+namespace PHPImageWorkshop;
+
 /**
  * ImageWorkshop class
  *
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.1.0
+ * @version 1.2.0
  * @link http://phpimageworkshop.com
- * @author Sybio (Clément Guillemain)
+ * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Clément Guillemain
  */
-
-namespace PHPImageWorkshop;
-
 class ImageWorkshop
 {
     // Properties
@@ -679,31 +678,130 @@ class ImageWorkshop
     /**
      * Resize the layer by specifying pixel
      *
-     * Note: If you choose to conserve the proportion but you give $newWidth AND $newHeight, proportion will be still conserve
-     * and the resize will use $newWidth to determine the $newHeight
-     *
      * @param integer $newWidth
      * @param integer $newHeight
      * @param boolean $converseProportion
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     * 
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
-    public function resizeInPixel($newWidth = null, $newHeight = null, $converseProportion = false)
+    public function resizeInPixel($newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
+    {
+        $this->resize('pixel', $newWidth, $newHeight, $converseProportion, $positionX, $positionY, $position);
+    }
+
+    /**
+     * Resize the layer by specifying a pourcent
+     *
+     * @param float $pourcentWidth
+     * @param float $pourcentHeight
+     * @param boolean $converseProportion
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     * 
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
+     */
+    public function resizeInPourcent($pourcentWidth = null, $pourcentHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
+    {
+        $this->resize('pourcent', $pourcentWidth, $pourcentHeight, $converseProportion, $positionX, $positionY, $position);
+    }
+    
+    /**
+     * Resize the layer
+     *
+     * @param string $unit
+     * @param float $pourcentWidth
+     * @param float $pourcentHeight
+     * @param boolean $converseProportion
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     * 
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     * 
+     * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
+     */
+    public function resize($unit = "pixel", $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
     {
         if ($newWidth || $newHeight) {
-
+            
+            if ($unit == 'pourcent') {
+                
+                if ($newWidth) {
+                    
+                    $newWidth = round(($newWidth / 100) * $this->width);
+                }
+                
+                if ($newHeight) {
+                    
+                    $newHeight = round(($newHeight / 100) * $this->height);
+                }
+            }
+        
             if ($converseProportion) { // Proportion are conserved
 
-                if ($newWidth) {
+                if ($newWidth && $newHeight) { // Proportions + $newWidth + $newHeight
+                    
+                    if ($this->getWidth() > $this->getHeight()) {
+                        
+                        $this->resizeInPixel($newWidth, null, true);
+                        
+                        if ($this->getHeight() > $newHeight) {
+                            
+                            $this->resizeInPixel(null, $newHeight, true);
+                        }
+                        
+                    } else {
+                        
+                        $this->resizeInPixel(null, $newHeight, true);
+                        
+                        if ($this->getWidth() > $newWidth) {
+                            
+                            $this->resizeInPixel($newWidth, null, true);
+                        }
+                    }
+                    
+                    if ($this->getWidth() != $newWidth || $this->getHeight() != $newHeight) {
+                        
+                        $layerTmp = new self(array(
+                            'width' => $newWidth,
+                            'height' => $newHeight,
+                        ));
+                        
+                        $layerTmp->addLayer(1, $this, round($positionX * ($newWidth / 100)), round($positionY * ($newHeight / 100)), $position);
+                        
+                        $this->width = $layerTmp->getWidth();
+                        $this->height = $layerTmp->getHeight();
+                        unset($this->image);
+                        unset($this->layerLevels);
+                        unset($this->layerPositions);
+                        unset($this->layers);
+                        $this->image = $layerTmp->getImage();
+                        $this->layerLevels = $layerTmp->getLayerLevels();
+                        $this->layerPositions = $layerTmp->getLayerPositions();
+                        $this->layers = $layerTmp->getLayers();
+                        unset($layerTmp);
+                    }
+                    
+                    return;
+                    
+                } elseif ($newWidth) {
 
-                    $widthPourcentScale = $this->width / 100;
-                    $widthResizePourcent = $newWidth / $widthPourcentScale;
+                    $widthResizePourcent = $newWidth / ($this->width / 100);
 
                     $newHeight = round(($widthResizePourcent / 100) * $this->height);
                     $heightResizePourcent = $widthResizePourcent;
 
-                } else {
+                } elseif ($newHeight) {
 
-                    $heightPourcentScale = $this->height / 100;
-                    $heightResizePourcent = $newHeight / $heightPourcentScale;
+                    $heightResizePourcent = $newHeight / ($this->height / 100);
 
                     $newWidth = round(($heightResizePourcent / 100) * $this->width);
                     $widthResizePourcent = $heightResizePourcent;
@@ -713,16 +811,14 @@ class ImageWorkshop
 
                 if ($newWidth) {
 
-                    $widthPourcentScale = $this->width / 100;
-                    $widthResizePourcent = $newWidth / $widthPourcentScale;
+                    $widthResizePourcent = $newWidth / ($this->width / 100);
 
                     $heightResizePourcent = 100;
                     $newHeight = $this->height;
 
                 } else {
 
-                    $heightPourcentScale = $this->height / 100;
-                    $heightResizePourcent = $newHeight / $heightPourcentScale;
+                    $heightResizePourcent = $newHeight / ($this->height / 100);
 
                     $widthResizePourcent = 100;
                     $newWidth = $this->width;
@@ -730,18 +826,14 @@ class ImageWorkshop
 
             } else { // New width AND new height are given
 
-                $widthPourcentScale = $this->width / 100;
-                $widthResizePourcent = $newWidth / $widthPourcentScale;
+                $widthResizePourcent = $newWidth / ($this->width / 100);
 
-                $heightPourcentScale = $this->height / 100;
-                $heightResizePourcent = $newHeight / $heightPourcentScale;
+                $heightResizePourcent = $newHeight / ($this->height / 100);
             }
 
             // Update the layer positions in the stack
 
-            $layerPositions = $this->layerPositions;
-
-            foreach ($layerPositions as $layerId => $layerPosition) {
+            foreach ($this->layerPositions as $layerId => $layerPosition) {
 
                 $newPosX = round(($widthResizePourcent / 100) * $layerPosition['x']);
                 $newPosY = round(($heightResizePourcent / 100) * $layerPosition['y']);
@@ -759,75 +851,6 @@ class ImageWorkshop
             foreach ($layers as $key => $layer) {
 
                 $layer->resizeInPourcent($widthResizePourcent, $heightResizePourcent);
-                $this->layers[$key] = $layer;
-            }
-
-            // Resize the layer
-
-            $this->resizeBackground($newWidth, $newHeight);
-        }
-    }
-
-    /**
-     * Resize the layer by specifying a pourcent
-     *
-     * @param float $pourcentWidth
-     * @param float $pourcentHeight
-     * @param boolean $converseProportion
-     */
-    public function resizeInPourcent($pourcentWidth = null, $pourcentHeight = null, $converseProportion = false)
-    {
-        if ($pourcentWidth || $pourcentHeight) {
-
-            if ($converseProportion) { // converse proportion
-
-                if ($pourcentWidth) {
-
-                    $pourcentHeight = $pourcentWidth;
-
-                } else {
-
-                    $pourcentWidth = $pourcentHeight;
-                }
-
-            } elseif (($pourcentWidth && !$pourcentHeight) || (!$pourcentWidth && $pourcentHeight)) { // $pourcentWidth OR $pourcentHeight is given
-
-                if ($pourcentWidth) {
-
-                    $pourcentHeight = 100;
-
-                } else {
-
-                    $pourcentWidth = 100;
-                }
-
-            }
-
-            $newWidth = round($this->width * ($pourcentWidth / 100));
-            $newHeight = round($this->height * ($pourcentHeight / 100));
-
-            // Update the layer positions in the stack
-
-            $layerPositions = $this->layerPositions;
-
-            foreach ($layerPositions as $layerId => $layerPosition) {
-
-                $newPosX = round(($pourcentWidth / 100) * $layerPosition['x']);
-                $newPosY = round(($pourcentHeight / 100) * $layerPosition['y']);
-
-                $this->layerPositions[$layerId] = array(
-                    "x" => $newPosX,
-                    "y" => $newPosY,
-                );
-            }
-
-            // Resize layers in the stack
-
-            $layers = $this->layers;
-
-            foreach ($layers as $key => $layer) {
-
-                $layer->resizeInPourcent(null, $pourcentWidth, $pourcentHeight);
                 $this->layers[$key] = $layer;
             }
 
