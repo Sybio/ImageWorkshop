@@ -9,11 +9,15 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.2.1 - 2012-08-13**
+- Better image quality after resize. (replace imagecopyresized function for imagecopyresampled)
+
 **Version 1.2.0 - 2012-07-31**
 - Updating the resizeInPixel & resizeInPourcent methods: http://phpimageworkshop.com/doc/17/resizing.html
 It allows you to resize your layer by conserving its proportion AND to get the wanted width and height both.
 (So the layer will be resized to fit in the wanted dimensions)
 - Creating the resize() method (refactoring resizeInPixel & Pourcent).
+
 **Version 1.1.0 - 2012-07-19**
 - Adding composer support / registering ImageWorkshop on packagist
 
