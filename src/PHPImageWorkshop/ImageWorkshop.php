@@ -1540,7 +1540,7 @@ class ImageWorkshop
 
         $virginLayoutImage = self::generateImage($this->width, $this->height);
 
-        imagecopyresized($virginLayoutImage, $this->image, 0, 0, 0, 0, $this->width, $this->height, $oldWidth, $oldHeight);
+        imagecopyresampled($virginLayoutImage, $this->image, 0, 0, 0, 0, $this->width, $this->height, $oldWidth, $oldHeight);
 
         unset($this->image);
         $this->image = $virginLayoutImage;
