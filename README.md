@@ -9,6 +9,9 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.2.2 - 2012-08-16**
+- Fixing a bug when applying a filter because of given parameter number
+
 **Version 1.2.1 - 2012-08-13**
 - Better image quality after resize. (replace imagecopyresized function for imagecopyresampled)
 

@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.1
+ * @version 1.2.2
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1400,7 +1400,22 @@ class ImageWorkshop
      */
     public function applyFilter($filterType, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $recursive = false)
     {
-        imagefilter($this->image, $filterType, $arg1, $arg2, $arg3, $arg4);
+        if ($filterType == IMG_FILTER_COLORIZE) {
+            
+            imagefilter($this->image, $filterType, $arg1, $arg2, $arg3, $arg4);
+            
+        } elseif ($filterType == IMG_FILTER_BRIGHTNESS || $filterType == IMG_FILTER_CONTRAST || $filterType == IMG_FILTER_SMOOTH) {
+            
+            imagefilter($this->image, $filterType, $arg1);
+        
+        } elseif ($filterType == IMG_FILTER_PIXELATE) {
+            
+            imagefilter($this->image, $filterType, $arg1, $arg2);
+            
+        } else {
+            
+            imagefilter($this->image, $filterType);
+        }
 
         if ($recursive) {
 
