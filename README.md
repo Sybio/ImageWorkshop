@@ -21,11 +21,17 @@ It allows you to resize your layer by conserving its proportion AND to get the w
 (So the layer will be resized to fit in the wanted dimensions)
 - Creating the resize() method (refactoring resizeInPixel & Pourcent).
 
-**Version 1.1.0 - 2012-07-19**
-- Adding composer support / registering ImageWorkshop on packagist
-
 ### Usage
-You will find all the documentation here: http://phpimageworkshop.com/documentation.html & http://phpimageworkshop.com/tutorials.html
+
+- Learn how to use the class in 5 minutes: http://phpimageworkshop.com/quickstart.html
+- The complete documentation: http://phpimageworkshop.com/documentation.html
+- Usefull tutorials: http://phpimageworkshop.com/tutorials.html
+
+**What's new in the doc' ?**
+
+- Rewriting the tutorial "Creating thumbnails": http://phpimageworkshop.com/tutorial/2/creating-thumbnails.html
+- Tutorial "Beautify your images with filters": http://phpimageworkshop.com/tutorial/4/beautify-images-filters.html
+- Quickstart page to learn the class faster: http://phpimageworkshop.com/quickstart.html
 
 ### @todo
 - Adding a method to add easily borders to a layer (external, inside and middle border)
