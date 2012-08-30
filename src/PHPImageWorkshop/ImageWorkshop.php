@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.2
+ * @version 1.2.3
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1012,12 +1012,38 @@ class ImageWorkshop
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
         }
-
-        $updatedPositions = self::calculatePositions($this->getWidth(), $this->getHeight(), $width, $height, $positionX, $positionY, $position);
-
-        $this->updateLayerPositionsAfterCropping($updatedPositions["x"], $updatedPositions["y"]);
-
-        $this->cropBackground($width, $height, $updatedPositions["x"], $updatedPositions["y"], $position, $backgroundColor);
+        
+        if (($width != $this->width || $positionX == 0) || ($height != $this->height || $positionY == 0)) {
+            
+            $layerTmp = new self(array(
+                'width' => $width,
+                'height' => $height,
+                'backgroundColor' => $backgroundColor,
+            ));
+            
+            $layerClone = new self(array(
+                'width' => $this->width,
+                'height' => $this->height,
+            ));
+            
+            imagedestroy($layerClone->image);
+            $layerClone->image = $this->image;
+            
+            $layerTmp->addLayer(1, $layerClone, -$positionX, -$positionY, $position);
+            
+            $newPos = $layerTmp->getLayerPositions();
+            $layerNewPosX = $newPos[1]['x'];
+            $layerNewPosY = $newPos[1]['y'];
+            
+            // update the layer
+            $this->width = $layerTmp->getWidth();
+            $this->height = $layerTmp->getHeight();
+            $this->image = $layerTmp->getResult();
+            unset($layerTmp);
+            unset($layerClone);
+            
+            $this->updateLayerPositionsAfterCropping($layerNewPosX, $layerNewPosY);
+        }
     }
 
     /**
@@ -1464,7 +1490,7 @@ class ImageWorkshop
 
     // Internals
     // ===================================================================================
-
+    
     /**
      * Update the positions of layers in the stack after cropping
      *
@@ -1478,8 +1504,8 @@ class ImageWorkshop
             $oldLayerPosX = $this->layerPositions[$layerId]["x"];
             $oldLayerPosY = $this->layerPositions[$layerId]["y"];
 
-            $newLayerPosX = $oldLayerPosX - $positionX;
-            $newLayerPosY = $oldLayerPosY - $positionY;
+            $newLayerPosX = $oldLayerPosX + $positionX;
+            $newLayerPosY = $oldLayerPosY + $positionY;
 
             unset($this->layerPositions[$layerId]);
 
@@ -1489,56 +1515,7 @@ class ImageWorkshop
             );
         }
     }
-
-    /**
-     * Crop the background of a layer
-     * $backgroundColor: "ffffff", "transparent"
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param integer $newWidth
-     * @param integer $newHeight
-     * @param integer $positionX
-     * @param integer $positionY
-     * @param string $position
-     * @param string $backgroundColor
-     */
-    public function cropBackground($newWidth, $newHeight, $positionX, $positionY, $position = "LT", $backgroundColor = "ffffff")
-    {
-        if ($newWidth <= $this->width && $newHeight <= $this->height) {
-
-            $oldWidth = $this->width;
-            $oldHeight = $this->height;
-
-            $this->width = $newWidth;
-            $this->height = $newHeight;
-
-            if (($this->width + $positionX) > $oldWidth || $positionX < 0 || ($this->height + $positionY) > $oldHeight || $positionY < 0) {
-
-                if ($backgroundColor == "transparent" || !$backgroundColor) {
-
-                    $virginLayoutImage = self::generateImage($this->width, $this->height);
-
-                    self::imagecopymergealpha($virginLayoutImage, $this->image, 0, 0, $positionX, $positionY, $oldWidth, $oldHeight, 100);
-
-                } else {
-
-                    $virginLayoutImage = self::generateImage($this->width, $this->height, $backgroundColor, 0);
-
-                    self::imagecopymergealpha($virginLayoutImage, $this->image, 0, 0, $positionX, $positionY, $oldWidth, $oldHeight, 100);
-                }
-
-            } else {
-
-                $virginLayoutImage = self::generateImage($this->width, $this->height);
-
-                imagecopymerge($virginLayoutImage, $this->image, 0, 0, $positionX, $positionY, $oldWidth, $oldHeight, 100);
-            }
-
-            unset($this->image);
-            $this->image = $virginLayoutImage;
-        }
-    }
-
+    
     /**
      * Resize the background of a layer
      *

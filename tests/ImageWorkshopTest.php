@@ -1,5 +1,5 @@
 <?php
-require_once('../src/ImageWorkshop.php');
+require_once('../src/PHPImageWorkshop/ImageWorkshop.php');
  
 /**
  * ImageWorkshopTest class
@@ -779,7 +779,7 @@ class ImageWorkshopTest extends PHPUnit_Framework_TestCase
      */
     protected function initializeLayer($method = 1)
     {
-        $layer = new ImageWorkshop(array(
+        $layer = new \PHPImageWorkshop\ImageWorkshop(array(
             "width" => 100,
             "height" => 75,
         ));

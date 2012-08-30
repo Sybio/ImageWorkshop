@@ -9,6 +9,13 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.2.3 - 2012-08-30**
+- Fixing a position bug when cropping with some positioning choices on crop() method
+- Changing the comportment of updateLayerPositionsAfterCropping(), an internal method
+- Removing useless cropBackground() method
+- Refactoring crop() method (comportment doesn't change)
+- Updating the lib path in the test file
+
 **Version 1.2.2 - 2012-08-16**
 - Fixing a bug when applying a filter because of given parameter number
 
@@ -21,13 +28,11 @@ It allows you to resize your layer by conserving its proportion AND to get the w
 (So the layer will be resized to fit in the wanted dimensions)
 - Creating the resize() method (refactoring resizeInPixel & Pourcent).
 
-**Version 1.1.0 - 2012-07-19**
-- Adding composer support / registering ImageWorkshop on packagist
-
 ### Usage
 You will find all the documentation here: http://phpimageworkshop.com/documentation.html & http://phpimageworkshop.com/tutorials.html
 
 ### @todo
+- Layer reverse (horizontal or vertical flip)
 - Adding a method to add easily borders to a layer (external, inside and middle border)
 
 ### Contributors
