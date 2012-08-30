@@ -29,7 +29,16 @@ It allows you to resize your layer by conserving its proportion AND to get the w
 - Creating the resize() method (refactoring resizeInPixel & Pourcent).
 
 ### Usage
-You will find all the documentation here: http://phpimageworkshop.com/documentation.html & http://phpimageworkshop.com/tutorials.html
+
+- Learn how to use the class in 5 minutes: http://phpimageworkshop.com/quickstart.html
+- The complete documentation: http://phpimageworkshop.com/documentation.html
+- Usefull tutorials: http://phpimageworkshop.com/tutorials.html
+
+**What's new in the doc' ?**
+
+- Rewriting the tutorial "Creating thumbnails": http://phpimageworkshop.com/tutorial/2/creating-thumbnails.html
+- Tutorial "Beautify your images with filters": http://phpimageworkshop.com/tutorial/4/beautify-images-filters.html
+- Quickstart page to learn the class faster: http://phpimageworkshop.com/quickstart.html
 
 ### @todo
 - Layer reverse (horizontal or vertical flip)
