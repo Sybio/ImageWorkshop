@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.3
+ * @version 1.2.4
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -359,8 +359,7 @@ class ImageWorkshop
                 $layerTmp->mergeAll();
 
                 $this->layers[$underLayerId] = clone $layerTmp;
-                $this->layerPositions[$underLayerId]["x"] = $minLayerPositionX;
-                $this->layerPositions[$underLayerId]["y"] = $minLayerPositionX;
+                $this->changePosition($underLayerId, $minLayerPositionX, $minLayerPositionX);
 
             } else {
 
@@ -838,10 +837,7 @@ class ImageWorkshop
                 $newPosX = round(($widthResizePourcent / 100) * $layerPosition['x']);
                 $newPosY = round(($heightResizePourcent / 100) * $layerPosition['y']);
 
-                $this->layerPositions[$layerId] = array(
-                    "x" => $newPosX,
-                    "y" => $newPosY,
-                );
+                $this->changePosition($layerId, $newPosX, $newPosY);
             }
 
             // Resize layers in the stack
@@ -1487,6 +1483,62 @@ class ImageWorkshop
 
         return $largestSideWidth;
     }
+    
+    /**
+     * Change the position of a sublayer for new positions
+     *
+     * @param integer $layerId
+     * @param integer $newPosX
+     * @param integer $newPosY
+     *
+     * @return boolean
+     */
+    public function changePosition($layerId, $newPosX = null, $newPosY = null)
+    {
+        // if the sublayer exists in the stack
+        if ($this->isLayerInIndex($layerId)) {
+            
+            if ($newPosX !== null) {
+                $this->layerPositions[$layerId]['x'] = $newPosX;
+            }
+            
+            if ($newPosY !== null) {
+                $this->layerPositions[$layerId]['y'] = $newPosY;
+            }
+            
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * Apply a translation on a sublayer that change its positions
+     *
+     * @param integer $layerId
+     * @param integer $addedPosX
+     * @param integer $addedPosY
+     *
+     * @return mixed (array of new positions or false if fail)
+     */
+    public function applyTranslation($layerId, $addedPosX = null, $addedPosY = null)
+    {
+        // if the sublayer exists in the stack
+        if ($this->isLayerInIndex($layerId)) {
+            
+            if ($addedPosX !== null) {
+                $this->layerPositions[$layerId]['x'] += $addedPosX;
+            }
+            
+            if ($addedPosY !== null) {
+                $this->layerPositions[$layerId]['y'] += $addedPosY;
+            }
+            
+            return $this->layerPositions[$layerId];
+        }
+
+        return false;
+    }
 
     // Internals
     // ===================================================================================
@@ -1508,11 +1560,8 @@ class ImageWorkshop
             $newLayerPosY = $oldLayerPosY + $positionY;
 
             unset($this->layerPositions[$layerId]);
-
-            $this->layerPositions[$layerId] = array(
-                "x" => $newLayerPosX,
-                "y" => $newLayerPosY,
-            );
+            
+            $this->changePosition($layerId, $newLayerPosX, $newLayerPosY);
         }
     }
     
@@ -1982,7 +2031,7 @@ class ImageWorkshop
     {
         return $this->layers[$layerId];
     }
-
+    
     /**
      * Calculate the right positions of a layer in a parent container (layer)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
@@ -2099,12 +2148,26 @@ class ImageWorkshop
 
     /**
      * Getter layerPositions
+     * 
+     * Get all the positions of the sublayers,
+     * or when specifying $layerId, get the position of this sublayer
      *
-     * @return array
+     * @param integer $layerId
+     * 
+     * @return mixed (array or boolean)
      */
-    public function getLayerPositions()
+    public function getLayerPositions($layerId = null)
     {
-        return $this->layerPositions;
+        if (!$layerId) {
+            
+            return $this->layerPositions;
+            
+        } elseif ($this->isLayerInIndex($layerId)) { // if the sublayer exists in the stack
+            
+            return $this->layerPositions[$layerId];
+        }
+        
+        return false;
     }
 
     /**

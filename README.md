@@ -9,6 +9,13 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.2.4 - 2012-09-03**
+- Adding the changePosition() method, to redefine the position of a sublayer in a layer stack
+- Adding the applyTranslation() method, that result to new positions after a given translation
+- Updating the getLayerPositions() method that allow you to get the positions of a sublayer
+- Refactoring methods that change the position of a sublayer for the new method
+- Adding some informations in the composer file
+
 **Version 1.2.3 - 2012-08-30**
 - Fixing a position bug when cropping with some positioning choices on crop() method
 - Changing the comportment of updateLayerPositionsAfterCropping(), an internal method
@@ -21,12 +28,6 @@ http://phpimageworkshop.com/
 
 **Version 1.2.1 - 2012-08-13**
 - Better image quality after resize. (replace imagecopyresized function for imagecopyresampled)
-
-**Version 1.2.0 - 2012-07-31**
-- Updating the resizeInPixel & resizeInPourcent methods: http://phpimageworkshop.com/doc/17/resizing.html
-It allows you to resize your layer by conserving its proportion AND to get the wanted width and height both.
-(So the layer will be resized to fit in the wanted dimensions)
-- Creating the resize() method (refactoring resizeInPixel & Pourcent).
 
 ### Usage
 

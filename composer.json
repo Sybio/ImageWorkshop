@@ -1,5 +1,17 @@
 {
     "name": "sybio/image-workshop",
+    "type": "library",
+    "description": "Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP)",
+    "keywords": ["image", "thumbnail", "watermark", "resize", "crop", "rotate", "library", "GD", "class"],
+    "homepage": "http://phpimageworkshop.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Clément Guillemain",
+            "homepage": "http://clementguillemain.fr",
+            "role": "Developer / Freelancer"
+        }
+    ],
     "require": {
         "php": ">=5.3.0"
     }
