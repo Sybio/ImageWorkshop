@@ -52,3 +52,4 @@ Main contributors:
 And also:
 - Cédric Spalvieri - Novaway [skwi69]
 - Elton Minetto - Coderockr [eminetto]
+- Phil Sturgeon - HappyNinjas Ltd. [philsturgeon]
