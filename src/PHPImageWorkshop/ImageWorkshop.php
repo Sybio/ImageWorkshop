@@ -88,7 +88,7 @@ class ImageWorkshop
     public function __construct($params = array())
     {
         if (! extension_loaded('gd')) {
-            throw new \Exception('PHP Image Workshop requires the GD extention to be loaded');
+            throw new \Exception('PHP Image Workshop requires the GD extension to be loaded');
         }
     	
         $this->width = 800;
