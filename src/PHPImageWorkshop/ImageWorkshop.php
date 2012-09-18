@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.4
+ * @version 1.2.5
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1858,51 +1858,56 @@ class ImageWorkshop
                 if ($x + $destX >= 0 && $x + $destX < $destW && $x + $srcX >= 0 && $x + $srcX < $srcW && $y + $destY >= 0 && $y + $destY < $destH && $y + $srcY >= 0 && $y + $srcY < $srcH) {
 
                     $destPixel = imagecolorsforindex($destImg, imagecolorat($destImg, $x + $destX, $y + $destY));
-                    $srcPixel = imagecolorsforindex($srcImg, imagecolorat($srcImg, $x + $srcX, $y + $srcY));
-
-                    $srcAlpha = 1 - ($srcPixel['alpha'] / 127);
-                    $destAlpha = 1 - ($destPixel['alpha'] / 127);
-                    $opacity = $srcAlpha * $pct / 100;
-
-                    if ($destAlpha >= $opacity) {
-						$alpha = $destAlpha;
-					}
-
-                    if ($destAlpha < $opacity) {
-						$alpha = $opacity;
-					}
-
-                    if ($alpha > 1) {
-						$alpha = 1;
-					}
-
-                    if ($opacity > 0) {
-
-                        $destRed = round((($destPixel['red'] * $destAlpha * (1 - $opacity))));
-                        $destGreen = round((($destPixel['green'] * $destAlpha * (1 - $opacity))));
-                        $destBlue = round((($destPixel['blue'] * $destAlpha * (1 - $opacity))));
-                        $srcRed = round((($srcPixel['red'] * $opacity)));
-                        $srcGreen = round((($srcPixel['green'] * $opacity)));
-                        $srcBlue = round((($srcPixel['blue'] * $opacity)));
-                        $red = round(($destRed + $srcRed  ) / ($destAlpha * (1 - $opacity) + $opacity));
-                        $green = round(($destGreen + $srcGreen) / ($destAlpha * (1 - $opacity) + $opacity));
-                        $blue = round(($destBlue + $srcBlue ) / ($destAlpha * (1 - $opacity) + $opacity));
-
-                        if ($red   > 255) {
-							$red   = 255;
-						}
-
-                        if ($green > 255) {
-							$green = 255;
+                    $srcImgColorat = imagecolorat($srcImg, $x + $srcX, $y + $srcY);
+                    
+                    if ($srcImgColorat > 0) {
+                    
+                        $srcPixel = imagecolorsforindex($srcImg, $srcImgColorat);
+    
+                        $srcAlpha = 1 - ($srcPixel['alpha'] / 127);
+                        $destAlpha = 1 - ($destPixel['alpha'] / 127);
+                        $opacity = $srcAlpha * $pct / 100;
+    
+                        if ($destAlpha >= $opacity) {
+    						$alpha = $destAlpha;
+    					}
+    
+                        if ($destAlpha < $opacity) {
+    						$alpha = $opacity;
+    					}
+    
+                        if ($alpha > 1) {
+    						$alpha = 1;
+    					}
+    
+                        if ($opacity > 0) {
+                            
+                            $destRed = round((($destPixel['red'] * $destAlpha * (1 - $opacity))));
+                            $destGreen = round((($destPixel['green'] * $destAlpha * (1 - $opacity))));
+                            $destBlue = round((($destPixel['blue'] * $destAlpha * (1 - $opacity))));
+                            $srcRed = round((($srcPixel['red'] * $opacity)));
+                            $srcGreen = round((($srcPixel['green'] * $opacity)));
+                            $srcBlue = round((($srcPixel['blue'] * $opacity)));
+                            $red = round(($destRed + $srcRed  ) / ($destAlpha * (1 - $opacity) + $opacity));
+                            $green = round(($destGreen + $srcGreen) / ($destAlpha * (1 - $opacity) + $opacity));
+                            $blue = round(($destBlue + $srcBlue ) / ($destAlpha * (1 - $opacity) + $opacity));
+    
+                            if ($red   > 255) {
+    							$red   = 255;
+    						}
+    
+                            if ($green > 255) {
+    							$green = 255;
+                            }
+    
+    						if ($blue  > 255) {
+    							$blue  = 255;
+    						}
+    
+                            $alpha = round((1 - $alpha) * 127);
+                            $color = imagecolorallocatealpha($destImg, $red, $green, $blue, $alpha);
+                            imagesetpixel($destImg, $x + $destX, $y + $destY, $color);
                         }
-
-						if ($blue  > 255) {
-							$blue  = 255;
-						}
-
-                        $alpha = round((1 - $alpha) * 127);
-                        $color = imagecolorallocatealpha($destImg, $red, $green, $blue, $alpha);
-                        imagesetpixel($destImg, $x + $destX, $y + $destY, $color);
                     }
                 }
             }
