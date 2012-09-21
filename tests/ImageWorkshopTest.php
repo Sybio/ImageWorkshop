@@ -1,5 +1,5 @@
 <?php
-require_once('../src/PHPImageWorkshop/ImageWorkshop.php');
+require_once(__DIR__.'/../src/PHPImageWorkshop/ImageWorkshop.php');
  
 /**
  * ImageWorkshopTest class
