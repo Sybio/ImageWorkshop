@@ -14,7 +14,7 @@ http://phpimageworkshop.com/
 
 **Version 1.2.5 - 2012-09-18**
 - Fixing the only one known bug that we are tracking for a long time: you can know
-apply a rotation -(>rotate()) and then an opacity (->opacity()) on a layer without crash.
+apply a rotation (->rotate()) and then an opacity (->opacity()) on a layer without crash.
 - Updating composer.json to autoload the class in a project using composer
 - Testing if the PHP environment has GD library enabled
 
