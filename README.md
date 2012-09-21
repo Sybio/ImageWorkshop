@@ -2,6 +2,8 @@
 # ImageWorkshop class
 # ================================
 
+![Test status](https://secure.travis-ci.org/Sybio/ImageWorkshop.png)
+
 ### Summary and features
 Really flexible and easy-to-use PHP class to work with images using the GD Library
 
@@ -10,6 +12,7 @@ http://phpimageworkshop.com/
 ### Latest updates
 
 **Version 1.2.5 - 2012-09-21**
+- You can now find tests status of the class on travis-ci: http://travis-ci.org/#!/Sybio/ImageWorkshop
 - Adding ImageWorkshop on http://travis-ci.org/ for controlled continuous integration
 
 **Version 1.2.5 - 2012-09-18**
