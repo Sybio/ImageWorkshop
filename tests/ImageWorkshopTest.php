@@ -4,10 +4,10 @@ require_once(__DIR__.'/../src/PHPImageWorkshop/ImageWorkshop.php');
 /**
  * ImageWorkshopTest class
  * 
- * Tests the class ImageWorkshop
+ * Tests ImageWorkshop class
  * 
  */
-class ImageWorkshopTest extends PHPUnit_Framework_TestCase
+class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
 {
     // Tests
     // ===================================================================================
