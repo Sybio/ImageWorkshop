@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.5
+ * @version 1.2.6
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -98,67 +98,72 @@ class ImageWorkshop
         $this->layerPositions = array();
         $imageFromPath = null;
         $imageVar = null;
+        $imageString = null;
         $backgroundColor = null;
         $text = null;
         $fontPath = null;
         $fontSize = 13;
-        $fontColor = "ffffff";
+        $fontColor = 'ffffff';
         $textRotation = 0;
         $fileObject = null;
         $tmpName = null;
         $mimeType = null;
 
-        if (array_key_exists("width", $params)) {
-            $this->width = $params["width"];
+        if (array_key_exists('width', $params)) {
+            $this->width = $params['width'];
         }
 
-        if (array_key_exists("height", $params)) {
-            $this->height = $params["height"];
+        if (array_key_exists('height', $params)) {
+            $this->height = $params['height'];
         }
 
-        if (array_key_exists("imageFromPath", $params)) {
-            $imageFromPath = $params["imageFromPath"];
+        if (array_key_exists('imageFromPath', $params)) {
+            $imageFromPath = $params['imageFromPath'];
         }
 
-        if (array_key_exists("imageVar", $params)) {
-            $imageVar = $params["imageVar"];
+        if (array_key_exists('imageVar', $params)) {
+            $imageVar = $params['imageVar'];
+        }
+        
+        if (array_key_exists('imageFromString', $params)) {
+            $imageString = $params['imageFromString'];
         }
 
-        if (array_key_exists("backgroundColor", $params)) {
-            $backgroundColor = $params["backgroundColor"];
+        if (array_key_exists('backgroundColor', $params)) {
+            $backgroundColor = $params['backgroundColor'];
         }
 
         // Text layer
 
-        if (array_key_exists("text", $params)) {
-            $text = $params["text"];
+        if (array_key_exists('text', $params)) {
+            $text = $params['text'];
         }
 
-        if (array_key_exists("fontPath", $params)) {
+        if (array_key_exists('fontPath', $params)) {
             $fontPath = $params["fontPath"];
         }
 
-        if (array_key_exists("fontSize", $params)) {
-            $fontSize = $params["fontSize"];
+        if (array_key_exists('fontSize', $params)) {
+            $fontSize = $params['fontSize'];
         }
 
-        if (array_key_exists("fontColor", $params)) {
-            $fontColor = $params["fontColor"];
+        if (array_key_exists('fontColor', $params)) {
+            $fontColor = $params['fontColor'];
         }
 
-        if (array_key_exists("textRotation", $params)) {
-            $textRotation = $params["textRotation"];
+        if (array_key_exists('textRotation', $params)) {
+            $textRotation = $params['textRotation'];
         }
 
         // Uploaded file object layer
 
-        if (array_key_exists("fileObject", $params)) {
+        if (array_key_exists('fileObject', $params)) {
 
-            $fileObject = $params["fileObject"];
+            $fileObject = $params['fileObject'];
 
-        } elseif (array_key_exists("tmpName", $params)) {
+        } elseif (array_key_exists('tmpName', $params)) {
 
-            $tmpName = $params["tmpName"];
+            $tmpName = $params['tmpName'];
         }
 
         $this->clearStack();
@@ -169,7 +174,7 @@ class ImageWorkshop
 
             if ($fileObject) {
 
-                $imageFromPath = $fileObject["tmp_name"];
+                $imageFromPath = $fileObject['tmp_name'];
 
             } elseif ($tmpName) {
 
@@ -181,7 +186,13 @@ class ImageWorkshop
         } elseif ($imageVar) {
 
             $this->initializeImageWith($imageVar);
+            
+        } elseif ($imageString) {
 
+            $imageVar = imagecreatefromstring($imageString);
+    
+            $this->initializeImageWith($imageVar);
+            
         } elseif ($text && $fontPath) {
 
             $this->initializeTextImage($text, $fontPath, $fontSize, $fontColor, $textRotation, $backgroundColor);

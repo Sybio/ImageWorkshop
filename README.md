@@ -9,6 +9,18 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.2.6 - 2012-09-27**
+- You can now initialize a layer from an image string (obtains with cURL, file_get_contents...):
+```php
+    $imgString = file_get_contents("/myfolder/pic.jpg");
+
+    $layer1 = new ImageWorkshop(array(
+        "imageFromString" => $imgString,
+    ));
+```
+Be carefull, JPEG format is known to be badly encoded after a cURL request or file_get_contents()
+and can show display bugs ! I'm trying to find a solution.
+
 **Version 1.2.5 - 2012-09-21**
 - Adding ImageWorkshop on http://travis-ci.org/ for controlled continuous integration
 
