@@ -12,7 +12,7 @@ http://phpimageworkshop.com/
 ### Latest updates
 
 **Version 1.2.6 - 2012-09-27**
-- You can now initialize a layer from an image string (obtains with cURL, file_get_contents...):
+- You can now initialize a layer from an image string (obtained with cURL, file_get_contents...):
 ```php
     $imgString = file_get_contents("/myfolder/pic.jpg");
 
