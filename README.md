@@ -47,9 +47,6 @@ apply a rotation (->rotate()) and then an opacity (->opacity()) on a layer witho
 **Version 1.2.2 - 2012-08-16**
 - Fixing a bug when applying a filter because of given parameter number
 
-**Version 1.2.1 - 2012-08-13**
-- Better image quality after resize. (replace imagecopyresized function for imagecopyresampled)
-
 ### Usage
 
 - Learn how to use the class in 5 minutes: http://phpimageworkshop.com/quickstart.html
