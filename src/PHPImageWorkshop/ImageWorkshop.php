@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.2.6
+ * @version 1.3.0
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1554,6 +1554,47 @@ class ImageWorkshop
 
         return false;
     }
+    
+    /**
+     * Apply horizontal or vertical flip. (Transformation)
+     * 
+     * @param string $type
+     */
+    public function flip($type = 'horizontal')
+    {
+        $layers = $this->layers;
+
+        foreach ($layers as $key => $layer) {
+
+            $layer->flip($type);
+            $this->layers[$key] = $layer;
+        }
+        
+        $temp = static::generateImage($this->width, $this->height);
+        
+        if ($type == 'horizontal') {
+            
+            imagecopyresampled($temp, $this->image, 0, 0, $this->width - 1, 0, $this->width, $this->height, -$this->width, $this->height);
+            $this->image = $temp;
+            
+            foreach ($this->layerPositions as $layerId => $layerPositions) {
+    
+                $this->changePosition($layerId, $this->width - $this->layers[$layerId]->getWidth() - $layerPositions['x'], $layerPositions['y']);
+            }
+            
+        } elseif ($type == 'vertical') {
+            
+            imagecopyresampled($temp, $this->image, 0, 0, 0, $this->height - 1, $this->width, $this->height, $this->width, -$this->height);
+            $this->image = $temp;
+            
+            foreach ($this->layerPositions as $layerId => $layerPositions) {
+    
+                $this->changePosition($layerId, $layerPositions['x'], $this->height - $this->layers[$layerId]->getHeight() - $layerPositions['y']);
+            }
+        }
+        
+        unset($temp);
+    }
 
     // Internals
     // ===================================================================================
@@ -1819,10 +1860,7 @@ class ImageWorkshop
      */
     public static function mergeTwoImages(&$destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
     {
-        $sourceImageX = imagesx($sourceImage);
-        $sourceImageY = imagesy($sourceImage);
-
-        imagecopy($destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, $sourceImageX, $sourceImageY);
+        imagecopy($destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, imageSX($sourceImage), imageSY($sourceImage));
     }
 
     /**

@@ -11,12 +11,19 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.3.0 - 2012-10-11**
+- You are able to apply a horizontal or vertical flip (transformation) on a layer
+```php
+    $layer->flip('horizontal');
+```
+- Refactoring mergeTwoImages() method.
+
 **Version 1.2.6 - 2012-09-27**
 - You can now initialize a layer from an image string (obtained with cURL, file_get_contents...):
 ```php
     $imgString = file_get_contents("/myfolder/pic.jpg");
 
-    $layer1 = new ImageWorkshop(array(
+    $layer = new ImageWorkshop(array(
         "imageFromString" => $imgString,
     ));
 ```
@@ -39,16 +46,6 @@ apply a rotation (->rotate()) and then an opacity (->opacity()) on a layer witho
 - Updating the getLayerPositions() method that allow you to get the positions of a sublayer
 - Refactoring methods that change the position of a sublayer for the new method
 - Adding some informations in the composer file
-
-**Version 1.2.3 - 2012-08-30**
-- Fixing a position bug when cropping with some positioning choices on crop() method
-- Changing the comportment of updateLayerPositionsAfterCropping(), an internal method
-- Removing useless cropBackground() method
-- Refactoring crop() method (comportment doesn't change)
-- Updating the lib path in the test file
-
-**Version 1.2.2 - 2012-08-16**
-- Fixing a bug when applying a filter because of given parameter number
 
 ### Usage
 
