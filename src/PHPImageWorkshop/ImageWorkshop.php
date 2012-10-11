@@ -679,7 +679,7 @@ class ImageWorkshop
      */
     public static function generateImage($width = 100, $height = 100, $color = "ffffff", $opacity = 127)
     {
-        $RGBColors = self::convertHexToRGB($color);
+        $RGBColors = static::convertHexToRGB($color);
 
         $image = imagecreatetruecolor($width, $height);
         imagesavealpha($image, true);
@@ -1247,9 +1247,9 @@ class ImageWorkshop
             }
         }
 
-        $transparentImage = self::generateImage($this->getWidth(), $this->getHeight());
+        $transparentImage = static::generateImage($this->getWidth(), $this->getHeight());
 
-        self::imagecopymergealpha($transparentImage, $this->image, 0, 0, 0, 0, $this->getWidth(), $this->getHeight(), $opacity);
+        static::imagecopymergealpha($transparentImage, $this->image, 0, 0, 0, 0, $this->getWidth(), $this->getHeight(), $opacity);
 
         unset($this->image);
         $this->image = $transparentImage;
@@ -1268,7 +1268,7 @@ class ImageWorkshop
      */
     public function writeText($text, $font = 1, $color = "ffffff", $positionX = 0, $positionY = 0, $align = "horizontal")
     {
-        $RGBTextColor = self::convertHexToRGB($color);
+        $RGBTextColor = static::convertHexToRGB($color);
         $textColor = imagecolorallocate($this->image, $RGBTextColor["R"], $RGBTextColor["G"], $RGBTextColor["B"]);
 
         if ($align == "horizontal") {
@@ -1297,7 +1297,7 @@ class ImageWorkshop
      */
     public function write($text, $fontPath, $fontSize = 13, $color = "ffffff", $positionX = 0, $positionY = 0, $fontRotation = 0)
     {
-        $RGBTextColor = self::convertHexToRGB($color);
+        $RGBTextColor = static::convertHexToRGB($color);
         $textColor = imagecolorallocate($this->image, $RGBTextColor["R"], $RGBTextColor["G"], $RGBTextColor["B"]);
 
         return imagettftext($this->image, $fontSize, $fontRotation, $positionX, $positionY, $textColor, $fontPath, $text);
@@ -1326,8 +1326,8 @@ class ImageWorkshop
             // Layer positions
             if ($this->layerPositions[$layerId]["x"] != 0 || $this->layerPositions[$layerId]["y"] != 0) {
 
-                $virginLayoutImageTmp = self::generateImage($this->width, $this->height);
-                self::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layerPositions[$layerId]["x"], $this->layerPositions[$layerId]["y"], 0, 0);
+                $virginLayoutImageTmp = static::generateImage($this->width, $this->height);
+                static::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layerPositions[$layerId]["x"], $this->layerPositions[$layerId]["y"], 0, 0);
                 $imagesToMerge[$layerLevel] = $virginLayoutImageTmp;
                 unset($virginLayoutImageTmp);
             }
@@ -1339,15 +1339,15 @@ class ImageWorkshop
 
         foreach ($imagesToMerge as $imageLevel => $image) {
 
-            self::mergeTwoImages($mergedImage, $image);
+            static::mergeTwoImages($mergedImage, $image);
 
             $iterator++;
         }
 
         if ($backgroundColor) {
 
-            $backgroundImage = self::generateImage($this->width, $this->height, $backgroundColor, 0);
-            self::mergeTwoImages($backgroundImage, $mergedImage);
+            $backgroundImage = static::generateImage($this->width, $this->height, $backgroundColor, 0);
+            static::mergeTwoImages($backgroundImage, $mergedImage);
             $mergedImage = $backgroundImage;
             unset($backgroundImage);
         }
@@ -1594,7 +1594,7 @@ class ImageWorkshop
         $this->width = $newWidth;
         $this->height = $newHeight;
 
-        $virginLayoutImage = self::generateImage($this->width, $this->height);
+        $virginLayoutImage = static::generateImage($this->width, $this->height);
 
         imagecopyresampled($virginLayoutImage, $this->image, 0, 0, 0, 0, $this->width, $this->height, $oldWidth, $oldHeight);
 
@@ -1613,11 +1613,11 @@ class ImageWorkshop
 
         if ($backgroundColor) {
 
-            $this->image = self::generateImage($this->width, $this->height, $backgroundColor, 0);
+            $this->image = static::generateImage($this->width, $this->height, $backgroundColor, 0);
 
         } else {
 
-            $this->image = self::generateImage($this->width, $this->height);
+            $this->image = static::generateImage($this->width, $this->height);
         }
     }
 
@@ -1706,11 +1706,11 @@ class ImageWorkshop
 
         if ($backgroundColor) {
 
-            $this->image = self::generateImage($this->width, $this->height, $backgroundColor, 0);
+            $this->image = static::generateImage($this->width, $this->height, $backgroundColor, 0);
 
         } else {
 
-            $this->image = self::generateImage($this->width, $this->height);
+            $this->image = static::generateImage($this->width, $this->height);
         }
 
         $this->write($text, $fontPath, $fontSize, $fontColor, $textDimensions["left"], $textDimensions["top"], $textRotation);
@@ -1741,7 +1741,7 @@ class ImageWorkshop
         $this->layers[$layerId] = $layer;
 
         // Add the layer positions in the main layer
-        $this->layerPositions[$layerId] = self::calculatePositions($this->getWidth(), $this->getHeight(), $layer->getWidth(), $layer->getHeight(), $positionX, $positionY, $position);
+        $this->layerPositions[$layerId] = static::calculatePositions($this->getWidth(), $this->getHeight(), $layer->getWidth(), $layer->getHeight(), $positionX, $positionY, $position);
 
         // Update the lastLayerId of the workshop
         $this->lastLayerId = $layerId;
@@ -2023,9 +2023,9 @@ class ImageWorkshop
     public function createNewVarFromBackgroundImage()
     {
         // Creation of a new background image
-        $virginImage = self::generateImage($this->getWidth(), $this->getHeight());
+        $virginImage = static::generateImage($this->getWidth(), $this->getHeight());
 
-        self::mergeTwoImages($virginImage, $this->image, 0, 0, 0, 0);
+        static::mergeTwoImages($virginImage, $this->image, 0, 0, 0, 0);
         unset($this->image);
 
         $this->image = $virginImage;
