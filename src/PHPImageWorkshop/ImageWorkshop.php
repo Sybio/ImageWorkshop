@@ -362,7 +362,7 @@ class ImageWorkshop
                     $layerTmpHeight = $totalHeightUnderLayer - $minLayerPositionY;
                 }
 
-                $layerTmp = new self(array(
+                $layerTmp = new static(array(
                     "width" => $layerTmpWidth,
                     "height" => $layerTmpHeight,
                 ));
@@ -378,7 +378,7 @@ class ImageWorkshop
 
             } else {
 
-                $layerTmp = new self(array(
+                $layerTmp = new static(array(
                     "imageVar" => $this->image,
                 ));
 
@@ -784,7 +784,7 @@ class ImageWorkshop
                     
                     if ($this->getWidth() != $newWidth || $this->getHeight() != $newHeight) {
                         
-                        $layerTmp = new self(array(
+                        $layerTmp = new static(array(
                             'width' => $newWidth,
                             'height' => $newHeight,
                         ));
@@ -1026,13 +1026,13 @@ class ImageWorkshop
         
         if (($width != $this->width || $positionX == 0) || ($height != $this->height || $positionY == 0)) {
             
-            $layerTmp = new self(array(
+            $layerTmp = new static(array(
                 'width' => $width,
                 'height' => $height,
                 'backgroundColor' => $backgroundColor,
             ));
             
-            $layerClone = new self(array(
+            $layerClone = new static(array(
                 'width' => $this->width,
                 'height' => $this->height,
             ));
