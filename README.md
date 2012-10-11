@@ -77,3 +77,4 @@ And also:
 - Elton Minetto - Coderockr [eminetto]
 - Phil Sturgeon - HappyNinjas Ltd. [philsturgeon]
 - [ziadoz]
+- Frank de Jonge - Ku [FrenkyNet]
