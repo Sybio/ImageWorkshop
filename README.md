@@ -12,9 +12,10 @@ http://phpimageworkshop.com/
 ### Latest updates
 
 **Version 1.3.0 - 2012-10-11**
-- You are able to apply a horizontal or vertical flip (transformation) on a layer
+- You are able to apply a horizontal or vertical flip (transformation) on a layer:
+
 ```php
-    $layer->flip('horizontal');
+$layer->flip('horizontal');
 ```
 - Refactoring mergeTwoImages() method.
 
