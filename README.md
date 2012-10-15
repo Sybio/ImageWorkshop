@@ -56,14 +56,12 @@ apply a rotation (->rotate()) and then an opacity (->opacity()) on a layer witho
 
 **What's new in the doc' ?**
 
+- Adding the flip documentation: http://phpimageworkshop.com/doc/25/flip-vertical-horizontal-mirror.html
 - Adding the opacity documentation which was omitted: http://phpimageworkshop.com/doc/24/opacity-transparency.html
 - Tutorial "Manage animated GIF with ImageWorkshop (and GiFFrameExtractor & GifCreator)": http://phpimageworkshop.com/tutorial/5/manage-animated-gif-with-imageworkshop.html
 - Rewriting the tutorial "Creating thumbnails": http://phpimageworkshop.com/tutorial/2/creating-thumbnails.html
-- Tutorial "Beautify your images with filters": http://phpimageworkshop.com/tutorial/4/beautify-images-filters.html
-- Quickstart page to learn the class faster: http://phpimageworkshop.com/quickstart.html
 
 ### @todo
-- Layer reverse (horizontal or vertical flip)
 - Adding a method to add easily borders to a layer (external, inside and middle border)
 
 ### Contributors
