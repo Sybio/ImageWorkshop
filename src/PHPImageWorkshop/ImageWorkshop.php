@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.3.1
+ * @version 1.3.2
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1346,7 +1346,7 @@ class ImageWorkshop
         
         $opacity = 127;
         
-        if ($backgroundColor) {
+        if ($backgroundColor && $backgroundColor != 'transparent') {
             $opacity = 0;
         }
         
