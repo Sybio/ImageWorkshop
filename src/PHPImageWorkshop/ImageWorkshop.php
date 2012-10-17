@@ -8,7 +8,7 @@ namespace PHPImageWorkshop;
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.3.0
+ * @version 1.3.1
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -1343,14 +1343,17 @@ class ImageWorkshop
 
             $iterator++;
         }
-
+        
+        $opacity = 127;
+        
         if ($backgroundColor) {
-
-            $backgroundImage = static::generateImage($this->width, $this->height, $backgroundColor, 0);
-            static::mergeTwoImages($backgroundImage, $mergedImage);
-            $mergedImage = $backgroundImage;
-            unset($backgroundImage);
+            $opacity = 0;
         }
+        
+        $backgroundImage = static::generateImage($this->width, $this->height, $backgroundColor, $opacity);
+        static::mergeTwoImages($backgroundImage, $mergedImage);
+        $mergedImage = $backgroundImage;
+        unset($backgroundImage);
 
         return $mergedImage;
     }

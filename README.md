@@ -11,6 +11,9 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.3.1 - 2012-10-17**
+- Fixing a transparency bug when saving a layer as PNG which has no sublayer.
+
 **Version 1.3.0 - 2012-10-11**
 - You are able to apply a horizontal or vertical flip (transformation) on a layer
 ```php
