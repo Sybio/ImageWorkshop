@@ -77,6 +77,11 @@ class ImageWorkshop
      */
     protected $image;
 
+    const ERROR_GD_NOT_INSTALLED = 1;
+    const ERROR_NOT_AN_IMAGE_FILE = 2;
+    const ERROR_PHP_IMAGE_VAR_NOT_USED = 3;
+    const ERROR_IMAGE_NOT_FOUND = 4;
+
     // Methods
     // ===================================================================================
 
@@ -88,7 +93,7 @@ class ImageWorkshop
     public function __construct($params = array())
     {
         if (!extension_loaded('gd')) {
-            throw new \Exception('PHPImageWorkshop requires the GD extension to be loaded.');
+            throw new ImageWorkshopException('PHPImageWorkshop requires the GD extension to be loaded.', ImageWorkshop::ERROR_GD_NOT_INSTALLED);
         }
     	
         $this->width = 800;
@@ -1686,7 +1691,6 @@ class ImageWorkshop
             $mimeContentType = $mimeContentType[1];
 
             switch ($mimeContentType) {
-
                 case "jpeg":
                     $this->image = imagecreatefromjpeg($path);
                 break;
@@ -1700,12 +1704,12 @@ class ImageWorkshop
                 break;
 
                 default:
-                    echo 'Not an image file (jpeg/png/gif) at "'.$path.'"'; exit;
+                    throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', ImageWorkshop::ERROR_NOT_AN_IMAGE_FILE);
                 break;
             }
 
         } else {
-            echo 'No such file found at "'.$path.'"'; exit;
+            throw new ImageWorkshopException('No such file found at "'.$path.'"', ImageWorkshop::ERROR_IMAGE_NOT_FOUND);
         }
     }
 
@@ -1720,7 +1724,7 @@ class ImageWorkshop
         unset($this->image);
 
         if (gettype($image) != "resource") {
-            echo "You must give a php image var by using initializeImageWith"; exit;
+            throw new ImageWorkshopException("You must give a php image var by using initializeImageWith", ImageWorkshop::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
 
         $this->width = imagesx($image);
@@ -2250,4 +2254,20 @@ class ImageWorkshop
     {
         return $this->lastLayerId;
     }
+}
+
+
+/**
+ * ImageWorkshopException
+ */
+class ImageWorkshopException extends \Exception
+{
+    public function __construct($message, $code = 0, Exception $previous = null) {
+        parent::__construct($message, $code, $previous);
+    }
+
+    public function __toString() {
+        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
+    }
+
 }
