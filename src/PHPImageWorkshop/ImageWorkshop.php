@@ -4,6 +4,8 @@ namespace PHPImageWorkshop;
 
 use PHPImageWorkshop\ImageWorkshopException;
 
+// require_once(__DIR__.'/ImageWorkshopException.php'); // If no autoloader, uncomment this line
+
 /**
  * ImageWorkshop class
  *
