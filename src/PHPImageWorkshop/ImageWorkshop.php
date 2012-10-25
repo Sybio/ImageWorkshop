@@ -2,13 +2,15 @@
 
 namespace PHPImageWorkshop;
 
+use PHPImageWorkshop\ImageWorkshopException;
+
 /**
  * ImageWorkshop class
  *
  * Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP).
  * ImageWorkshop can be used as a layer, a group or a document.
  *
- * @version 1.3.2
+ * @version 1.3.3
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -77,9 +79,24 @@ class ImageWorkshop
      */
     protected $image;
 
+    /**
+     * @var integer
+     */
     const ERROR_GD_NOT_INSTALLED = 1;
+    
+    /**
+     * @var integer
+     */
     const ERROR_NOT_AN_IMAGE_FILE = 2;
+    
+    /**
+     * @var integer
+     */
     const ERROR_PHP_IMAGE_VAR_NOT_USED = 3;
+    
+    /**
+     * @var integer
+     */
     const ERROR_IMAGE_NOT_FOUND = 4;
 
     // Methods
@@ -2254,20 +2271,4 @@ class ImageWorkshop
     {
         return $this->lastLayerId;
     }
-}
-
-
-/**
- * ImageWorkshopException
- */
-class ImageWorkshopException extends \Exception
-{
-    public function __construct($message, $code = 0, Exception $previous = null) {
-        parent::__construct($message, $code, $previous);
-    }
-
-    public function __toString() {
-        return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-    }
-
 }

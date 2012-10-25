@@ -11,6 +11,9 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.3.3 - 2012-10-25**
+- Adding an ImageWorkshopException class in the project to manage exceptions
+
 **Version 1.3.1 - 2012-10-17**
 - Fixing a transparency bug when saving a layer as PNG which has no sublayer.
 
@@ -77,3 +80,4 @@ And also:
 - Phil Sturgeon - HappyNinjas Ltd. [philsturgeon]
 - [ziadoz]
 - Frank de Jonge - Ku [FrenkyNet]
+- Bjørn Børresen - Freelancer [bjornbjorn]
