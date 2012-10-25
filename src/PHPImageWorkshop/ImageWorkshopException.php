@@ -23,6 +23,8 @@ class ImageWorkshopException extends \Exception
     
     /**
      * __toString method
+     *
+     * @return string
      */
     public function __toString()
     {
