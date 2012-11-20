@@ -11,6 +11,11 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 1.3.4 - 2012-11-20**
+- Renaming "Pourcent" occurrences for "Percent"
+For example, the method resizeInPourcent() is now named resizeInPercent().
+Check the changes: https://github.com/Sybio/ImageWorkshop/pull/9/files
+
 **Version 1.3.3 - 2012-10-25**
 - Adding an ImageWorkshopException class in the project to manage exceptions
 
