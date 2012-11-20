@@ -249,7 +249,7 @@ class ImageWorkshop
      */
     public function pasteImage($unit = "pixel", $image, $positionX = 0, $positionY = 0)
     {
-        if ($unit == "pourcent") {
+        if ($unit == "percent") {
 
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
