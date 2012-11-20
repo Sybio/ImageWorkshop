@@ -80,6 +80,16 @@ class ImageWorkshop
      * Background Image
      */
     protected $image;
+    
+    /**
+     * @var string
+     */
+    const UNIT_PIXEL = 'pixel';
+    
+    /**
+     * @var string
+     */    
+    const UNIT_PERCENT = 'percent';
 
     /**
      * @var integer
@@ -242,14 +252,14 @@ class ImageWorkshop
      * You can specify the position left (in pixels) and the position top (in pixels) of the added image relatives to the layer
      * Otherwise, it will be set at 0 and 0
      *
-     * @param string $unit
+     * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
      * @param resource $image
      * @param integer $positionX
      * @param integer $positionY
      */
-    public function pasteImage($unit = "pixel", $image, $positionX = 0, $positionY = 0)
+    public function pasteImage($unit = self::UNIT_PIXEL, $image, $positionX = 0, $positionY = 0)
     {
-        if ($unit == "percent") {
+        if ($unit == self::UNIT_PERCENT) {
 
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
@@ -733,10 +743,10 @@ class ImageWorkshop
     }
 
     /**
-     * Resize the layer by specifying a pourcent
+     * Resize the layer by specifying a percent
      *
-     * @param float $pourcentWidth
-     * @param float $pourcentHeight
+     * @param float $percentWidth
+     * @param float $percentHeight
      * @param boolean $converseProportion
      * @param integer $positionX
      * @param integer $positionY
@@ -746,17 +756,17 @@ class ImageWorkshop
      * 
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
-    public function resizeInPourcent($pourcentWidth = null, $pourcentHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
+    public function resizeInPercent($percentWidth = null, $percentHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
     {
-        $this->resize('pourcent', $pourcentWidth, $pourcentHeight, $converseProportion, $positionX, $positionY, $position);
+        $this->resize(self::UNIT_PERCENT, $percentWidth, $percentHeight, $converseProportion, $positionX, $positionY, $position);
     }
     
     /**
      * Resize the layer
      *
      * @param string $unit
-     * @param float $pourcentWidth
-     * @param float $pourcentHeight
+     * @param float $percentWidth
+     * @param float $percentHeight
      * @param boolean $converseProportion
      * @param integer $positionX
      * @param integer $positionY
@@ -766,11 +776,11 @@ class ImageWorkshop
      * 
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
-    public function resize($unit = "pixel", $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
+    public function resize($unit = self::UNIT_PIXEL, $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
     {
         if ($newWidth || $newHeight) {
             
-            if ($unit == 'pourcent') {
+            if ($unit == self::UNIT_PERCENT) {
                 
                 if ($newWidth) {
                     
@@ -832,49 +842,49 @@ class ImageWorkshop
                     
                 } elseif ($newWidth) {
 
-                    $widthResizePourcent = $newWidth / ($this->width / 100);
+                    $widthResizePercent = $newWidth / ($this->width / 100);
 
-                    $newHeight = round(($widthResizePourcent / 100) * $this->height);
-                    $heightResizePourcent = $widthResizePourcent;
+                    $newHeight = round(($widthResizePercent / 100) * $this->height);
+                    $heightResizePercent = $widthResizePercent;
 
                 } elseif ($newHeight) {
 
-                    $heightResizePourcent = $newHeight / ($this->height / 100);
+                    $heightResizePercent = $newHeight / ($this->height / 100);
 
-                    $newWidth = round(($heightResizePourcent / 100) * $this->width);
-                    $widthResizePourcent = $heightResizePourcent;
+                    $newWidth = round(($heightResizePercent / 100) * $this->width);
+                    $widthResizePercent = $heightResizePercent;
                 }
 
             } elseif (($newWidth && !$newHeight) || (!$newWidth && $newHeight)) { // New width OR new height is given
 
                 if ($newWidth) {
 
-                    $widthResizePourcent = $newWidth / ($this->width / 100);
+                    $widthResizePercent = $newWidth / ($this->width / 100);
 
-                    $heightResizePourcent = 100;
+                    $heightResizePercent = 100;
                     $newHeight = $this->height;
 
                 } else {
 
-                    $heightResizePourcent = $newHeight / ($this->height / 100);
+                    $heightResizePercent = $newHeight / ($this->height / 100);
 
-                    $widthResizePourcent = 100;
+                    $widthResizePercent = 100;
                     $newWidth = $this->width;
                 }
 
             } else { // New width AND new height are given
 
-                $widthResizePourcent = $newWidth / ($this->width / 100);
+                $widthResizePercent = $newWidth / ($this->width / 100);
 
-                $heightResizePourcent = $newHeight / ($this->height / 100);
+                $heightResizePercent = $newHeight / ($this->height / 100);
             }
 
             // Update the layer positions in the stack
 
             foreach ($this->layerPositions as $layerId => $layerPosition) {
 
-                $newPosX = round(($widthResizePourcent / 100) * $layerPosition['x']);
-                $newPosY = round(($heightResizePourcent / 100) * $layerPosition['y']);
+                $newPosX = round(($widthResizePercent / 100) * $layerPosition['x']);
+                $newPosY = round(($heightResizePercent / 100) * $layerPosition['y']);
 
                 $this->changePosition($layerId, $newPosX, $newPosY);
             }
@@ -885,7 +895,7 @@ class ImageWorkshop
 
             foreach ($layers as $key => $layer) {
 
-                $layer->resizeInPourcent($widthResizePourcent, $heightResizePourcent);
+                $layer->resizeInPercent($widthResizePercent, $heightResizePercent);
                 $this->layers[$key] = $layer;
             }
 
@@ -907,26 +917,26 @@ class ImageWorkshop
     }
 
     /**
-     * Resize the layer by its largest side by specifying pourcent
+     * Resize the layer by its largest side by specifying percent
      *
-     * @param integer $newLargestSideWidth pourcent
+     * @param integer $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
-    public function resizeByLargestSideInPourcent($newLargestSideWidth, $converseProportion = false)
+    public function resizeByLargestSideInPercent($newLargestSideWidth, $converseProportion = false)
     {
-        $this->resizeByLargestSide('pourcent', $newLargestSideWidth, $converseProportion);
+        $this->resizeByLargestSide(self::UNIT_PERCENT, $newLargestSideWidth, $converseProportion);
     }
 
     /**
      * Resize the layer by its largest side
      *
      * @param string $unit
-     * @param integer $newLargestSideWidth pourcent
+     * @param integer $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
-    public function resizeByLargestSide($unit = "pixel", $newLargestSideWidth, $converseProportion = false)
+    public function resizeByLargestSide($unit = self::UNIT_PIXEL, $newLargestSideWidth, $converseProportion = false)
     {
-        if ($unit == 'pourcent') {
+        if ($unit == self::UNIT_PERCENT) {
 
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
         }
@@ -953,14 +963,14 @@ class ImageWorkshop
     }
 
     /**
-     * Resize the layer by its narrow side by specifying pourcent
+     * Resize the layer by its narrow side by specifying percent
      *
-     * @param integer $newNarrowSideWidth pourcent
+     * @param integer $newNarrowSideWidth percent
      * @param boolean $converseProportion
      */
-    public function resizeByNarrowSideInPourcent($newNarrowSideWidth, $converseProportion = false)
+    public function resizeByNarrowSideInPercent($newNarrowSideWidth, $converseProportion = false)
     {
-        $this->resizeByNarrowSide('pourcent', $newNarrowSideWidth, $converseProportion);
+        $this->resizeByNarrowSide(self::UNIT_PERCENT, $newNarrowSideWidth, $converseProportion);
     }
 
     /**
@@ -972,7 +982,7 @@ class ImageWorkshop
      */
     public function resizeByNarrowSide($unit = "pixel", $newNarrowSideWidth, $converseProportion = false)
     {
-        if ($unit == 'pourcent') {
+        if ($unit == self::UNIT_PERCENT) {
 
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
         }
@@ -1006,21 +1016,21 @@ class ImageWorkshop
     }
 
     /**
-     * Crop the document by specifying pourcent
+     * Crop the document by specifying percent
      *
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param float $pourcentWidth
-     * @param float $pourcentHeight
-     * @param float $positionXPourcent
-     * @param float $positionYPourcent
+     * @param float $percentWidth
+     * @param float $percentHeight
+     * @param float $positionXPercent
+     * @param float $positionYPercent
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropInPourcent($pourcentWidth = 0, $pourcentHeight = 0, $positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropInPercent($percentWidth = 0, $percentHeight = 0, $positionXPercent = 0, $positionYPercent = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        $this->crop("pourcent", $pourcentWidth, $pourcentHeight, $positionXPourcent, $positionYPourcent, $position, $backgroundColor);
+        $this->crop(self::UNIT_PERCENT, $percentWidth, $percentHeight, $positionXPercent, $positionYPercent, $position, $backgroundColor);
     }
 
     /**
@@ -1039,7 +1049,7 @@ class ImageWorkshop
      */
     public function crop($unit = "pixel", $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        if ($unit == "pourcent") {
+        if ($unit == self::UNIT_PERCENT) {
 
             $width = round(($width / 100) * $this->width);
             $height = round(($height / 100) * $this->height);
@@ -1100,21 +1110,21 @@ class ImageWorkshop
     }
 
     /**
-     * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pourcent
+     * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in percent
      *
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param integer $width
      * @param integer $height
-     * @param integer $positionXPourcent
-     * @param integer $positionYPourcent
+     * @param integer $positionXPercent
+     * @param integer $positionYPercent
      * @param string $position
      * @param string $backgroundColor
      */
-    public function cropMaximumInPourcent($positionXPourcent = 0, $positionYPourcent = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function cropMaximumInPercent($positionXPercent = 0, $positionYPercent = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        $this->cropMaximum("pourcent", $positionXPourcent, $positionYPourcent, $position, $backgroundColor);
+        $this->cropMaximum(self::UNIT_PERCENT, $positionXPercent, $positionYPercent, $position, $backgroundColor);
     }
 
     /**
@@ -1134,7 +1144,7 @@ class ImageWorkshop
     public function cropMaximum($unit = "pixel", $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         $narrowSide = $this->getNarrowSideWidth();
-        if ($unit == "pourcent") {
+        if ($unit == self::UNIT_PERCENT) {
 
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
