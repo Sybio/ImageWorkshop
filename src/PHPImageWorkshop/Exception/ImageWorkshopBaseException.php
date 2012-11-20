@@ -1,13 +1,18 @@
 <?php
 
-namespace PHPImageWorkshop;
+namespace PHPImageWorkshop\Exception;
 
 /**
- * ImageWorkshopException
+ * ImageWorkshopBaseException
  * 
- * Manage ImageWorkshop exceptions
+ * The inherited exception class
+ * 
+ * @link http://phpimageworkshop.com
+ * @author Bjørn Børresen | Sybio (Clément Guillemain  / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
  */
-class ImageWorkshopException extends \Exception
+class ImageWorkshopBaseException extends \Exception
 {
     /**
      * Constructor

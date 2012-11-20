@@ -11,6 +11,33 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.0 - 2012-11-21**
+New version of ImageWorkshop ! The library is now divided in 3 main classes for cleaned code:
+- ImageWorkshopLayer: the class which represents a layer, that you manipulate
+- ImageWorkshop: a factory that is used to generate layers
+- ImageWorkshopLib: a class containing some tools (for calculations, etc...), used by both classes
+
+Technically, only the initialization change compared with the 1.3.x versions, check the documentation:
+http://phpimageworkshop.com/documentation.html#chapter-initialization-of-a-layer
+
+Here an example, before and now:
+```php
+    // before
+    $layer = new ImageWorkshop(array(
+        'imageFromPath' => '/path/to/images/picture.jpg',
+    ));
+```
+
+```php
+    // now
+    $layer = ImageWorkshop::initFromPath('/path/to/images/picture.jpg');
+```
+
+And also the installation of the class: http://phpimageworkshop.com/installation.html
+
+The documentation has been updated, you can now check the documentation of each version since 1.3.3:
+(Ex: http://phpimageworkshop.com/doc/9/initialize-from-an-image-file.html?version=2.0.0, http://phpimageworkshop.com/doc/9/initialize-from-an-image-file.html?version=1.3.3)
+
 **Version 1.3.4 - 2012-11-20**
 - Renaming "Pourcent" occurrences for "Percent"
 For example, the method resizeInPourcent() is now named resizeInPercent().
@@ -45,12 +72,6 @@ and can show display bugs ! I'm trying to find a solution.
 **Version 1.2.5 - 2012-09-21**
 - You can now find tests status of the class on travis-ci: http://travis-ci.org/#!/Sybio/ImageWorkshop
 - Adding ImageWorkshop on http://travis-ci.org/ for controlled continuous integration
-
-**Version 1.2.5 - 2012-09-18**
-- Fixing the only one known bug that we are tracking for a long time: you can know
-apply a rotation (->rotate()) and then an opacity (->opacity()) on a layer without crash.
-- Updating composer.json to autoload the class in a project using composer
-- Testing if the PHP environment has GD library enabled
 
 ### Installation
 
