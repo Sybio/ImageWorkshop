@@ -764,7 +764,7 @@ class ImageWorkshop
     /**
      * Resize the layer
      *
-     * @param string $unit
+     * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
      * @param float $percentWidth
      * @param float $percentHeight
      * @param boolean $converseProportion
@@ -1039,7 +1039,7 @@ class ImageWorkshop
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param string $unit
+     * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
      * @param float $width
      * @param float $height
      * @param float $positionX
@@ -1047,7 +1047,7 @@ class ImageWorkshop
      * @param string $position
      * @param string $backgroundColor
      */
-    public function crop($unit = "pixel", $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
+    public function crop($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
         if ($unit == self::UNIT_PERCENT) {
 
@@ -1106,7 +1106,7 @@ class ImageWorkshop
      */
     public function cropMaximumInPixel($positionX = 0, $positionY = 0, $position = "LT", $backgroundColor = "ffffff")
     {
-        $this->cropMaximum("pixel", $positionX, $positionY, $position, $backgroundColor);
+        $this->cropMaximum(self::UNIT_PIXEL, $positionX, $positionY, $position, $backgroundColor);
     }
 
     /**
