@@ -1,6 +1,5 @@
 {
     "name": "sybio/image-workshop",
-    "version": "2.0.0",
     "type": "library",
     "description": "Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP)",
     "keywords": ["image", "thumbnail", "watermark", "resize", "crop", "rotate", "library", "GD", "class"],
