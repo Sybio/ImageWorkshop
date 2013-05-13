@@ -97,6 +97,47 @@ class ImageWorkshop
     }
     
     /**
+     * Initialize a text layer With a given Width
+     * 
+     * @param string $text
+     * @param string $fontPath
+     * @param integer $fontSize     
+     * @param string $fontColor
+     * @param integer $textRotation
+     * @param integer $backgroundColor
+     * @param integer $maxWidth
+     * 
+     * @return ImageWorkshopLayer
+     */
+    public static function initTextLayerWithMaxWidth($text, $fontPath, $fontSize = 13, $fontColor = 'ffffff', $textRotation = 0, $backgroundColor = null,$maxWidth=200)
+    {   
+	$txt_clean = $text;	
+	$textDimensions = ImageWorkshopLib::getTextBoxDimension($fontSize, $textRotation, $fontPath, $text);   
+	$resetMaxWith=false;
+	while($textDimensions['width'] > $maxWidth ){
+	    if(!$resetMaxWith)
+	    {
+		/*
+		 * on prevoit 5 pixels pour les 3 points 
+		 */
+		$maxWidth = $maxWidth -5;
+		$resetMaxWith = true;		
+	    }
+	    
+	    $txt_clean = substr($txt_clean, 0,-1); 
+	    $text = $txt_clean.'...';
+	    $textDimensions = ImageWorkshopLib::getTextBoxDimension($fontSize, $textRotation, $fontPath, $text);
+	}
+        
+	
+
+        $layer = static::initVirginLayer($textDimensions['width'], $textDimensions['height'], $backgroundColor);
+        $layer->write($text, $fontPath, $fontSize, $fontColor, $textDimensions['left'], $textDimensions['top'], $textRotation);
+        
+        return $layer;
+    }
+    
+    /**
      * Initialize a new virgin layer
      * 
      * @param integer $width
