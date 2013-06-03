@@ -11,6 +11,11 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.1 - 2013-06-03**
+
+- Fix an opacity bug : pure black color (#000000) always displayed fully transparent (from 0 to 99% opacity). Bug fixed ! (no known bug anymore)
+- Add some Exceptions to help debugging
+
 **Version 2.0.0 - 2012-11-21**
 
 New version of ImageWorkshop ! The library is now divided in 3 main classes for cleaned code:

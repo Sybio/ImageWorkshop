@@ -228,7 +228,7 @@ class ImageWorkshopLib
                     $destPixel = imageColorsForIndex($destImg, imageColorat($destImg, $x + $destX, $y + $destY));
                     $srcImgColorat = imageColorat($srcImg, $x + $srcX, $y + $srcY);
                     
-                    if ($srcImgColorat > 0) {
+                    if ($srcImgColorat >= 0) {
                     
                         $srcPixel = imageColorsForIndex($srcImg, $srcImgColorat);
     
