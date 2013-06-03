@@ -15,7 +15,7 @@ use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
  * 
  * Use this class as a factory to initialize ImageWorkshop layers
  *
- * @version 2.0.0
+ * @version 2.0.1
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
@@ -34,6 +34,16 @@ class ImageWorkshop
     const ERROR_IMAGE_NOT_FOUND = 2;
     
     /**
+     * @var integer
+     */
+    const ERROR_NOT_WRITABLE_FILE = 3;
+    
+    /**
+     * @var integer
+     */
+    const ERROR_CREATE_IMAGE_FROM_STRING = 4;
+      
+    /**
      * Initialize a layer from a given image path
      * 
      * From an upload form, you can give the "tmp_name" path
@@ -46,10 +56,19 @@ class ImageWorkshop
     {
         if (file_exists($path) && !is_dir($path)) {
             
-            $imageSizeInfos = getImageSize($path);
+            if (!is_readable($path)) {
+                throw new ImageWorkshopException('Can\'t open the file at "'.$path.'" : file is not writable, did you check permissions (755 / 777) ?', static::ERROR_NOT_WRITABLE_FILE);
+            }
+            
+            $imageSizeInfos = @getImageSize($path);
             $mimeContentType = explode('/', $imageSizeInfos['mime']);
+            
+            if (!$mimeContentType || !array_key_exists(1, $mimeContentType)) {
+                throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
+            }
+            
             $mimeContentType = $mimeContentType[1];
-
+            
             switch ($mimeContentType) {
                 case 'jpeg':
                     $image = imageCreateFromJPEG($path);
@@ -140,6 +159,10 @@ class ImageWorkshop
      */
     public static function initFromString($imageString)
     {
-        return new ImageWorkshopLayer(imageCreateFromString($imageString));
+        if (!$image = @imageCreateFromString($imageString)) {
+            throw new ImageWorkshopException('Can\'t generate an image from the given string.', static::ERROR_CREATE_IMAGE_FROM_STRING);
+        }
+        
+        return new ImageWorkshopLayer($image);
     }
 }
