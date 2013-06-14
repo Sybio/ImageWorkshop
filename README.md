@@ -11,6 +11,19 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.2 - 2013-06-14**
+
+- Fix a new bug : when resizing or cropping, small images can have 0 pixel of width or height (because of round), which
+is impossible and script crashes. Now width and height are 1 pixel minimum.
+
+Note: 
+
+```php
+$layer->resizeInPixel(null, 0 /* or negative number */, null);
+```
+
+It will generate a 1 pixel height image, not 0.
+
 **Version 2.0.1 - 2013-06-03**
 
 - Fix an opacity bug : pure black color (#000000) always displayed fully transparent (from 0 to 99% opacity). Bug fixed ! (no known bug anymore)

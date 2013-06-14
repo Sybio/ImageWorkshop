@@ -680,11 +680,11 @@ class ImageWorkshopLayer
      * Resize the layer
      *
      * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
-     * @param float $percentWidth
-     * @param float $percentHeight
+     * @param mixed $newWidth (integer or float)
+     * @param mixed $newHeight (integer or float)
      * @param boolean $converseProportion
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param mixed $positionX (integer or float)
+     * @param mixed $positionY (integer or float)
      * @param string $position
      * 
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
@@ -692,8 +692,8 @@ class ImageWorkshopLayer
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
     public function resize($unit = self::UNIT_PIXEL, $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
-    {
-        if ($newWidth || $newHeight) {
+    {   
+        if (is_numeric($newWidth) || is_numeric($newHeight)) {
             
             if ($unit == self::UNIT_PERCENT) {
                 
@@ -704,6 +704,14 @@ class ImageWorkshopLayer
                 if ($newHeight) {
                     $newHeight = round(($newHeight / 100) * $this->height);
                 }
+            }
+            
+            if (is_numeric($newWidth) && $newWidth <= 0) {
+                $newWidth = 1;
+            }
+            
+            if (is_numeric($newHeight) && $newHeight <= 0) {
+                $newHeight = 1;
             }
         
             if ($converseProportion) { // Proportion are conserved
@@ -930,10 +938,10 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param string $unit
-     * @param float $width
-     * @param float $height
-     * @param float $positionX
-     * @param float $positionY
+     * @param mixed $width (integer or float)
+     * @param mixed $height (integer or float)
+     * @param mixed $positionX (integer or float)
+     * @param mixed $positionY (integer or float)
      * @param string $position
      */
     public function crop($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
@@ -948,6 +956,14 @@ class ImageWorkshopLayer
         }
         
         if (($width != $this->width || $positionX == 0) || ($height != $this->height || $positionY == 0)) {
+            
+            if ($width == 0) {
+                $width = 1;
+            }
+            
+            if ($height == 0) {
+                $height = 1;
+            }
             
             $layerTmp = ImageWorkshop::initVirginLayer($width, $height);
             $layerClone = ImageWorkshop::initVirginLayer($this->width, $this->height);
