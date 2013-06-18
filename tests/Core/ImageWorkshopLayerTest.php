@@ -1205,6 +1205,54 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
     }
     
+    /**
+     * Test rotate
+     */
+    public function testRotate()
+    {
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(0);
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(90);
+        $this->assertTrue($layer->getWidth() == 75, 'Expect $layer to have a width of 75px');
+        $this->assertTrue($layer->getHeight() == 100, 'Expect $layer to have a height of 100px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(-90);
+        $this->assertTrue($layer->getWidth() == 75, 'Expect $layer to have a width of 75px');
+        $this->assertTrue($layer->getHeight() == 100, 'Expect $layer to have a height of 100px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(180);
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(40);
+        $this->assertTrue($layer->getWidth() <= 126 && $layer->getWidth() >= 124, 'Expect $layer to have a width around 125px');
+        $this->assertTrue($layer->getHeight() <= 124 && $layer->getHeight() >= 122, 'Expect $layer to have a height around 123px');
+    
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(20);
+        $this->assertTrue($layer->getWidth() <= 121 && $layer->getWidth() >= 119, 'Expect $layer to have a width around 120px');
+        $this->assertTrue($layer->getHeight() <= 107 && $layer->getHeight() >= 105, 'Expect $layer to have a height around 106px');
+    
+        $layer = $this->initializeLayer(1);
+        
+        $layer->rotate(-20);
+        $this->assertTrue($layer->getWidth() <= 121 && $layer->getWidth() >= 119, 'Expect $layer to have a width around 120px');
+        $this->assertTrue($layer->getHeight() <= 107 && $layer->getHeight() >= 105, 'Expect $layer to have a height around 106px');
+    }
+    
     // Internals
     // ===================================================================================
     
