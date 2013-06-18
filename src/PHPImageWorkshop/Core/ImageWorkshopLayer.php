@@ -115,6 +115,11 @@ class ImageWorkshopLayer
      */
     const METHOD_DEPRECATED = 4;
     
+    /**
+     * @var integer
+     */
+    const ERROR_NEGATIVE_NUMBER_USED = 5;
+    
     // ===================================================================================
     // Methods
     // ===================================================================================
@@ -946,6 +951,10 @@ class ImageWorkshopLayer
      */
     public function crop($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
     {
+        if ($width < 0 || $height < 0) {
+            throw new ImageWorkshopLayerException('You can\'t use negative $width or $height for "'.__METHOD__.'" method.', static::ERROR_NEGATIVE_NUMBER_USED);
+        }
+        
         if ($unit == self::UNIT_PERCENT) {
 
             $width = round(($width / 100) * $this->width);
