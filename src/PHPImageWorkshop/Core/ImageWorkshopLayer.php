@@ -745,7 +745,7 @@ class ImageWorkshopLayer
                         $layerTmp = ImageWorkshop::initVirginLayer($newWidth, $newHeight);
                         
                         $layerTmp->addLayer(1, $this, round($positionX * ($newWidth / 100)), round($positionY * ($newHeight / 100)), $position);
-                        
+                        $layerTmp->mergeAll();
                         $this->width = $layerTmp->getWidth();
                         $this->height = $layerTmp->getHeight();
                         unset($this->image);
