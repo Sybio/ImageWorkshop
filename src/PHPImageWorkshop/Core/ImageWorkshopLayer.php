@@ -622,13 +622,17 @@ class ImageWorkshopLayer
     
     /**
      * Reset the layer stack
+     * 
+     * @boolean $deleteSubImgVar Delete sublayers image resource var
      */
-    public function clearStack()
+    public function clearStack($deleteSubImgVar = true)
     {
-        foreach ($this->layers as $layer) {
-            $layer->delete();
+        if ($deleteSubImgVar) {
+            foreach ($this->layers as $layer) {
+                $layer->delete();
+            }
         }
-
+        
         unset($this->layers);
         unset($this->layerLevels);
         unset($this->layerPositions);
@@ -744,18 +748,33 @@ class ImageWorkshopLayer
                         
                         $layerTmp = ImageWorkshop::initVirginLayer($newWidth, $newHeight);
                         
-                        $layerTmp->addLayer(1, $this, round($positionX * ($newWidth / 100)), round($positionY * ($newHeight / 100)), $position);
+                        $layerTmp->addLayer(1, $this, $positionX, $positionY, $position);
                         
-                        $this->width = $layerTmp->getWidth();
-                        $this->height = $layerTmp->getHeight();
+                        // Reset part of stack
+                        
                         unset($this->image);
                         unset($this->layerLevels);
                         unset($this->layerPositions);
                         unset($this->layers);
-                        $this->image = $layerTmp->getImage();
-                        $this->layerLevels = $layerTmp->getLayerLevels();
-                        $this->layerPositions = $layerTmp->getLayerPositions();
-                        $this->layers = $layerTmp->getLayers();
+                        
+                        // Update current object
+                        
+                        $this->width = $layerTmp->getWidth();
+                        $this->height = $layerTmp->getHeight();
+                        $this->layerLevels = $layerTmp->layers[1]->getLayerLevels();
+                        $this->layerPositions = $layerTmp->layers[1]->getLayerPositions();
+                        $this->layers = $layerTmp->layers[1]->getLayers();
+                        $this->lastLayerId = $layerTmp->layers[1]->getLastLayerId();
+                        $this->highestLayerLevel = $layerTmp->layers[1]->getHighestLayerLevel();
+                        
+                        $translations = $layerTmp->getLayerPositions(1);
+                        
+                        foreach ($this->layers as $id => $layer) {
+                            $this->applyTranslation($id, $translations['x'], $translations['y']);
+                        }
+                        
+                        $layerTmp->layers[1]->clearStack(false);
+                        $this->image = $layerTmp->getResult();
                         unset($layerTmp);
                     }
                     
@@ -1713,8 +1732,6 @@ class ImageWorkshopLayer
             $newLayerPosX = $oldLayerPosX + $positionX;
             $newLayerPosY = $oldLayerPosY + $positionY;
 
-            unset($this->layerPositions[$layerId]);
-            
             $this->changePosition($layerId, $newLayerPosX, $newLayerPosY);
         }
     }

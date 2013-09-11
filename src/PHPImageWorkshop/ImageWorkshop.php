@@ -15,7 +15,7 @@ use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
  * 
  * Use this class as a factory to initialize ImageWorkshop layers
  *
- * @version 2.0.3
+ * @version 2.0.4
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
