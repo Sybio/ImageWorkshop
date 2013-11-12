@@ -1384,7 +1384,7 @@ class ImageWorkshopLayer
      * @param string $backgroundColor
      * @param integer $imageQuality
      */
-    public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75)
+    public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = null)
     {
         if (!is_file($folder)) {
 
@@ -1408,6 +1408,10 @@ class ImageWorkshopLayer
                 }
 
                 $image = $this->getResult($backgroundColor);
+
+                if ($interlace !== null) {
+                    imageinterlace($image, $interlace);
+                }
 
                 if ($extension == 'jpg' || $extension == 'jpeg') {
 
