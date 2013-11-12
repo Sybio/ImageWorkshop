@@ -14,10 +14,12 @@ http://phpimageworkshop.com/
 **Version 2.0.5 - 2013-11-12**
 
 - Implementing interlace mode (http://php.net/manual/en/function.imageinterlace.php) on save() method to display progessive JPEG image
+
 ```php
     $interlace = true; // set true to enable interlace, false by default
     $layer->save($dirPath, $filename, $createFolders, $backgroundColor, $imageQuality, $interlace);
 ```
+
 Thanks @dripolles (https://github.com/dripolles) & @johnhunt (https://github.com/johnhunt)
 
 **Version 2.0.4 - 2013-09-11**
