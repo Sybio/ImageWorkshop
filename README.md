@@ -11,6 +11,15 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.5 - 2013-11-12**
+
+- Implementing interlace mode (http://php.net/manual/en/function.imageinterlace.php) on save() method to display progessive JPEG image
+```php
+$interlace = true; // set true to enable interlace, false by default
+$layer->save($dirPath, $filename, $createFolders, $backgroundColor, $imageQuality, $interlace);
+```
+Thanks @dripolles & @johnhunt
+
 **Version 2.0.4 - 2013-09-11**
 
 - Fix a major bug when resizing both sides AND conserving proportion : layer stack problem (current layer has a new 
