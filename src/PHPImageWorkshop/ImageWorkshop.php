@@ -72,6 +72,7 @@ class ImageWorkshop
             switch ($mimeContentType) {
                 case 'jpeg':
                     $image = imageCreateFromJPEG($path);
+                    imageinterlace($image, true);
                 break;
 
                 case 'gif':
