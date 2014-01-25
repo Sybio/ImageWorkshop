@@ -686,6 +686,27 @@ class ImageWorkshopLayer
     }
     
     /**
+     * Resize the layer to fit a bounding box by specifying pixel
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param boolean $converseProportion
+     */
+    public function resizeToFit($width, $height, $converseProportion = false)
+    {
+        if ($this->getWidth() <= $width && $this->getHeight() <= $height) {
+            return;
+        }
+
+        if (!$converseProportion) {
+            $width = min($width, $this->getWidth());
+            $height = min($height, $this->getHeight());
+        }
+        
+        $this->resize(self::UNIT_PIXEL, $width, $height, $converseProportion ? 2 : false);
+    }
+    
+    /**
      * Resize the layer
      *
      * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
@@ -744,7 +765,7 @@ class ImageWorkshopLayer
                         }
                     }
                     
-                    if ($this->getWidth() != $newWidth || $this->getHeight() != $newHeight) {
+                    if ($converseProportion !== 2 && ($this->getWidth() != $newWidth || $this->getHeight() != $newHeight)) {
                         
                         $layerTmp = ImageWorkshop::initVirginLayer($newWidth, $newHeight);
                         
@@ -1074,7 +1095,7 @@ class ImageWorkshopLayer
 
         $this->cropInPixel($narrowSide, $narrowSide, $positionX, $positionY, $position);
     }
-
+    
     /**
      * Rotate the layer (in degree)
      *
