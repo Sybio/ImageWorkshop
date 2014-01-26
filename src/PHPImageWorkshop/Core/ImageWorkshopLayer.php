@@ -1036,6 +1036,83 @@ class ImageWorkshopLayer
             $this->updateLayerPositionsAfterCropping($layerNewPosX, $layerNewPosY);
         }
     }
+    
+    /**
+     * Crop the document to a specific aspect ratio by specifying a shift in pixel
+     *
+     * $backgroundColor: can be set transparent (The script will be longer to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param integer $positionX
+     * @param integer $positionY
+     * @param string $position
+     */
+    public function cropToAspectRatioInPixel($width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
+    {
+        $this->cropToAspectRatio(self::UNIT_PIXEL, $width, $height, $positionX, $positionY, $position);
+    }
+
+    /**
+     * Crop the document to a specific aspect ratio by specifying a shift in percent
+     *
+     * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     *
+     * @param integer $width
+     * @param integer $height
+     * @param float $positionXPercent
+     * @param float $positionYPercent
+     * @param string $position
+     */
+    public function cropToAspectRatioInPercent($width = 0, $height = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
+    {
+        $this->cropToAspectRatio(self::UNIT_PERCENT, $width, $height, $positionXPercent, $positionYPercent, $position);
+    }
+
+    /**
+     * Crop the document to a specific aspect ratio
+     *
+     * $backgroundColor can be set transparent (but script could be long to execute)
+     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+     *
+     * @param string $unit
+     * @param integer $width (integer or float)
+     * @param integer $height (integer or float)
+     * @param mixed $positionX (integer or float)
+     * @param mixed $positionY (integer or float)
+     * @param string $position
+     */
+    public function cropToAspectRatio($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
+    {
+        if ($width < 0 || $height < 0) {
+            throw new ImageWorkshopLayerException('You can\'t use negative $width or $height for "'.__METHOD__.'" method.', static::ERROR_NEGATIVE_NUMBER_USED);
+        }
+        
+        if ($width == 0) {
+            $width = 1;
+        }
+
+        if ($height == 0) {
+            $height = 1;
+        }
+
+        if ($this->getWidth() / $this->getHeight() <= $width / $height) {
+            $newWidth = $this->getWidth();
+            $newHeight = round($height * ($this->getWidth() / $width));
+        } else {
+            $newWidth = round($width * ($this->getHeight() / $height));
+            $newHeight = $this->getHeight();
+        }
+        
+        if ($unit == self::UNIT_PERCENT) {
+            $positionX = round(($positionX / 100) * $this->width);
+            $positionY = round(($positionY / 100) * $this->height);
+        }
+
+        $this->cropInPixel($newWidth, $newHeight, $positionX, $positionY, $position);
+    }
 
     /**
      * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pixel
