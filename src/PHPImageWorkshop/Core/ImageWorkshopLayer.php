@@ -1218,6 +1218,222 @@ class ImageWorkshopLayer
         }
     }
     
+     /**
+     * Apply a image convolution on the layer
+     * 
+     *
+     * @param array $matrix 
+     * @param int $div
+     * @param int $offset
+     * @param boolean $recursive
+     *
+     * @author by Jondalar K. Lee
+     *
+     */
+    public function applyimageconvolution($matrix, $div=0, $offset=0,$recursive=false){
+        if(is_string($matrix)){
+            $matrix = strtolower($matrix);
+            switch($matrix){
+                case "blur":
+                    $matrix = array(array(1,1,1), array(1,.25,1), array(1,1,1));
+                    $div = 8.25;
+                    $offset = 0;
+                break;
+
+                case "emboss": 
+                    $matrix = array(array(2, 2, 2), array(2, 1, -2), array(-2, -2, -2));
+                    $div = 0;
+                    $offset = 127;
+                break;
+                    
+                case  "gaussian blur" :
+                    $matrix = array(array(1.0, 2.0, 1.0), array(2.0, 4.0, 2.0), array(1.0, 2.0, 1.0));
+                    $div = 16;
+                    $offset = 0;
+                break;
+
+                case "sharpen" :
+                    $Matrix = array(array(-1.2, -1.2, -1.2),array(-1.2, .4, -1.2),array(-1.2, -1.2, -1.2)); 
+                    $div = array_sum(array_map('array_sum', $Matrix));  
+                    $offset = 0;
+                break;
+
+            }
+             
+        }
+        if(is_array($matrix)){
+            imageconvolution($this->image, $matrix, $div, $offset);
+        }
+
+        if ($recursive) {
+
+            $layers = $this->layers;
+
+            foreach($layers as $layerId => $layer) {
+                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset);
+            }
+        }
+
+        
+
+    }
+
+    /**
+     * Apply alpha layer mask.
+     *
+     * @param layer $mask 
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function applyalphamask($mask){
+        
+        $masktemp = clone $mask;
+
+        $masktemp->resizeInPixel($this->width, $this->height); // make $mask and $layer the same size.
+        $masktemp->applyFilter(IMG_FILTER_GRAYSCALE); //converts to greyscale if not greyscale;
+        $masktemp->applyFilter(IMG_FILTER_NEGATE); 
+
+        $layerImg= $this->getImage();
+        $maskImg = $masktemp->getImage();
+
+        $imgtemp = imageCreateTrueColor($this->width,$this->height);
+
+        imagealphablending($imgtemp, false);
+        imagesavealpha($imgtemp, true);
+
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                $Lrgb = imagecolorat($layerImg, $w, $h);
+                $Lcolors = imagecolorsforindex($layerImg, $Lrgb);
+
+                $Mrgb = imagecolorat($maskImg, $w, $h);
+                $Mcolors = imagecolorsforindex($maskImg, $Mrgb);
+
+                $alpha = $Mcolors["red"]/255*127;
+                //$alpha = (int)( $alpha);
+                
+                imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Lcolors["red"],$Lcolors["green"],$Lcolors["blue"],$alpha));
+        }}
+
+       
+
+        //imagecopyresampled($imgtemp, $this->image, 0, 0, 0, 0, $this->width, $this->height, -$this->width, $this->height);     
+        $this->image = $imgtemp;
+    }
+
+     /**
+     * split Layer in to channels.
+     *
+     * @return a group of 4 layers each one a channel.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function splitchannels(){
+        $ChlR = imageCreateTrueColor($this->width,$this->height);
+        $ChlG = imageCreateTrueColor($this->width,$this->height);
+        $ChlB = imageCreateTrueColor($this->width,$this->height);
+        $ChlA = imageCreateTrueColor($this->width,$this->height);
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                $Lrgb = imagecolorat($this->image, $w, $h);
+                $Lcolors = imagecolorsforindex($this->image, $Lrgb);
+
+                
+                imagesetpixel($ChlR,$w,$h,imagecolorallocatealpha($ChlR,$Lcolors["red"],0,0,0));
+                imagesetpixel($ChlG,$w,$h,imagecolorallocatealpha($ChlG,0,$Lcolors["green"],0,0));
+                imagesetpixel($ChlB,$w,$h,imagecolorallocatealpha($ChlB,0,0,$Lcolors["blue"],0));
+                imagesetpixel($ChlA,$w,$h,imagecolorallocatealpha($ChlA,127,127,127,$Lcolors["alpha"]));
+        }}
+
+        $group =  ImageWorkshop::initVirginLayer($this->width,$this->height);
+        $r     =  ImageWorkshop::initFromResourceVar($ChlR);
+        $g     =  ImageWorkshop::initFromResourceVar($ChlG);
+        $b     =  ImageWorkshop::initFromResourceVar($ChlB);
+        $a     =  ImageWorkshop::initFromResourceVar($ChlA);
+
+        $sublayerInfos = $group->addLayer("1", $r, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("2", $g, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("3", $b, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("4", $a, 0, 0, "LT");
+
+        return $group;
+    }
+
+     /**
+     * get channel by color.
+     *
+     * @param string of channel name
+     *
+     * @return a layer based on channel name a channel.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+     
+    public function getchannel($channel){
+        switch (variable) {
+            case 'red':
+                return $this->getLayer(1);
+                break;
+
+            case 'green':
+                return $this->getLayer(2);
+                break;
+
+            case 'blue':
+                return $this->getLayer(3);
+                break;
+
+            case 'alpha':
+                return $this->getLayer(4);
+                break;
+
+        }
+    }
+
+    /**
+     * get channel by color.
+     *
+     * @param group of channels
+     *
+     * @return sets layer image to merge channels.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function mergechannels($group){
+        $ChlR = $group->getLayer(1)->getResult();
+        $ChlG = $group->getLayer(2)->getResult();
+        $ChlB = $group->getLayer(3)->getResult();
+        $ChlA = $group->getLayer(4)->getResult();
+
+        $imgtemp = imageCreateTrueColor($this->width,$this->height);
+
+        imagealphablending($imgtemp, false);
+        imagesavealpha($imgtemp, true);
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                //$LR = imagecolorsforindex($ChlR,imagecolorat($ChlR, $w, $h));
+                $Color["red"]   = (imagecolorat($ChlR, $w, $h) >> 16) & 0xFF;
+                $Color["green"] = (imagecolorat($ChlG, $w, $h) >> 8) & 0xFF;
+                $Color["blue"]  =  imagecolorat($ChlB, $w, $h) & 0xFF;
+                $Color["alpha"] = (imagecolorat($ChlA, $w, $h) & 0x7F000000) >> 24;
+          
+                imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Color["red"],$Color["green"],$Color["blue"],$Color["alpha"]));
+            }
+        }
+
+        $this->image = $imgtemp;   
+    }
+    
     /**
      * Apply horizontal or vertical flip (Transformation)
      * 
