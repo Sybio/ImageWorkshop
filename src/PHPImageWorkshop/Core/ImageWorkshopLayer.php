@@ -1377,7 +1377,7 @@ class ImageWorkshopLayer
      */
      
     public function getchannel($channel){
-        switch (variable) {
+        switch ($channel) {
             case 'red':
                 return $this->getLayer(1);
                 break;
