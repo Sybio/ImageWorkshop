@@ -1235,7 +1235,7 @@ class ImageWorkshopLayer
      * @param int $offset
      * @param boolean $recursive
      *
-     * @author by Jondalar K. Lee
+     * @author Email Goodlittledeveloper@gmail.com
      *
      */
     public function applyimageconvolution($matrix, $div=0, $offset=0,$recursive=false){
