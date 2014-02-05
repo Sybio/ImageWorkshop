@@ -1278,7 +1278,7 @@ class ImageWorkshopLayer
             $layers = $this->layers;
 
             foreach($layers as $layerId => $layer) {
-                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset);
+                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset, true);
             }
         }
 
@@ -1345,7 +1345,7 @@ class ImageWorkshopLayer
             $layers = $this->layers;
 
             foreach($layers as $layerId => $layer) {
-                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset);
+                $this->layers[$layerId]->toGreyscale($type, true);
             }
         }
     }
