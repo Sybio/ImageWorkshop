@@ -1350,7 +1350,7 @@ class ImageWorkshopLayer
 
         $masktemp->resizeInPixel($this->width, $this->height); // make $mask and $layer the same size.
         $masktemp->applyFilter(IMG_FILTER_GRAYSCALE); //converts to greyscale if not greyscale;
-        $masktemp->applyFilter(IMG_FILTER_NEGATE); 
+        $masktemp->applyFilter(IMG_FILTER_NEGATE); // inverts the mask so black  = 100% transparent and white = 0
 
         $layerImg= $this->getImage();
         $maskImg = $masktemp->getImage();
@@ -1366,10 +1366,9 @@ class ImageWorkshopLayer
                 $Lrgb = imagecolorat($layerImg, $w, $h);
                 $Lcolors = imagecolorsforindex($layerImg, $Lrgb);
 
-                $Mrgb = imagecolorat($maskImg, $w, $h);
-                $Mcolors = imagecolorsforindex($maskImg, $Mrgb);
 
-                $alpha = $Mcolors["red"]/255*127;
+                $alpha = (imagecolorat($maskImg, $w, $h) >> 16) & 0xFF; //faster calc to get red            
+                $alpha = $alpha/255*127; // the gets alpha from red value
                 //$alpha = (int)( $alpha);
                 
                 imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Lcolors["red"],$Lcolors["green"],$Lcolors["blue"],$alpha));
