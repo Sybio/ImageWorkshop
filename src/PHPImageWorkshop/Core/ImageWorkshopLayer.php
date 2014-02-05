@@ -1482,7 +1482,7 @@ class ImageWorkshopLayer
     }
 
     /**
-     * get channel by color.
+     * merge channels.
      *
      * @param group of channels
      *
@@ -1514,7 +1514,7 @@ class ImageWorkshopLayer
                 imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Color["red"],$Color["green"],$Color["blue"],$Color["alpha"]));
             }
         }
-        
+
         unset($ChlR);
         unset($ChlG);    
         unset($ChlB);
