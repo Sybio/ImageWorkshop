@@ -7,9 +7,9 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
 
 // If no autoloader, uncomment these lines:
-//require_once(__DIR__.'/../ImageWorkshop.php');
-//require_once(__DIR__.'/ImageWorkshopLib.php');
-//require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
+require_once(__DIR__.'/../ImageWorkshop.php');
+require_once(__DIR__.'/ImageWorkshopLib.php');
+require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
 
 /**
  * ImageWorkshopLayer class
@@ -21,6 +21,58 @@ use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshop
  * @license http://en.wikipedia.org/wiki/MIT_License
  * @copyright Clément Guillemain
  */
+
+class Logger{
+    protected $filename;
+    
+    public function __construct($filename = "",$ext = "html"){
+        if($filename != ""){
+            $this->filename = $filename;
+        }
+        else{
+                    $this->filename = realpath(dirname(__FILE__))."\logmask2.".$ext;
+        };
+    }
+    public function open(){
+        $fd = fopen($this->filename, "a");
+            // append date/time to message
+        $str = "<html>\n <head> \n <title> log for ".basename(__FILE__)."</title> \n </head> \n ";
+        $str  .="<body><h3><center>Log for ".basename(__FILE__)."</center></h3> ";
+         // write string
+        fwrite($fd, $str . "\n");
+            // close file
+        fclose($fd);
+        
+    }
+
+    public function LogToFile($msg){
+        $fd = fopen($this->filename, "a");
+            // append date/time to message
+        $str = "<center><font color='red'> " .$msg."</font></center>"; 
+         // write string
+        fwrite($fd, $str . "\n");
+            // close file
+        fclose($fd);
+
+    }
+    public function deleteLog(){
+        unlink($this->filename);
+    }
+    public function close(){
+        $fd = fopen($this->filename, "a");
+            // append date/time to message
+        
+        $str  ="</body>\n";
+        $str .= "</html>";
+         // write string
+        fwrite($fd, $str . "\n");
+            // close file
+        fclose($fd);
+
+    }
+}
+
+
 class ImageWorkshopLayer
 {
     // ===================================================================================
@@ -119,6 +171,11 @@ class ImageWorkshopLayer
      * @var integer
      */
     const ERROR_NEGATIVE_NUMBER_USED = 5;
+
+    /**
+     * @var integer
+     */
+    const ERROR_LAYER_GROUP = 6;
     
     // ===================================================================================
     // Methods
@@ -1217,8 +1274,8 @@ class ImageWorkshopLayer
             }
         }
     }
-    
-     /**
+
+    /**
      * Apply a image convolution on the layer
      * 
      *
@@ -1334,6 +1391,11 @@ class ImageWorkshopLayer
      */
 
     public function splitchannels(){
+        if($this->getLastLayerId()!=0){
+            throw new ImageWorkshopException('Can\'t split channels of a layer group', static::ERROR_LAYER_GROUP);
+        }
+        else{
+
         $ChlR = imageCreateTrueColor($this->width,$this->height);
         $ChlG = imageCreateTrueColor($this->width,$this->height);
         $ChlB = imageCreateTrueColor($this->width,$this->height);
@@ -1363,7 +1425,7 @@ class ImageWorkshopLayer
         $sublayerInfos = $group->addLayer("4", $a, 0, 0, "LT");
 
         return $group;
-    }
+    }}
 
      /**
      * get channel by color.
@@ -1375,7 +1437,7 @@ class ImageWorkshopLayer
      * @author email goodlittledeveloper@gmail.com
      *
      */
-     
+
     public function getchannel($channel){
         switch ($channel) {
             case 'red':
@@ -1433,7 +1495,7 @@ class ImageWorkshopLayer
 
         $this->image = $imgtemp;   
     }
-    
+
     /**
      * Apply horizontal or vertical flip (Transformation)
      * 
