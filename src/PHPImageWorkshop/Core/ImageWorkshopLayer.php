@@ -22,55 +22,6 @@ require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
  * @copyright Clément Guillemain
  */
 
-class Logger{
-    protected $filename;
-    
-    public function __construct($filename = "",$ext = "html"){
-        if($filename != ""){
-            $this->filename = $filename;
-        }
-        else{
-                    $this->filename = realpath(dirname(__FILE__))."\logmask2.".$ext;
-        };
-    }
-    public function open(){
-        $fd = fopen($this->filename, "a");
-            // append date/time to message
-        $str = "<html>\n <head> \n <title> log for ".basename(__FILE__)."</title> \n </head> \n ";
-        $str  .="<body><h3><center>Log for ".basename(__FILE__)."</center></h3> ";
-         // write string
-        fwrite($fd, $str . "\n");
-            // close file
-        fclose($fd);
-        
-    }
-
-    public function LogToFile($msg){
-        $fd = fopen($this->filename, "a");
-            // append date/time to message
-        $str = "<center><font color='red'> " .$msg."</font></center>"; 
-         // write string
-        fwrite($fd, $str . "\n");
-            // close file
-        fclose($fd);
-
-    }
-    public function deleteLog(){
-        unlink($this->filename);
-    }
-    public function close(){
-        $fd = fopen($this->filename, "a");
-            // append date/time to message
-        
-        $str  ="</body>\n";
-        $str .= "</html>";
-         // write string
-        fwrite($fd, $str . "\n");
-            // close file
-        fclose($fd);
-
-    }
-}
 
 
 class ImageWorkshopLayer
