@@ -1390,7 +1390,7 @@ class ImageWorkshopLayer
 
        
 
-        //imagecopyresampled($imgtemp, $this->image, 0, 0, 0, 0, $this->width, $this->height, -$this->width, $this->height); 
+        
         unset($this->image);
         $this->image = $imgtemp;
         unset($imgtemp);    
@@ -1505,7 +1505,7 @@ class ImageWorkshopLayer
 
         for ($h=0; $h<$this->height; $h++){
             for ($w=0; $w<$this->width; $w++){
-                //$LR = imagecolorsforindex($ChlR,imagecolorat($ChlR, $w, $h));
+                
                 $Color["red"]   = (imagecolorat($ChlR, $w, $h) >> 16) & 0xFF;
                 $Color["green"] = (imagecolorat($ChlG, $w, $h) >> 8) & 0xFF;
                 $Color["blue"]  =  imagecolorat($ChlB, $w, $h) & 0xFF;
