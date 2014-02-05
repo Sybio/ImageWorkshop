@@ -1514,6 +1514,11 @@ class ImageWorkshopLayer
                 imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Color["red"],$Color["green"],$Color["blue"],$Color["alpha"]));
             }
         }
+        
+        unset($ChlR);
+        unset($ChlG);    
+        unset($ChlB);
+        unset($ChlA);
 
         unset($this->image);
         $this->image = $imgtemp;
