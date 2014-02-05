@@ -1286,6 +1286,70 @@ class ImageWorkshopLayer
 
     }
 
+     public function toGreyscale($type = null,$recursive=false){
+        $type = strtolower($type);
+        
+        switch ($type) {
+            case 'lightness':
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                        $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = (max($r,$g,$b)+min($r,$g,$b))/2;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+
+                break;
+
+            case 'luminosity':
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                         $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = 0.21*$r+0.71*$g+0.07*$b;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+                break;
+            
+            default://average
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                        $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = ($r+$g+$b)/3;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+                break;
+        }
+
+        if ($recursive) {
+
+            $layers = $this->layers;
+
+            foreach($layers as $layerId => $layer) {
+                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset);
+            }
+        }
+    }
+
     /**
      * Apply alpha layer mask.
      *
@@ -1318,17 +1382,19 @@ class ImageWorkshopLayer
                 $Lcolors = imagecolorsforindex($layerImg, $Lrgb);
 
 
-                $alpha = (imagecolorat($maskImg, $w, $h) >> 16) & 0xFF; //faster calc to get red            
-                $alpha = $alpha/255*127; // the gets alpha from red value
-                //$alpha = (int)( $alpha);
+                $alpha = (imagecolorat($maskImg, $w, $h) >> 16) & 0xFF; //faster calc to get red value.          
+                $alpha = $alpha/255*127; // the gets alpha from red value 
                 
                 imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Lcolors["red"],$Lcolors["green"],$Lcolors["blue"],$alpha));
         }}
 
        
 
-        //imagecopyresampled($imgtemp, $this->image, 0, 0, 0, 0, $this->width, $this->height, -$this->width, $this->height);     
+        //imagecopyresampled($imgtemp, $this->image, 0, 0, 0, 0, $this->width, $this->height, -$this->width, $this->height); 
+        unset($this->image);
         $this->image = $imgtemp;
+        unset($imgtemp);    
+        
     }
 
      /**
@@ -1368,6 +1434,12 @@ class ImageWorkshopLayer
         $g     =  ImageWorkshop::initFromResourceVar($ChlG);
         $b     =  ImageWorkshop::initFromResourceVar($ChlB);
         $a     =  ImageWorkshop::initFromResourceVar($ChlA);
+
+        unset($ChlR);
+        unset($ChlG);    
+        unset($ChlB);
+        unset($ChlA);
+           
 
         $sublayerInfos = $group->addLayer("1", $r, 0, 0, "LT");
         $sublayerInfos = $group->addLayer("2", $g, 0, 0, "LT");
@@ -1443,8 +1515,13 @@ class ImageWorkshopLayer
             }
         }
 
-        $this->image = $imgtemp;   
+        unset($this->image);
+        $this->image = $imgtemp;
+        unset($imgtemp);      
     }
+
+
+   
 
     /**
      * Apply horizontal or vertical flip (Transformation)
