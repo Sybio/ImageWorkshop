@@ -1098,17 +1098,17 @@ class ImageWorkshopLayer
             $height = 1;
         }
 
-        if ($this->getWidth() / $this->getHeight() <= $width / $height) {
-            $newWidth = $this->getWidth();
-            $newHeight = round($height * ($this->getWidth() / $width));
+        if ($this->width / $this->height <= $width / $height) {
+            $newWidth = $this->width;
+            $newHeight = round($height * ($this->width / $width));
         } else {
-            $newWidth = round($width * ($this->getHeight() / $height));
-            $newHeight = $this->getHeight();
+            $newWidth = round($width * ($this->height / $height));
+            $newHeight = $this->height;
         }
         
         if ($unit == self::UNIT_PERCENT) {
-            $positionX = round(($positionX / 100) * $this->width);
-            $positionY = round(($positionY / 100) * $this->height);
+            $positionX = round(($positionX / 100) * ($this->width - $newWidth));
+            $positionY = round(($positionY / 100) * ($this->height - $newHeight));
         }
 
         $this->cropInPixel($newWidth, $newHeight, $positionX, $positionY, $position);
