@@ -21,7 +21,7 @@ http://phpimageworkshop.com/
 ### Latest updates
 **Version 2.0.6 - 2014-3-6**
 
-- Move Layer effect into there own class, allowing you to.
+- Move Layer effect into there own class, allowing you to use your own effects libaries.
 
 - Added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
 
