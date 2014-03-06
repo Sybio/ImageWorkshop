@@ -23,7 +23,7 @@ http://phpimageworkshop.com/
 
 -Move Layer effect into there own class, allowing you to.
 
--added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
+-Added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
 
 **Version 2.0.5 - 2013-11-12**
 
