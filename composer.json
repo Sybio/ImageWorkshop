@@ -1,5 +1,5 @@
 {
-    "name": "sybio/image-workshop",
+    "name": "newerton/image-workshop",
     "type": "library",
     "description": "Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP)",
     "keywords": ["image", "thumbnail", "watermark", "resize", "crop", "rotate", "library", "GD", "class"],
@@ -7,8 +7,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Clément Guillemain",
-            "homepage": "http://clementguillemain.fr",
+            "name": "Newerton Vargas de Araujo",
+            "homepage": "http://newerton.com.br",
             "role": "Developer / Freelancer"
         }
     ],
