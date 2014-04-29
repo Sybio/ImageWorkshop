@@ -14,7 +14,7 @@ http://phpimageworkshop.com/
 **Version 2.0.5 - 2014-04-29**
 
 - Fixed transparency, to rotate the watermark.
--Added in return's save () function to work with the database.
+- Added in return's save () function to work with the database.
 
 ### Latest updates
 
