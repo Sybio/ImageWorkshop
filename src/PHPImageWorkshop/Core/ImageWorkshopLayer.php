@@ -1430,8 +1430,11 @@ class ImageWorkshopLayer
                     imagepng($image, $filename, $imageQuality);
                     unset($image);
                 }
+                return true;
             }
+            return false;
         }
+        return false;
     }
 
     // Checkers
