@@ -1194,46 +1194,6 @@ class ImageWorkshopLayer
     }
     
     /**
-    * Apply extended filters
-    * 
-    * @param author Email: Goodlittledeveloper@gmail.com
-    * @param Effect is the name of the effect you wish to apply,
-    * @param EffectsLib is an object with the method that applys the effect,
-    * @param it pass anyother varable you send to the method.
-    */
-
-    public function Extended_Effects(string $Effect, object $EffectsLib , $recursive = false){
-        $args = func_get_args();//get all function arguments
-        unset($args[0]);// removes $Effect From the array
-        unset($args[1]);// removes $Effect Lib from the array
-        unset($args[2]);// removes $recursive from the array
-
-        
-
-        if ($recursive) {// if it is recursive then applys each effect to each layer
-
-            $group = clone $this;
-            $layers = $group->layers;
-
-            foreach($layers as $layerId => $layer) {
-                 array_unshift($args, $this->layers[$layerId]->Image);// adds current image to the arguments array
-                 $args = array_values($args);// reorginizes the array
-                 $this->layers[$layerId] = call_user_func_array(array($EffectsLib, $Effect), $args);// apply effect and returns an image.
-                 unset($args[0]);// removes the current image from the array allowing the next image to be added.
-            }
-            return $group;
-        }
-
-        else// if not recursive then applays effect to current layer.
-        {
-            array_unshift($args, $this->image); // adds current image
-            $args = array_values($args);// reorders arguments.
-            $layer = call_user_func_array(array($EffectsLib, $Effect), $args);// applys effect and return image.
-            return $layer;// doing this allow you to apply an effect on an image and store it in a new or old value.
-        }
-    }
-
-    /**
      * Apply a filter on the layer
      * Be careful: some filters can damage transparent images, use it sparingly ! (A good pratice is to use mergeAll on your layer before applying a filter)
      *
