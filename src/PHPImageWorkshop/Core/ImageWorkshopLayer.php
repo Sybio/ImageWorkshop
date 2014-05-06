@@ -1204,6 +1204,11 @@ class ImageWorkshopLayer
      * @param int $arg4
      * @param boolean $recursive
      */
+    public function EnableAlpha($enable = true,$save = true){
+        imageAlphaBlending($this->image, $enable);
+        imageSaveAlpha($this->image, $save);
+    }
+
     public function applyFilter($filterType, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $recursive = false)
     {
         if ($filterType == IMG_FILTER_COLORIZE) {
