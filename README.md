@@ -32,11 +32,16 @@ http://phpimageworkshop.com/
 
 - Added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
 
-**Version 2.0.7 - 2014-3-6**
+**Version 2.0.7 - 2014-2-5**
 - Forked
 - Added Layer Effect:
      - applyFilter
-     - 
+     - applyimageconvolution
+     - toGreyscale
+     - applyalphamask
+     - splitchannels
+     - getchannel
+     - mergeChannels
 
 **Version 2.0.5 - 2013-11-12**
 

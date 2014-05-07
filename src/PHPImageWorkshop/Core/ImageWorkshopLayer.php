@@ -1497,7 +1497,7 @@ class ImageWorkshopLayer
      *
      */
 
-    public function mergechannels($group){
+    public function mergeChannels($group){
         $ChlR = $group->getLayer(1)->getResult();
         $ChlG = $group->getLayer(2)->getResult();
         $ChlB = $group->getLayer(3)->getResult();
