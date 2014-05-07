@@ -22,6 +22,7 @@ http://phpimageworkshop.com/
 **Version 2.0.7 - 2014-5-6**
 - removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
 - add new EnableAlpha: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
+   $layer->EnabeAlpha(true,true);
 
 **Version 2.0.6 - 2014-3-6**
 
