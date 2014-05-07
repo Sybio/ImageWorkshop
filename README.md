@@ -19,18 +19,24 @@ to your require_once request;
 http://phpimageworkshop.com/
 
 ### Latest updates
-**Version 2.0.7 - 2014-5-6**
+**Version 2.0.8 - 2014-5-6**
 - removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
 - add new EnableAlpha: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
 ```php
    $layer->EnabeAlpha(true,true);
 ```
 
-**Version 2.0.6 - 2014-3-6**
+**Version 2.0.7 - 2014-3-6**
 
 - Move Layer effect into there own class, allowing you to use your own effects libaries.
 
 - Added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
+
+**Version 2.0.7 - 2014-3-6**
+- Forked
+- Added Layer Effect:
+     - applyFilter
+     - 
 
 **Version 2.0.5 - 2013-11-12**
 
