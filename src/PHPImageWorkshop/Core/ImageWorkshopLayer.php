@@ -1204,7 +1204,7 @@ class ImageWorkshopLayer
      * @param int $arg4
      * @param boolean $recursive
      */
-    public function EnableAlpha($enable = true,$save = true){
+    public function enableAlpha($enable = true,$save = true){
         imageAlphaBlending($this->image, $enable);
         imageSaveAlpha($this->image, $save);
     }
@@ -1243,7 +1243,7 @@ class ImageWorkshopLayer
      * @author Email Goodlittledeveloper@gmail.com
      *
      */
-    public function applyimageconvolution($matrix, $div=0, $offset=0,$recursive=false){
+    public function applyImageConvolution($matrix, $div=0, $offset=0,$recursive=false){
         if(is_string($matrix)){
             $matrix = strtolower($matrix);
             switch($matrix){
@@ -1364,7 +1364,7 @@ class ImageWorkshopLayer
      *
      */
 
-    public function applyalphamask($mask){
+    public function applyAlphaMask($mask){
         
         $masktemp = clone $mask;
 
@@ -1411,7 +1411,7 @@ class ImageWorkshopLayer
      *
      */
 
-    public function splitchannels(){
+    public function splitChannels(){
         if($this->getLastLayerId()!=0){
             throw new ImageWorkshopException('Can\'t split channels of a layer group', static::ERROR_LAYER_GROUP);
         }
@@ -1465,7 +1465,7 @@ class ImageWorkshopLayer
      *
      */
 
-    public function getchannel($channel){
+    public function getChannel($channel){
         switch ($channel) {
             case 'red':
                 return $this->getLayer(1);

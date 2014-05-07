@@ -21,9 +21,9 @@ http://phpimageworkshop.com/
 ### Latest updates
 **Version 2.0.8 - 2014-5-6**
 - removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
-- add new EnableAlpha: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
+- add new enableAlpha: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
 ```php
-   $layer->EnabeAlpha(true,true);
+   $layer->enabeAlpha(true,true);
 ```
 
 **Version 2.0.7 - 2014-3-6**
@@ -36,11 +36,11 @@ http://phpimageworkshop.com/
 - Forked
 - Added Layer Effect:
      - applyFilter
-     - applyimageconvolution
+     - applyImageConvolution
      - toGreyscale
-     - applyalphamask
-     - splitchannels
-     - getchannel
+     - applyAlphaMask
+     - splitChannels
+     - getChannel
      - mergeChannels
 
 **Version 2.0.5 - 2013-11-12**
