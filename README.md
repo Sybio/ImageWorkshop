@@ -22,13 +22,13 @@ http://phpimageworkshop.com/
 **Version 2.0.8 - 2014-5-6**
 - removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
 - add new enableAlpha method: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
-- add new setTransparentColor method: the first three arguments are RBG values of the color the forth is the tolerance so colors +/- the tolerance will also be made transparent the fifth argument is optional and it locks the tolerance so that only color with the same hue and saturation the same as the base color will be altered, optional feather by tolerance true/false is the sixth argument. this cause the degree of transpanancy to Decay futher the color differs from the base color. 
+- add new setTransparentColor method: the first three arguments are RBG values of the color the forth is the tolerance so colors +/- the tolerance will also be made transparent the fifth argument is optional and it locks the tolerance so that only color with the same hue and saturation as the base color will be altered, optional feather by tolerance true/false is the sixth argument. this cause the degree of transpanancy to Decay futher the color differs from the base color. 
 ```php
    
    $layer->enabeAlpha($blend,$save); 
    example:
    $layer->enabeAlpha(true,true);
-   
+
    $layer->setTransparentColor($r,$g,$b,$tolerance,$Lock,$feather);
    example:
    $layer->setTransparentColor(0,0,0,7,false,true);
