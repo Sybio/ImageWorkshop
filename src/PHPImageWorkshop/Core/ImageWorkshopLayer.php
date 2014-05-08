@@ -1194,6 +1194,56 @@ class ImageWorkshopLayer
     }
     
     /**
+     * Enable Alpha
+     * enable alpha blending and enable saving of the alpha channel.
+     *
+     * @param boolen $enable - true enables alpha blending
+     * @param boolen $save - true enables saving of the alpha channel.
+     */
+
+    public function enableAlpha($enable = true,$save = true){
+        imageAlphaBlending($this->image, $enable);
+        imageSaveAlpha($this->image, $save);
+    }
+
+    /**
+     * Set TransparentColor
+     * makes a color transparent even if the image already has 
+     *
+     * @param int $filterType (http://www.php.net/manual/en/function.imagefilter.php)
+     * @param int $r,$g,$b - color value for the color that is to be made transparent
+     * @param int $t - tolerance (color that are close to the color that is to be made transparent will also be made transparent)
+     * @param int $f - feather (color that are close will be made transparent by the degree that that are close to the color).
+     * @param int $L - lock luminissity (color are only considered clode if they have the same hue and saturation as the request color).
+     * @param boolean $recursive
+     */
+    public function setTransparentColor($r=0,$b=0,$g=0,$t=0,$L = true,$f=false){
+        if(!imageistruecolor($this->image)){ throw new ImageWorkshopException('Can\'t set a color to transparent Image is not true color', static::ERROR_LAYER_GROUP);}
+
+       for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                         $rgb = imagecolorat($this->image, $w, $h);
+                         $Cr  = ($rgb >> 16) & 0xFF;
+                         $Cg  = ($rgb >> 8) & 0xFF;
+                         $Cb  =  $rgb & 0xFF;
+                         $alpha = 127;
+
+
+                        if($Cr<$r+$t and $Cr>$r-$t  and   $Cg<$g+$t and $Cg>$g-$t  and  $Cb<$b+$t and $Cb>$b-$t or $Cr==$r and $Cg==$g and $Cb==$b){// color comparason
+                            if($Cr-$r == $Cg>$g and   $Cg-$g ==  $Cb>$b or $L == false){// brightness lock
+                                 if($f==true){// Feathering
+                                     $alpha = 127-(127/$t)*($Cr-$r);
+                                     }
+
+                                 imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$r,$g,$b,$alpha));
+                            }
+                        }
+                       
+                }
+        }
+    }
+
+    /**
      * Apply a filter on the layer
      * Be careful: some filters can damage transparent images, use it sparingly ! (A good pratice is to use mergeAll on your layer before applying a filter)
      *
@@ -1204,29 +1254,6 @@ class ImageWorkshopLayer
      * @param int $arg4
      * @param boolean $recursive
      */
-    public function enableAlpha($enable = true,$save = true){
-        imageAlphaBlending($this->image, $enable);
-        imageSaveAlpha($this->image, $save);
-    }
-
-    public function setTransparentColor($r=0,$b=0,$g=0,$t=0,){
-       for ($h=0; $h<$this->height; $h++){
-                    for ($w=0; $w<$this->width; $w++){
-                         $rgb = imagecolorat($this->image, $w, $h);
-                         $Cr  = ($rgb >> 16) & 0xFF;
-                         $Cg  = ($rgb >> 8) & 0xFF;
-                         $Cb  =  $rgb & 0xFF;
-
-
-                        if($Cr<$r+$t and $Cr>$r-$t  and   $Cg<$g+$t and $Cg>$g-$t  and  $Cb<$b+$t and $Cb>$b-$t or $Cr==$r and $Cg==$g and $Cb==$b){
-
-                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$r,$g,$b,127));
-                    }
-                       
-                }
-        }
-    }
-
     public function applyFilter($filterType, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $recursive = false)
     {
         if ($filterType == IMG_FILTER_COLORIZE) {
