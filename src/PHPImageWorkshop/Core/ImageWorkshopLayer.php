@@ -1209,6 +1209,24 @@ class ImageWorkshopLayer
         imageSaveAlpha($this->image, $save);
     }
 
+    public function setTransparentColor($r=0,$b=0,$g=0,$t=0,){
+       for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                         $rgb = imagecolorat($this->image, $w, $h);
+                         $Cr  = ($rgb >> 16) & 0xFF;
+                         $Cg  = ($rgb >> 8) & 0xFF;
+                         $Cb  =  $rgb & 0xFF;
+
+
+                        if($Cr<$r+$t and $Cr>$r-$t  and   $Cg<$g+$t and $Cg>$g-$t  and  $Cb<$b+$t and $Cb>$b-$t or $Cr==$r and $Cg==$g and $Cb==$b){
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$r,$g,$b,127));
+                    }
+                       
+                }
+        }
+    }
+
     public function applyFilter($filterType, $arg1 = null, $arg2 = null, $arg3 = null, $arg4 = null, $recursive = false)
     {
         if ($filterType == IMG_FILTER_COLORIZE) {
