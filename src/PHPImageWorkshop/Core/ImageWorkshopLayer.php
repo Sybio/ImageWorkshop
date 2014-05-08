@@ -127,6 +127,13 @@ class ImageWorkshopLayer
      * @var integer
      */
     const ERROR_LAYER_GROUP = 6;
+
+    /**
+     * @var integer
+     */
+    const ERROR_IMAGE_TYPE = 7;
+
+
     
     // ===================================================================================
     // Methods
@@ -1218,7 +1225,7 @@ class ImageWorkshopLayer
      * @param boolean $recursive
      */
     public function setTransparentColor($r=0,$b=0,$g=0,$t=0,$L = true,$f=false){
-        if(!imageistruecolor($this->image)){ throw new ImageWorkshopException('Can\'t set a color to transparent Image is not true color', static::ERROR_LAYER_GROUP);}
+        if(!imageistruecolor($this->image)){ throw new ImageWorkshopException('Can\'t set a color to transparent Image is not true color', static::ERROR_IMAGE_TYPE);}
 
        for ($h=0; $h<$this->height; $h++){
                     for ($w=0; $w<$this->width; $w++){
