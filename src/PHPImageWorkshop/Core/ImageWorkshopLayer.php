@@ -7,9 +7,22 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
 
 // If no autoloader, uncomment these lines:
-require_once(__DIR__.'/../ImageWorkshop.php');
-require_once(__DIR__.'/ImageWorkshopLib.php');
-require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
+if (!class_exists('ImageWorkshop') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/../ImageWorkshop.php');
+}
+
+if (!class_exists('ImageWorkshopLib') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/ImageWorkshopLib.php');
+}
+
+if (!class_exists('ImageWorkshopLayerException') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
+}
+
+
+
+
+
 
 /**
  * ImageWorkshopLayer class

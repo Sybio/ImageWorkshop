@@ -7,8 +7,13 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
 
 // If no autoloader, uncomment these lines:
-require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
-require_once(__DIR__.'/Exception/ImageWorkshopException.php');
+
+if (!class_exists('ImageWorkshopLayer')) { // auto loads if not already loaded.
+   require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
+}
+if (!class_exists('ImageWorkshopException')) {
+   require_once(__DIR__.'/Exception/ImageWorkshopException.php');
+}
 
 /**
  * ImageWorkshop class

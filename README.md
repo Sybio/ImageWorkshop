@@ -19,6 +19,22 @@ to your require_once request;
 http://phpimageworkshop.com/
 
 ### Latest updates
+**Version 2.0.8.1 - 2014-5-6**
+- Updated includeds to allow load files if the main class is not already defined (like autoloading except), if you still wish to auto load (inorder to add custom load files) then just comment out 
+```php
+   
+  if (!class_exists('classname')) { 
+   require_once(pathandfilename.php'); 
+}
+
+// example : 
+if (!class_exists('ImageWorkshopLayer')) { // auto loads if not already loaded.
+   require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
+}
+
+```
+
+
 **Version 2.0.8 - 2014-5-6**
 - removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
 - add new enableAlpha method: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
