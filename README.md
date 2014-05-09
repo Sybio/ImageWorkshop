@@ -7,14 +7,7 @@
 ### Summary and features
 Really flexible and easy-to-use PHP class to work with images using the GD Library
 
-Included Libary for Layer Effects.
-to include effect libary please add:
-
-```php
-require_once(the_Path_to_.'/PHPImageWorkshop/core/GLDEffectsLib.php');
-```
-
-to your require_once request;
+Included Layer Effects.
 
 http://phpimageworkshop.com/
 
