@@ -1421,7 +1421,7 @@ class ImageWorkshopLayer
      */
     public function getResultAsPNG($backgroundColor = null, $quality = 75)
     {
-        $quality = floor(($quality > 100 ? 99:$quality) / 10);
+        $quality = floor(($quality >= 100 ? 99:$quality) / 10);
         ob_start();
         imagepng($this->getResult($backgroundColor), null, $quality);
         return ob_get_clean();
