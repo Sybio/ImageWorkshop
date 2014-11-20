@@ -51,6 +51,7 @@ class ImageWorkshop
      * @param string $path
      * 
      * @return ImageWorkshopLayer
+     * @throws Exception\ImageWorkshopException
      */
     public static function initFromPath($path)
     {
