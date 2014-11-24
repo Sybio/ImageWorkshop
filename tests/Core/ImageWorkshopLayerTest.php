@@ -912,6 +912,54 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
+     * Test resizeToFitInPixel
+     */
+    public function testResizeToFit()
+    {
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(20, 10);
+        $this->assertTrue($layer->getWidth() == 20, 'Expect $layer to have a width of 20px');
+        $this->assertTrue($layer->getHeight() == 10, 'Expect $layer to have a height of 10px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(120, 50);
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 50, 'Expect $layer to have a height of 50px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(60, 100);
+        $this->assertTrue($layer->getWidth() == 60, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 50px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(120, 100);
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(20, 10, true);
+        $this->assertTrue($layer->getWidth() == 13, 'Expect $layer to have a width of 13px');
+        $this->assertTrue($layer->getHeight() == 10, 'Expect $layer to have a height of 10px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(20, 18, true);
+        $this->assertTrue($layer->getWidth() == 20, 'Expect $layer to have a width of 20px');
+        $this->assertTrue($layer->getHeight() == 15, 'Expect $layer to have a height of 15px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->resizeToFit(120, 100, true);
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+    }
+    
+    /**
      * Test resizeByLargestSideInPixel
      */
     public function testResizeByLargestSideInPixel()
@@ -1143,6 +1191,124 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
         
         $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
         $layer->cropInPercent(-1, -1, 0, 0, 'LT');
+    }
+    
+    /**
+     * Test cropToAspectRatioInPixel
+     */
+    public function testCropToAspectRatioInPixel()
+    {
+        // Test larger width
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(50, 30, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(50, 30, 20, 20, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(50, 30, -20, -20, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        // Test larger than initial width
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(60, 50, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(60, 50, 20, 20, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(60, 50, -20, -20, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPixel(0, 0, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 75, 'Expect $layer to have a width of 75px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        // Test negative
+        
+        $layer = $this->initializeLayer(1);
+        
+        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $layer->cropToAspectRatioInPixel(-1, -1, 0, 0, 'LT');
+    }
+    
+    /**
+     * Test cropToAspectRatioInPercent
+     */
+    public function testCropToAspectRatioInPercent()
+    {
+        // Test larger width
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(50, 30, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(50, 30, 20, 20, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(50, 30, -20, -20, 'LT');
+        $this->assertTrue($layer->getWidth() == 100, 'Expect $layer to have a width of 100px');
+        $this->assertTrue($layer->getHeight() == 60, 'Expect $layer to have a height of 60px');
+        
+        // Test larger than initial width
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(60, 50, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(60, 50, 20, 20, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(60, 50, -20, -20, 'LT');
+        $this->assertTrue($layer->getWidth() == 90, 'Expect $layer to have a width of 90px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        $layer = $this->initializeLayer(1);
+        
+        $layer->cropToAspectRatioInPercent(0, 0, 0, 0, 'LT');
+        $this->assertTrue($layer->getWidth() == 75, 'Expect $layer to have a width of 75px');
+        $this->assertTrue($layer->getHeight() == 75, 'Expect $layer to have a height of 75px');
+        
+        // Test negative
+        
+        $layer = $this->initializeLayer(1);
+        
+        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $layer->cropToAspectRatioInPercent(-1, -1, 0, 0, 'LT');
     }
     
     /**

@@ -18,6 +18,15 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.6 - 2014-08-01**
+
+@jasny (https://github.com/jasny) contribution, new methods :
+
+* `ImageWorkshopLayer::resizeToFit()` resizes an image to fit a bounding box.
+* `ImageWorkshopLayer::cropToAspectRatio()` crops either to width or height of the document to match the aspect ratio.
+
+Documentation here : https://github.com/Sybio/ImageWorkshop/pull/37#issue-28704248
+
 **Version 2.0.5 - 2013-11-12**
 
 - Implementing interlace mode (http://php.net/manual/en/function.imageinterlace.php) on save() method to display progessive JPEG image
