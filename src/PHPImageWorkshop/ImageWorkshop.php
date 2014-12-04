@@ -128,7 +128,7 @@ class ImageWorkshop
     {
         $opacity = 0;
         
-        if (!$backgroundColor || $backgroundColor == 'transparent') {
+        if (null === $backgroundColor || $backgroundColor == 'transparent') {
             $opacity = 127;
             $backgroundColor = 'ffffff';
         }
