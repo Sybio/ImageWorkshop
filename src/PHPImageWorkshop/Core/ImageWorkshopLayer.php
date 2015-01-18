@@ -170,7 +170,7 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param integer $layerLevel
-     * @param ImageWorkshop $layer
+     * @param ImageWorkshopLayer $layer
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
@@ -189,7 +189,7 @@ class ImageWorkshopLayer
      *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param ImageWorkshop $layer
+     * @param ImageWorkshopLayer $layer
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
@@ -208,7 +208,7 @@ class ImageWorkshopLayer
      *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param ImageWorkshop $layer
+     * @param ImageWorkshopLayer $layer
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
