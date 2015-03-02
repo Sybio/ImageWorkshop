@@ -49,10 +49,11 @@ class ImageWorkshop
      * From an upload form, you can give the "tmp_name" path
      * 
      * @param string $path
+     * @param bool $fixOrientation
      * 
      * @return ImageWorkshopLayer
      */
-    public static function initFromPath($path)
+    public static function initFromPath($path, $fixOrientation = false)
     {
         if (file_exists($path) && !is_dir($path)) {
             
@@ -86,8 +87,15 @@ class ImageWorkshop
                     throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
                 break;
             }
-            
-            return new ImageWorkshopLayer($image);
+
+            $exif = read_exif_data($path);
+            $layer = new ImageWorkshopLayer($image, $exif);
+
+            if ($fixOrientation) {
+                $layer->fixOrientation();
+            }
+
+            return $layer;
         }
         
         throw new ImageWorkshopException('No such file found at "'.$path.'"', static::ERROR_IMAGE_NOT_FOUND);

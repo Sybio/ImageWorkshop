@@ -84,6 +84,13 @@ class ImageWorkshopLayer
      * Background Image
      */
     protected $image;
+
+    /**
+     * @var array
+     *
+     * Exif data
+     */
+    protected $exif;
     
     /**
      * @var string
@@ -132,7 +139,7 @@ class ImageWorkshopLayer
      *
      * @param \resource $image
      */
-    public function __construct($image)
+    public function __construct($image, array $exif = array())
     {
         if (!extension_loaded('gd')) {
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
@@ -145,6 +152,7 @@ class ImageWorkshopLayer
         $this->width = imagesx($image);
         $this->height = imagesy($image);
         $this->image = $image;
+        $this->exif = $exif;
         $this->layers = $this->layerLevels = $this->layerPositions = array();
         $this->clearStack();
     }
@@ -1857,6 +1865,50 @@ class ImageWorkshopLayer
 
         unset($this->image);
         $this->image = $virginLayoutImage;
+    }
+
+    /**
+     * Fix image orientation based on exif data
+     */
+    public function fixOrientation()
+    {
+        if (!isset($this->exif['Orientation'])) {
+            return;
+        }
+
+        switch ($this->exif['Orientation']) {
+            case 2:
+                $this->flip('horizontal');
+            break;
+
+            case 3:
+                $this->rotate(180);
+            break;
+
+            case 4:
+                $this->flip('vertical');
+            break;
+
+            case 5:
+                $this->rotate(-90);
+                $this->flip('vertical');
+            break;
+
+            case 6:
+                $this->rotate(90);
+            break;
+
+            case 7:
+                $this->rotate(90);
+                $this->flip('horizontal');
+            break;
+
+            case 8:
+                $this->rotate(-90);
+            break;
+        }
+
+        $this->exif['Orientation'] = 1;
     }
     
     // Deprecated, don't use anymore
