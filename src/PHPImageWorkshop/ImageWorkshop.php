@@ -69,10 +69,12 @@ class ImageWorkshop
             }
             
             $mimeContentType = $mimeContentType[1];
+            $exif = array();
             
             switch ($mimeContentType) {
                 case 'jpeg':
                     $image = imageCreateFromJPEG($path);
+                    $exif = read_exif_data($path);
                 break;
 
                 case 'gif':
@@ -88,7 +90,6 @@ class ImageWorkshop
                 break;
             }
 
-            $exif = read_exif_data($path);
             $layer = new ImageWorkshopLayer($image, $exif);
 
             if ($fixOrientation) {
