@@ -2,6 +2,7 @@
 
 namespace PHPImageWorkshop\Core;
 
+use PHPImageWorkshop\Exif\ExifOrientations;
 use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
@@ -1872,43 +1873,43 @@ class ImageWorkshopLayer
      */
     public function fixOrientation()
     {
-        if (!isset($this->exif['Orientation'])) {
+        if (!isset($this->exif['Orientation']) || 0 == $this->exif['Orientation']) {
             return;
         }
 
         switch ($this->exif['Orientation']) {
-            case 2:
+            case ExifOrientations::TOP_RIGHT:
                 $this->flip('horizontal');
             break;
 
-            case 3:
+            case ExifOrientations::BOTTOM_RIGHT:
                 $this->rotate(180);
             break;
 
-            case 4:
+            case ExifOrientations::BOTTOM_LEFT:
                 $this->flip('vertical');
             break;
 
-            case 5:
+            case ExifOrientations::LEFT_TOP:
                 $this->rotate(-90);
                 $this->flip('vertical');
             break;
 
-            case 6:
+            case ExifOrientations::RIGHT_TOP:
                 $this->rotate(90);
             break;
 
-            case 7:
+            case ExifOrientations::RIGHT_BOTTOM:
                 $this->rotate(90);
                 $this->flip('horizontal');
             break;
 
-            case 8:
+            case ExifOrientations::LEFT_BOTTOM:
                 $this->rotate(-90);
             break;
         }
 
-        $this->exif['Orientation'] = 1;
+        $this->exif['Orientation'] = ExifOrientations::TOP_LEFT;
     }
     
     // Deprecated, don't use anymore
