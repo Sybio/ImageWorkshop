@@ -2,6 +2,7 @@
 
 namespace PHPImageWorkshop\Core;
 
+use PHPImageWorkshop\Exif\ExifOrientations;
 use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
@@ -84,6 +85,13 @@ class ImageWorkshopLayer
      * Background Image
      */
     protected $image;
+
+    /**
+     * @var array
+     *
+     * Exif data
+     */
+    protected $exif;
     
     /**
      * @var string
@@ -132,7 +140,7 @@ class ImageWorkshopLayer
      *
      * @param \resource $image
      */
-    public function __construct($image)
+    public function __construct($image, array $exif = array())
     {
         if (!extension_loaded('gd')) {
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
@@ -145,6 +153,7 @@ class ImageWorkshopLayer
         $this->width = imagesx($image);
         $this->height = imagesy($image);
         $this->image = $image;
+        $this->exif = $exif;
         $this->layers = $this->layerLevels = $this->layerPositions = array();
         $this->clearStack();
     }
@@ -1857,6 +1866,50 @@ class ImageWorkshopLayer
 
         unset($this->image);
         $this->image = $virginLayoutImage;
+    }
+
+    /**
+     * Fix image orientation based on exif data
+     */
+    public function fixOrientation()
+    {
+        if (!isset($this->exif['Orientation']) || 0 == $this->exif['Orientation']) {
+            return;
+        }
+
+        switch ($this->exif['Orientation']) {
+            case ExifOrientations::TOP_RIGHT:
+                $this->flip('horizontal');
+            break;
+
+            case ExifOrientations::BOTTOM_RIGHT:
+                $this->rotate(180);
+            break;
+
+            case ExifOrientations::BOTTOM_LEFT:
+                $this->flip('vertical');
+            break;
+
+            case ExifOrientations::LEFT_TOP:
+                $this->rotate(-90);
+                $this->flip('vertical');
+            break;
+
+            case ExifOrientations::RIGHT_TOP:
+                $this->rotate(90);
+            break;
+
+            case ExifOrientations::RIGHT_BOTTOM:
+                $this->rotate(90);
+                $this->flip('horizontal');
+            break;
+
+            case ExifOrientations::LEFT_BOTTOM:
+                $this->rotate(-90);
+            break;
+        }
+
+        $this->exif['Orientation'] = ExifOrientations::TOP_LEFT;
     }
     
     // Deprecated, don't use anymore
