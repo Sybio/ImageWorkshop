@@ -1199,8 +1199,8 @@ class ImageWorkshopLayer
                 $degrees = 360 + $degrees;
             }
 
-			// Rotate the layer background image
-            $imageRotated = imagerotate($this->image, -$degrees, -1);
+            // Rotate the layer background image
+            $imageRotated = imagerotate($this->image, -$degrees, imageColorAllocateAlpha($this->image, 0, 0, 0, 127));
             imagealphablending($imageRotated, true);
             imagesavealpha($imageRotated, true);
 
@@ -1537,8 +1537,11 @@ class ImageWorkshopLayer
                     imagepng($image, $filename, $imageQuality);
                     unset($image);
                 }
+                return true;
             }
+            return false;
         }
+        return false;
     }
 
     // Checkers

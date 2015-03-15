@@ -9,6 +9,13 @@ Really flexible and easy-to-use PHP class to work with images using the GD Libra
 
 http://phpimageworkshop.com/
 
+### My Latest updates
+
+**Version 2.0.5 - 2014-04-29**
+
+- Fixed transparency, to rotate the watermark.
+- Added in return's save () function to work with the database.
+
 ### Latest updates
 
 **Version 2.0.6 - 2014-08-01**
