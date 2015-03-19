@@ -1199,8 +1199,11 @@ class ImageWorkshopLayer
                 $degrees = 360 + $degrees;
             }
 
-			// Rotate the layer background image
-            $imageRotated = imagerotate($this->image, -$degrees, -1);
+            $transparentColor = imageColorAllocateAlpha($this->image, 0, 0, 0, 127);
+            $rotationDegrees = ($degrees > 0) ? intval(360 * (1 - $degrees / 360)) : $degrees; // Used to fixed PHP >= 5.5 rotation with base angle 90°, 180°
+
+            // Rotate the layer background image
+            $imageRotated = imagerotate($this->image, $rotationDegrees, $transparentColor);
             imagealphablending($imageRotated, true);
             imagesavealpha($imageRotated, true);
 
