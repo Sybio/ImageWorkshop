@@ -37,8 +37,15 @@ class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
         
         $this->assertTrue(is_object($layer) === true, 'Expect $layer to be an object');
         $this->assertTrue(get_class($layer) === 'PHPImageWorkshop\Core\ImageWorkshopLayer', 'Expect $layer to be an ImageWorkshopLayer object');
-    
+
         // test 2
+
+        $layer = ImageWorkshop::initFromPath('file://'.__DIR__.static::IMAGE_SAMPLE_PATH);
+
+        $this->assertTrue(is_object($layer) === true, 'Expect $layer to be an object');
+        $this->assertTrue(get_class($layer) === 'PHPImageWorkshop\Core\ImageWorkshopLayer', 'Expect $layer to be an ImageWorkshopLayer object');
+
+        // test 3
         
         $this->setExpectedException('PHPImageWorkshop\Exception\ImageWorkshopException');
         $layer = ImageWorkshop::initFromPath('fakePath');
