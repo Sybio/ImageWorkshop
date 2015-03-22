@@ -5,7 +5,11 @@ namespace PHPImageWorkshop\Core\Exception;
 use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseException;
 
 // If no autoloader, uncomment these lines:
-//require_once(__DIR__.'/../../Exception/ImageWorkshopBaseException.php');
+
+if (!class_exists('ImageWorkshopBaseException')) { // auto loads if not already loaded.
+   require_once(__DIR__.'/../../Exception/ImageWorkshopBaseException.php');
+}
+
 
 /**
  * ImageWorkshopLayerException

@@ -8,9 +8,22 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
 
 // If no autoloader, uncomment these lines:
-//require_once(__DIR__.'/../ImageWorkshop.php');
-//require_once(__DIR__.'/ImageWorkshopLib.php');
-//require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
+if (!class_exists('ImageWorkshop') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/../ImageWorkshop.php');
+}
+
+if (!class_exists('ImageWorkshopLib') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/ImageWorkshopLib.php');
+}
+
+if (!class_exists('ImageWorkshopLayerException') and !isset($autoload)) { // auto loads if not already loaded.
+   require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
+}
+
+
+
+
+
 
 /**
  * ImageWorkshopLayer class
@@ -22,6 +35,9 @@ use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshop
  * @license http://en.wikipedia.org/wiki/MIT_License
  * @copyright Clément Guillemain
  */
+
+
+
 class ImageWorkshopLayer
 {
     // ===================================================================================
@@ -127,6 +143,18 @@ class ImageWorkshopLayer
      * @var integer
      */
     const ERROR_NEGATIVE_NUMBER_USED = 5;
+
+    /**
+     * @var integer
+     */
+    const ERROR_LAYER_GROUP = 6;
+
+    /**
+     * @var integer
+     */
+    const ERROR_IMAGE_TYPE = 7;
+
+
     
     // ===================================================================================
     // Methods
@@ -1296,6 +1324,56 @@ class ImageWorkshopLayer
     }
     
     /**
+     * Enable Alpha
+     * enable alpha blending and enable saving of the alpha channel.
+     *
+     * @param boolen $enable - true enables alpha blending
+     * @param boolen $save - true enables saving of the alpha channel.
+     */
+
+    public function enableAlpha($enable = true,$save = true){
+        imageAlphaBlending($this->image, $enable);
+        imageSaveAlpha($this->image, $save);
+    }
+
+    /**
+     * Set TransparentColor
+     * makes a color transparent even if the image already has 
+     *
+     * @param int $filterType (http://www.php.net/manual/en/function.imagefilter.php)
+     * @param int $r,$g,$b - color value for the color that is to be made transparent
+     * @param int $t - tolerance (color that are close to the color that is to be made transparent will also be made transparent)
+     * @param int $f - feather (color that are close will be made transparent by the degree that that are close to the color).
+     * @param int $L - lock luminissity (color are only considered clode if they have the same hue and saturation as the request color).
+     * @param boolean $recursive
+     */
+    public function setTransparentColor($r=0,$b=0,$g=0,$t=0,$L = true,$f=false){
+        if(!imageistruecolor($this->image)){ throw new ImageWorkshopException('Can\'t set a color to transparent Image is not true color', static::ERROR_IMAGE_TYPE);}
+
+       for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                         $rgb = imagecolorat($this->image, $w, $h);
+                         $Cr  = ($rgb >> 16) & 0xFF;
+                         $Cg  = ($rgb >> 8) & 0xFF;
+                         $Cb  =  $rgb & 0xFF;
+                         $alpha = 127;
+
+
+                        if($Cr<$r+$t and $Cr>$r-$t  and   $Cg<$g+$t and $Cg>$g-$t  and  $Cb<$b+$t and $Cb>$b-$t or $Cr==$r and $Cg==$g and $Cb==$b){// color comparason
+                            if($Cr-$r == $Cg>$g and   $Cg-$g ==  $Cb>$b or $L == false){// brightness lock
+                                 if($f==true){// Feathering
+                                     $alpha = 127-(127/$t)*($Cr-$r);
+                                     }
+
+                                 imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$r,$g,$b,$alpha));
+                            }
+                        }
+                       
+                }
+        }
+    }
+
+    /**
      * Apply a filter on the layer
      * Be careful: some filters can damage transparent images, use it sparingly ! (A good pratice is to use mergeAll on your layer before applying a filter)
      *
@@ -1327,7 +1405,309 @@ class ImageWorkshopLayer
             }
         }
     }
-    
+
+    /**
+     * Apply a image convolution on the layer
+     * 
+     *
+     * @param array $matrix 
+     * @param int $div
+     * @param int $offset
+     * @param boolean $recursive
+     *
+     * @author Email Goodlittledeveloper@gmail.com
+     *
+     */
+    public function applyImageConvolution($matrix, $div=0, $offset=0,$recursive=false){
+        if(is_string($matrix)){
+            $matrix = strtolower($matrix);
+            switch($matrix){
+                case "blur":
+                    $matrix = array(array(1,1,1), array(1,.25,1), array(1,1,1));
+                    $div = 8.25;
+                    $offset = 0;
+                break;
+
+                case "emboss": 
+                    $matrix = array(array(2, 2, 2), array(2, 1, -2), array(-2, -2, -2));
+                    $div = 0;
+                    $offset = 127;
+                break;
+                    
+                case  "gaussian blur" :
+                    $matrix = array(array(1.0, 2.0, 1.0), array(2.0, 4.0, 2.0), array(1.0, 2.0, 1.0));
+                    $div = 16;
+                    $offset = 0;
+                break;
+
+                case "sharpen" :
+                    $Matrix = array(array(-1.2, -1.2, -1.2),array(-1.2, .4, -1.2),array(-1.2, -1.2, -1.2)); 
+                    $div = array_sum(array_map('array_sum', $Matrix));  
+                    $offset = 0;
+                break;
+
+            }
+             
+        }
+        if(is_array($matrix)){
+            imageconvolution($this->image, $matrix, $div, $offset);
+        }
+
+        if ($recursive) {
+
+            $layers = $this->layers;
+
+            foreach($layers as $layerId => $layer) {
+                $this->layers[$layerId]->applyImageConvolution($matrix, $div, $offset, true);
+            }
+        }
+
+        
+
+    }
+
+     public function toGreyscale($type = null,$recursive=false){
+        $type = strtolower($type);
+        
+        switch ($type) {
+            case 'lightness':
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                        $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = (max($r,$g,$b)+min($r,$g,$b))/2;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+
+                break;
+
+            case 'luminosity':
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                         $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = 0.21*$r+0.71*$g+0.07*$b;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+                break;
+            
+            default://average
+                for ($h=0; $h<$this->height; $h++){
+                    for ($w=0; $w<$this->width; $w++){
+                        $rgb = imagecolorat($this->image, $w, $h);
+                         $r  = ($rgb >> 16) & 0xFF;
+                         $g  = ($rgb >> 8) & 0xFF;
+                         $b  =  $rgb & 0xFF;
+                         $a  = ($rgb & 0x7F000000) >> 24;
+
+                         $grey = ($r+$g+$b)/3;
+
+                         imagesetpixel($this->image,$w,$h,imagecolorallocatealpha($this->image,$grey,$grey,$grey,$a));
+                    }
+                }
+                break;
+        }
+
+        if ($recursive) {
+
+            $layers = $this->layers;
+
+            foreach($layers as $layerId => $layer) {
+                $this->layers[$layerId]->toGreyscale($type, true);
+            }
+        }
+    }
+
+    /**
+     * Apply alpha layer mask.
+     *
+     * @param layer $mask 
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function applyAlphaMask($mask){
+        
+        $masktemp = clone $mask;
+
+        $masktemp->resizeInPixel($this->width, $this->height); // make $mask and $layer the same size.
+        $masktemp->applyFilter(IMG_FILTER_GRAYSCALE); //converts to greyscale if not greyscale;
+        $masktemp->applyFilter(IMG_FILTER_NEGATE); // inverts the mask so black  = 100% transparent and white = 0
+
+        $layerImg= $this->getImage();
+        $maskImg = $masktemp->getImage();
+
+        $imgtemp = imageCreateTrueColor($this->width,$this->height);
+
+        imagealphablending($imgtemp, false);
+        imagesavealpha($imgtemp, true);
+
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                $Lrgb = imagecolorat($layerImg, $w, $h);
+                $Lcolors = imagecolorsforindex($layerImg, $Lrgb);
+
+
+                $alpha = (imagecolorat($maskImg, $w, $h) >> 16) & 0xFF; //faster calc to get red value.          
+                $alpha = $alpha/255*127; // the gets alpha from red value 
+                
+                imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Lcolors["red"],$Lcolors["green"],$Lcolors["blue"],$alpha));
+        }}
+
+       
+
+        
+        unset($this->image);
+        $this->image = $imgtemp;
+        unset($imgtemp);    
+        
+    }
+
+     /**
+     * split Layer in to channels.
+     *
+     * @return a group of 4 layers each one a channel.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function splitChannels(){
+        if($this->getLastLayerId()!=0){
+            throw new ImageWorkshopException('Can\'t split channels of a layer group', static::ERROR_LAYER_GROUP);
+        }
+        else{
+
+        $ChlR = imageCreateTrueColor($this->width,$this->height);
+        $ChlG = imageCreateTrueColor($this->width,$this->height);
+        $ChlB = imageCreateTrueColor($this->width,$this->height);
+        $ChlA = imageCreateTrueColor($this->width,$this->height);
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                $Lrgb = imagecolorat($this->image, $w, $h);
+                $Lcolors = imagecolorsforindex($this->image, $Lrgb);
+
+                
+                imagesetpixel($ChlR,$w,$h,imagecolorallocatealpha($ChlR,$Lcolors["red"],0,0,0));
+                imagesetpixel($ChlG,$w,$h,imagecolorallocatealpha($ChlG,0,$Lcolors["green"],0,0));
+                imagesetpixel($ChlB,$w,$h,imagecolorallocatealpha($ChlB,0,0,$Lcolors["blue"],0));
+                imagesetpixel($ChlA,$w,$h,imagecolorallocatealpha($ChlA,127,127,127,$Lcolors["alpha"]));
+        }}
+
+        $group =  ImageWorkshop::initVirginLayer($this->width,$this->height);
+        $r     =  ImageWorkshop::initFromResourceVar($ChlR);
+        $g     =  ImageWorkshop::initFromResourceVar($ChlG);
+        $b     =  ImageWorkshop::initFromResourceVar($ChlB);
+        $a     =  ImageWorkshop::initFromResourceVar($ChlA);
+
+        unset($ChlR);
+        unset($ChlG);    
+        unset($ChlB);
+        unset($ChlA);
+           
+
+        $sublayerInfos = $group->addLayer("1", $r, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("2", $g, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("3", $b, 0, 0, "LT");
+        $sublayerInfos = $group->addLayer("4", $a, 0, 0, "LT");
+
+        return $group;
+    }}
+
+     /**
+     * get channel by color.
+     *
+     * @param string of channel name
+     *
+     * @return a layer based on channel name a channel.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function getChannel($channel){
+        switch ($channel) {
+            case 'red':
+                return $this->getLayer(1);
+                break;
+
+            case 'green':
+                return $this->getLayer(2);
+                break;
+
+            case 'blue':
+                return $this->getLayer(3);
+                break;
+
+            case 'alpha':
+                return $this->getLayer(4);
+                break;
+
+        }
+    }
+
+    /**
+     * merge channels.
+     *
+     * @param group of channels
+     *
+     * @return sets layer image to merge channels.
+     *
+     * @author email goodlittledeveloper@gmail.com
+     *
+     */
+
+    public function mergeChannels($group){
+        $ChlR = $group->getLayer(1)->getResult();
+        $ChlG = $group->getLayer(2)->getResult();
+        $ChlB = $group->getLayer(3)->getResult();
+        $ChlA = $group->getLayer(4)->getResult();
+
+        $imgtemp = imageCreateTrueColor($this->width,$this->height);
+
+        imagealphablending($imgtemp, false);
+        imagesavealpha($imgtemp, true);
+
+        for ($h=0; $h<$this->height; $h++){
+            for ($w=0; $w<$this->width; $w++){
+                
+                $Color["red"]   = (imagecolorat($ChlR, $w, $h) >> 16) & 0xFF;
+                $Color["green"] = (imagecolorat($ChlG, $w, $h) >> 8) & 0xFF;
+                $Color["blue"]  =  imagecolorat($ChlB, $w, $h) & 0xFF;
+                $Color["alpha"] = (imagecolorat($ChlA, $w, $h) & 0x7F000000) >> 24;
+          
+                imagesetpixel($imgtemp,$w,$h,imagecolorallocatealpha($imgtemp,$Color["red"],$Color["green"],$Color["blue"],$Color["alpha"]));
+            }
+        }
+
+        unset($ChlR);
+        unset($ChlG);    
+        unset($ChlB);
+        unset($ChlA);
+
+        unset($this->image);
+        $this->image = $imgtemp;
+        unset($imgtemp);      
+    }
+
+
+   
+
     /**
      * Apply horizontal or vertical flip (Transformation)
      * 

@@ -7,9 +7,58 @@
 ### Summary and features
 Really flexible and easy-to-use PHP class to work with images using the GD Library
 
+Included Layer Effects.
+
 http://phpimageworkshop.com/
 
 ### Latest updates
+**Version 2.0.8.1 - 2014-5-6**
+- Updated includeds to allow load files if the main class is not already defined (like autoloading except), if you still wish to auto load (inorder to add custom load files) then just comment out 
+```php
+   
+  if (!class_exists('classname')) { 
+   require_once(pathandfilename.php'); 
+}
+
+// example : 
+if (!class_exists('ImageWorkshopLayer')) { // auto loads if not already loaded.
+   require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
+}
+
+```
+
+
+**Version 2.0.8 - 2014-5-6**
+- removed Layer Effect class and merged back into main Layer Class(Working to resolve issues with extracted effects).
+- add new enableAlpha method: the first argument turns on alpha blending for graphic manipuation, the second turns on alpha      blending when saving image (this prevents the black background).
+- add new setTransparentColor method: the first three arguments are RBG values of the color the forth is the tolerance so colors +/- the tolerance will also be made transparent the fifth argument is optional and it locks the tolerance so that only color with the same hue and saturation as the base color will be altered, optional feather by tolerance true/false is the sixth argument. this cause the degree of transpanancy to Decay futher the color differs from the base color. 
+```php
+   
+   $layer->enabeAlpha($blend,$save); 
+   example:
+   $layer->enabeAlpha(true,true);
+
+   $layer->setTransparentColor($r,$g,$b,$tolerance,$Lock,$feather);
+   example:
+   $layer->setTransparentColor(0,0,0,7,false,true);
+```
+
+**Version 2.0.7 - 2014-3-6**
+
+- Move Layer effect into there own class, allowing you to use your own effects libaries.
+
+- Added Extended_Effects method which request Effect name, EffectsLib object , and if it should apply recursively.
+
+**Version 2.0.7 - 2014-2-5**
+- Forked
+- Added Layer Effect:
+     - applyFilter
+     - applyImageConvolution
+     - toGreyscale
+     - applyAlphaMask
+     - splitChannels
+     - getChannel
+     - mergeChannels
 
 **Version 2.0.7 - 2015-03-22**
 
