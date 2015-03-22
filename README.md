@@ -11,6 +11,13 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.7 - 2015-03-22**
+
+- Allow `ImageWorkshop::initFromPath` factory working with remote URL
+- Improve PHP >= 5.5 compatibility
+- Add `fixOrientation` method to layer to change image orientation based on EXIF orientation data
+- Fix background color when value is setting to "000000"
+
 **Version 2.0.6 - 2014-08-01**
 
 @jasny (https://github.com/jasny) contribution, new methods :
