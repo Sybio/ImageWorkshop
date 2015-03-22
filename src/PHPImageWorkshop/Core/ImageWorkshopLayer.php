@@ -127,6 +127,16 @@ class ImageWorkshopLayer
      * @var integer
      */
     const ERROR_NEGATIVE_NUMBER_USED = 5;
+
+    /**
+     * @var integer
+     */
+    const ERROR_NOT_WRITABLE_FILE = 6;
+
+    /**
+     * @var integer
+     */
+    const ERROR_FILE_NOT_SAVED = 7;
     
     // ===================================================================================
     // Methods
@@ -1504,44 +1514,61 @@ class ImageWorkshopLayer
                 // Creating the folders if they don't exist
                 if (!is_dir($folder) && $createFolders) {
                     $oldUmask = umask(0);
-                    mkdir($folder, 0777, true);
-                    umask($oldUmask);
-                    chmod($folder, 0777);
+                    if (!mkdir($folder, 0777, true))
+                        throw new ImageWorkshopLayerException('Can\'t create the folder "' . $folder . '"', static::ERROR_NOT_WRITABLE_FILE);
+                    else {
+                        umask($oldUmask);
+                        chmod($folder, 0777);
+                    }
                 }
 
-                $extension = explode('.', $imageName);
-                $extension = strtolower($extension[count($extension) - 1]);
+                if (is_writable($folder)) {
+                    $extension = explode('.', $imageName);
+                    $extension = strtolower($extension[count($extension) - 1]);
 
-                $filename = $folder.'/'.$imageName;
+                    $slash = substr($folder, strlen($folder)-1, 1) != '/' ? '/' : '';   // trailling slash
+                    $filename = $folder.$slash.$imageName;
 
-                if (($extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') && (!$backgroundColor || $backgroundColor == 'transparent')) {
-                    $backgroundColor = 'ffffff';
+                    if (($extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') && (!$backgroundColor || $backgroundColor == 'transparent')) {
+                        $backgroundColor = 'ffffff';
+                    }
+
+                    $image = $this->getResult($backgroundColor);
+
+                    imageinterlace($image, (int) $interlace);
+
+                    $saved = false;
+                    if ($extension == 'jpg' || $extension == 'jpeg') {
+
+                        $saved = imagejpeg($image, $filename, $imageQuality);
+                        unset($image);
+
+                    } elseif ($extension == 'gif') {
+
+                        $saved = imagegif($image, $filename);
+                        unset($image);
+
+                    } elseif ($extension == 'png') {
+
+                        $imageQuality = $imageQuality / 10;
+                        $imageQuality -= 1;
+
+                        $saved = imagepng($image, $filename, $imageQuality);
+                        unset($image);
+                    }
+
+                    if (!$saved)
+                        throw new ImageWorkshopLayerException('Error occurs when saving "' . $filename . '"', static::ERROR_FILE_NOT_SAVED);
+                    // else return true ?
                 }
-
-                $image = $this->getResult($backgroundColor);
-
-                imageinterlace($image, (int) $interlace);
-
-                if ($extension == 'jpg' || $extension == 'jpeg') {
-
-                    imagejpeg($image, $filename, $imageQuality);
-                    unset($image);
-
-                } elseif ($extension == 'gif') {
-
-                    imagegif($image, $filename);
-                    unset($image);
-
-                } elseif ($extension == 'png') {
-
-                    $imageQuality = $imageQuality / 10;
-                    $imageQuality -= 1;
-
-                    imagepng($image, $filename, $imageQuality);
-                    unset($image);
-                }
+                else
+                    throw new ImageWorkshopLayerException('The folder "' . $folder . '" is not writable.', ImageWorkshop::ERROR_NOT_WRITABLE_FILE);
             }
+            else
+                throw new ImageWorkshopLayerException('"' . $folder . '" is not a folder.', static::ERROR_NOT_WRITABLE_FILE);
         }
+        else
+            throw new ImageWorkshopLayerException('"' . $folder . '" is an existing file, can\'t be used as a folder.', static::ERROR_NOT_WRITABLE_FILE);
     }
 
     // Checkers
