@@ -1,5 +1,5 @@
 {
-    "name": "newerton/image-workshop",
+    "name": "sybio/image-workshop",
     "type": "library",
     "description": "Powerful PHP class using GD library to work easily with images including layer notion (like Photoshop or GIMP)",
     "keywords": ["image", "thumbnail", "watermark", "resize", "crop", "rotate", "library", "GD", "class"],
