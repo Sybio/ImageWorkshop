@@ -127,6 +127,21 @@ class ImageWorkshopLayer
      * @var integer
      */
     const ERROR_NEGATIVE_NUMBER_USED = 5;
+
+    /**
+     * @var integer
+     */
+    const ERROR_NOT_WRITABLE_FOLDER = 6;
+
+    /**
+     * @var integer
+     */
+    const ERROR_NOT_SUPPORTED_FORMAT = 7;
+
+    /**
+     * @var integer
+     */
+    const ERROR_UNKNOW = 8;
     
     // ===================================================================================
     // Methods
@@ -1497,51 +1512,68 @@ class ImageWorkshopLayer
      */
     public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = false)
     {
-        if (!is_file($folder)) {
-
-            if (is_dir($folder) || $createFolders) {
-
-                // Creating the folders if they don't exist
-                if (!is_dir($folder) && $createFolders) {
-                    $oldUmask = umask(0);
-                    mkdir($folder, 0777, true);
-                    umask($oldUmask);
-                    chmod($folder, 0777);
-                }
-
-                $extension = explode('.', $imageName);
-                $extension = strtolower($extension[count($extension) - 1]);
-
-                $filename = $folder.'/'.$imageName;
-
-                if (($extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') && (!$backgroundColor || $backgroundColor == 'transparent')) {
-                    $backgroundColor = 'ffffff';
-                }
-
-                $image = $this->getResult($backgroundColor);
-
-                imageinterlace($image, (int) $interlace);
-
-                if ($extension == 'jpg' || $extension == 'jpeg') {
-
-                    imagejpeg($image, $filename, $imageQuality);
-                    unset($image);
-
-                } elseif ($extension == 'gif') {
-
-                    imagegif($image, $filename);
-                    unset($image);
-
-                } elseif ($extension == 'png') {
-
-                    $imageQuality = $imageQuality / 10;
-                    $imageQuality -= 1;
-
-                    imagepng($image, $filename, $imageQuality);
-                    unset($image);
-                }
-            }
+        if (is_file($folder)) {
+            throw new ImageWorkshopLayerException(sprintf('Destination folder "%s" is a file.', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
         }
+
+        if ((!is_dir($folder) && !$createFolders)) {
+            throw new ImageWorkshopLayerException(sprintf('Destination folder "%s" not exists.', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
+        }
+
+        if (is_dir($folder) && !is_writable($folder)) {
+            throw new ImageWorkshopLayerException(sprintf('Destination folder "%s" not writable.', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
+        }
+
+        // Creating the folders if they don't exist
+        if (!is_dir($folder) && $createFolders) {
+            if (!mkdir($folder, 0777, true)) {
+                throw new ImageWorkshopLayerException(sprintf('Unable to create destination folder "%s".', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
+            }
+
+            $oldUmask = umask(0);
+            umask($oldUmask);
+            chmod($folder, 0777);
+        }
+
+        $extension = explode('.', $imageName);
+        $extension = strtolower($extension[count($extension) - 1]);
+
+        $filename = $folder.'/'.$imageName;
+
+        if (($extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') && (!$backgroundColor || $backgroundColor == 'transparent')) {
+            $backgroundColor = 'ffffff';
+        }
+
+        $image = $this->getResult($backgroundColor);
+
+        imageinterlace($image, (int) $interlace);
+
+        if ($extension == 'jpg' || $extension == 'jpeg') {
+
+            $isSaved = imagejpeg($image, $filename, $imageQuality);
+
+        } elseif ($extension == 'gif') {
+
+            $isSaved = imagegif($image, $filename);
+
+        } elseif ($extension == 'png') {
+
+            $imageQuality = $imageQuality / 10;
+            $imageQuality -= 1;
+
+            $isSaved = imagepng($image, $filename, intval($imageQuality));
+
+        } else {
+
+            throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported.', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
+
+        }
+
+        if (!$isSaved) {
+            throw new ImageWorkshopLayerException(sprintf('Error occurs when save image "%s".', $folder), self::ERROR_UNKNOW);
+        }
+
+        unset($image);
     }
 
     // Checkers
