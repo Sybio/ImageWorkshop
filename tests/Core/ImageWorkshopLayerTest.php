@@ -17,6 +17,23 @@ require_once(__DIR__.'/../autoload.php');
  */
 class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var string */
+    protected $workspace = null;
+
+    protected function setUp()
+    {
+        $this->umask = umask(0);
+        $this->workspace = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.time().rand(0, 1000);
+        mkdir($this->workspace, 0777, true);
+        $this->workspace = realpath($this->workspace);
+    }
+
+    protected function tearDown()
+    {
+        $this->clean($this->workspace);
+        umask($this->umask);
+    }
+
     // Tests
     // ===================================================================================
     
@@ -1424,7 +1441,49 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($layer->getWidth() <= 121 && $layer->getWidth() >= 119, 'Expect $layer to have a width around 120px');
         $this->assertTrue($layer->getHeight() <= 107 && $layer->getHeight() >= 105, 'Expect $layer to have a height around 106px');
     }
-    
+
+    public function testSaveWithDirectoryAsFile()
+    {
+        $destinationFolder = $this->workspace.DIRECTORY_SEPARATOR.'fileDestination';
+
+        $this->setExpectedException(
+            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
+            'Destination folder "'.$destinationFolder.'" is a file.',
+            6
+        );
+
+        touch($destinationFolder);
+
+        $layer = $this->initializeLayer();
+        $layer->save($destinationFolder, 'test.png', false);
+    }
+
+    public function testSaveWithNonExistDirectory()
+    {
+        $destinationFolder = $this->workspace.DIRECTORY_SEPARATOR.'nonExistFolder';
+
+        $this->setExpectedException(
+            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
+            'Destination folder "'.$destinationFolder.'" not exists.',
+            6
+        );
+
+        $layer = $this->initializeLayer();
+        $layer->save($destinationFolder, 'test.png', false);
+    }
+
+    public function testSaveWithNonSupportedFileExtension()
+    {
+        $this->setExpectedException(
+            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
+            'Image format "tif" not supported.',
+            7
+        );
+
+        $layer = $this->initializeLayer();
+        $layer->save($this->workspace, 'test.tif', false);
+    }
+
     // Internals
     // ===================================================================================
     
@@ -1464,5 +1523,21 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
         }
         
         return $layer;
+    }
+
+    /**
+     * @param string $file
+     */
+    protected function clean($file)
+    {
+        if (is_dir($file) && !is_link($file)) {
+            $dir = new \FilesystemIterator($file);
+            foreach ($dir as $childFile) {
+                $this->clean($childFile);
+            }
+            rmdir($file);
+        } else {
+            unlink($file);
+        }
     }
 }
