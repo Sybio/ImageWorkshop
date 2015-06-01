@@ -47,7 +47,7 @@ class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
 
         // test 3
         
-        $this->setExpectedException('PHPImageWorkshop\Exception\ImageWorkshopException');
+        $this->setExpectedException('PHPImageWorkshop\Exception\ImageWorkshopException', '', ImageWorkshop::ERROR_IMAGE_NOT_FOUND);
         $layer = ImageWorkshop::initFromPath('fakePath');
     }
     
