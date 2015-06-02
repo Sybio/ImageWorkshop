@@ -1151,8 +1151,6 @@ class ImageWorkshopLayer
 	 * @param integer $positionX
 	 * @param integer $positionY
 	 * @param string $position
-	 * @internal param int $width
-	 * @internal param int $height
 	 */
     public function cropMaximumInPixel($positionX = 0, $positionY = 0, $position = 'LT')
     {
@@ -1168,8 +1166,6 @@ class ImageWorkshopLayer
 	 * @param integer $positionXPercent
 	 * @param integer $positionYPercent
 	 * @param string $position
-	 * @internal param int $width
-	 * @internal param int $height
 	 */
     public function cropMaximumInPercent($positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
     {
@@ -1186,8 +1182,6 @@ class ImageWorkshopLayer
 	 * @param integer $positionX
 	 * @param integer $positionY
 	 * @param string $position
-	 * @internal param int $width
-	 * @internal param int $height
 	 */
     public function cropMaximum($unit = self::UNIT_PIXEL, $positionX = 0, $positionY = 0, $position = 'LT')
     {
