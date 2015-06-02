@@ -1593,11 +1593,7 @@ class ImageWorkshopLayer
      */
     public function isLayerInIndex($layerId)
     {
-        if (array_key_exists($layerId, $this->layers)) {
-            return true;
-        }
-
-        return false;
+        return array_key_exists($layerId, $this->layers);
     }
 
     // Getter / Setter
@@ -1610,13 +1606,7 @@ class ImageWorkshopLayer
      */
     public function getNarrowSideWidth()
     {
-        $narrowSideWidth = $this->getWidth();
-
-        if ($this->getHeight() < $narrowSideWidth) {
-            $narrowSideWidth = $this->getHeight();
-        }
-
-        return $narrowSideWidth;
+		return $this->getHeight() < $this->getWidth() ? $this->getHeight() : $this->getWidth();
     }
 
     /**
@@ -1626,13 +1616,7 @@ class ImageWorkshopLayer
      */
     public function getLargestSideWidth()
     {
-        $largestSideWidth = $this->getWidth();
-
-        if ($this->getHeight() > $largestSideWidth) {
-            $largestSideWidth = $this->getHeight();
-        }
-
-        return $largestSideWidth;
+		return $this->getHeight() > $this->getWidth() ? $this->getHeight() : $this->getWidth();
     }
     
     /**
@@ -1784,9 +1768,7 @@ class ImageWorkshopLayer
         $this->image = $virginImage;
         unset($virginImage);
 
-        $layers = $this->layers;
-
-        foreach($layers as $layerId => $layer) {
+        foreach($this->layers as $layerId => $layer) {
             $this->layers[$layerId] = clone $this->layers[$layerId];
         }
     }
