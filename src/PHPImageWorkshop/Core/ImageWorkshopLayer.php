@@ -983,36 +983,38 @@ class ImageWorkshopLayer
         $this->crop(self::UNIT_PIXEL, $width, $height, $positionX, $positionY, $position);
     }
 
-    /**
-     * Crop the document by specifying percent
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param float $percentWidth
-     * @param float $percentHeight
-     * @param float $positionXPercent
-     * @param float $positionYPercent
-     * @param string $position
-     */
+	/**
+	 * Crop the document by specifying percent
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param float|int $percentWidth
+	 * @param float|int $percentHeight
+	 * @param float|int $positionXPercent
+	 * @param float|int $positionYPercent
+	 * @param string $position
+	 * @throws ImageWorkshopLayerException
+	 */
     public function cropInPercent($percentWidth = 0, $percentHeight = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
     {
         $this->crop(self::UNIT_PERCENT, $percentWidth, $percentHeight, $positionXPercent, $positionYPercent, $position);
     }
 
-    /**
-     * Crop the document
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param string $unit
-     * @param mixed $width (integer or float)
-     * @param mixed $height (integer or float)
-     * @param mixed $positionX (integer or float)
-     * @param mixed $positionY (integer or float)
-     * @param string $position
-     */
+	/**
+	 * Crop the document
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param string $unit
+	 * @param int $width
+	 * @param int $height
+	 * @param int $positionX
+	 * @param int $positionY
+	 * @param string $position
+	 * @throws ImageWorkshopLayerException
+	 */
     public function crop($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
     {
         if ($width < 0 || $height < 0) {
@@ -1078,36 +1080,38 @@ class ImageWorkshopLayer
         $this->cropToAspectRatio(self::UNIT_PIXEL, $width, $height, $positionX, $positionY, $position);
     }
 
-    /**
-     * Crop the document to a specific aspect ratio by specifying a shift in percent
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param integer $width
-     * @param integer $height
-     * @param float $positionXPercent
-     * @param float $positionYPercent
-     * @param string $position
-     */
+	/**
+	 * Crop the document to a specific aspect ratio by specifying a shift in percent
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param integer $width
+	 * @param integer $height
+	 * @param float|int $positionXPercent
+	 * @param float|int $positionYPercent
+	 * @param string $position
+	 * @throws ImageWorkshopLayerException
+	 */
     public function cropToAspectRatioInPercent($width = 0, $height = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
     {
         $this->cropToAspectRatio(self::UNIT_PERCENT, $width, $height, $positionXPercent, $positionYPercent, $position);
     }
 
-    /**
-     * Crop the document to a specific aspect ratio
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param string $unit
-     * @param integer $width (integer or float)
-     * @param integer $height (integer or float)
-     * @param mixed $positionX (integer or float)
-     * @param mixed $positionY (integer or float)
-     * @param string $position
-     */
+	/**
+	 * Crop the document to a specific aspect ratio
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param string $unit
+	 * @param int|float $width
+	 * @param int|float $height
+	 * @param int|float $positionX
+	 * @param int|float $positionY
+	 * @param string $position
+	 * @throws ImageWorkshopLayerException
+	 */
     public function cropToAspectRatio($unit = self::UNIT_PIXEL, $width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
     {
         if ($width < 0 || $height < 0) {
@@ -1138,53 +1142,53 @@ class ImageWorkshopLayer
         $this->cropInPixel($newWidth, $newHeight, $positionX, $positionY, $position);
     }
 
-    /**
-     * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pixel
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $positionX
-     * @param integer $positionY
-     * @param string $position
-     */
+	/**
+	 * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in pixel
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param integer $positionX
+	 * @param integer $positionY
+	 * @param string $position
+	 * @internal param int $width
+	 * @internal param int $height
+	 */
     public function cropMaximumInPixel($positionX = 0, $positionY = 0, $position = 'LT')
     {
         $this->cropMaximum(self::UNIT_PIXEL, $positionX, $positionY, $position);
     }
 
-    /**
-     * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in percent
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $positionXPercent
-     * @param integer $positionYPercent
-     * @param string $position
-     */
+	/**
+	 * Crop the maximum possible from left top ("LT"), "RT"... by specifying a shift in percent
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param integer $positionXPercent
+	 * @param integer $positionYPercent
+	 * @param string $position
+	 * @internal param int $width
+	 * @internal param int $height
+	 */
     public function cropMaximumInPercent($positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
     {
         $this->cropMaximum(self::UNIT_PERCENT, $positionXPercent, $positionYPercent, $position);
     }
 
-    /**
-     * Crop the maximum possible from left top
-     *
-     * $backgroundColor can be set transparent (but script could be long to execute)
-     * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     *
-     * @param string $unit
-     * @param integer $width
-     * @param integer $height
-     * @param integer $positionX
-     * @param integer $positionY
-     * @param string $position
-     */
+	/**
+	 * Crop the maximum possible from left top
+	 *
+	 * $backgroundColor can be set transparent (but script could be long to execute)
+	 * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
+	 *
+	 * @param string $unit
+	 * @param integer $positionX
+	 * @param integer $positionY
+	 * @param string $position
+	 * @internal param int $width
+	 * @internal param int $height
+	 */
     public function cropMaximum($unit = self::UNIT_PIXEL, $positionX = 0, $positionY = 0, $position = 'LT')
     {
         $narrowSide = $this->getNarrowSideWidth();
@@ -1406,20 +1410,20 @@ class ImageWorkshopLayer
         }
     }
 
-    /**
-     * Add a text on the background image of the layer using a font localized at $fontPath
-     * Return the text coordonates
-     *
-     * @param string $text
-     * @param integer $fontPath
-     * @param integer $fontSize
-     * @param string $color
-     * @param integer $positionX
-     * @param integer $positionY
-     * @param integer $fontRotation
-     *
-     * @return array
-     */
+	/**
+	 * Add a text on the background image of the layer using a font localized at $fontPath
+	 * Return the text coordonates
+	 *
+	 * @param string $text
+	 * @param integer $fontPath
+	 * @param integer $fontSize
+	 * @param string $color
+	 * @param integer $positionX
+	 * @param integer $positionY
+	 * @param integer $fontRotation
+	 * @return array
+	 * @throws ImageWorkshopLayerException
+	 */
     public function write($text, $fontPath, $fontSize = 13, $color = 'ffffff', $positionX = 0, $positionY = 0, $fontRotation = 0)
     {
         if (!file_exists($fontPath)) {
@@ -1487,29 +1491,30 @@ class ImageWorkshopLayer
         return $mergedImage;
     }
 
-    /**
-     * Save the resulting image at the specified path
-     *
-     * $backgroundColor is really usefull if you want to save a JPG or GIF, because the transparency of the background
-     * would be remove for a colored background, so you should choose a color like "ffffff" (white)
-     *
-     * If the file already exists, it will be override !
-     *
-     * $imageQuality is useless for GIF
-     *
-     * Ex: $folder = __DIR__."/../web/images/2012"
-     *     $imageName = "butterfly.jpg"
-     *     $createFolders = true
-     *     $imageQuality = 95
-     *     $backgroundColor = "ffffff"
-     *
-     * @param string $folder
-     * @param string $imageName
-     * @param boolean $createFolders
-     * @param string $backgroundColor
-     * @param integer $imageQuality
-     * @param boolean $interlace
-     */
+	/**
+	 * Save the resulting image at the specified path
+	 *
+	 * $backgroundColor is really usefull if you want to save a JPG or GIF, because the transparency of the background
+	 * would be remove for a colored background, so you should choose a color like "ffffff" (white)
+	 *
+	 * If the file already exists, it will be override !
+	 *
+	 * $imageQuality is useless for GIF
+	 *
+	 * Ex: $folder = __DIR__."/../web/images/2012"
+	 *     $imageName = "butterfly.jpg"
+	 *     $createFolders = true
+	 *     $imageQuality = 95
+	 *     $backgroundColor = "ffffff"
+	 *
+	 * @param string $folder
+	 * @param string $imageName
+	 * @param boolean $createFolders
+	 * @param string $backgroundColor
+	 * @param integer $imageQuality
+	 * @param boolean $interlace
+	 * @throws ImageWorkshopLayerException
+	 */
     public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = false)
     {
         if (is_file($folder)) {
