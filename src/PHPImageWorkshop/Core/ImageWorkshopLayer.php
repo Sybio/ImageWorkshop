@@ -1399,10 +1399,11 @@ class ImageWorkshopLayer
      * @param integer $positionX
      * @param integer $positionY
      * @param integer $fontRotation
+     * @param integer $spacing
      *
      * @return array
      */
-    public function write($text, $fontPath, $fontSize = 13, $color = 'ffffff', $positionX = 0, $positionY = 0, $fontRotation = 0)
+    public function write($text, $fontPath, $fontSize = 13, $color = 'ffffff', $positionX = 0, $positionY = 0, $fontRotation = 0, $spacing = 0)
     {
         if (!file_exists($fontPath)) {
             throw new ImageWorkshopLayerException('Can\'t find a font file at this path : "'.$fontPath.'".', static::ERROR_FONT_NOT_FOUND);
@@ -1411,7 +1412,19 @@ class ImageWorkshopLayer
         $RGBTextColor = ImageWorkshopLib::convertHexToRGB($color);
         $textColor = imagecolorallocate($this->image, $RGBTextColor['R'], $RGBTextColor['G'], $RGBTextColor['B']);
 
-        return imagettftext($this->image, $fontSize, $fontRotation, $positionX, $positionY, $textColor, $fontPath, $text);
+        if (0 === $spacing) {
+            return imagettftext($this->image, $fontSize, $fontRotation, $positionX, $positionY, $textColor, $fontPath, $text);
+        }
+
+        $bbox = null;
+        $x    = $positionX;
+
+        for ($i = 0; $i < strlen($text); $i++) {
+            $bbox = imagettftext($this->image, $fontSize, $fontRotation, $x, $positionY, $textColor, $fontPath, $text[$i]);
+            $x += $spacing + ($bbox[2] - $bbox[0]);
+        }
+
+        return $bbox;
     }
     
     // Manage the result
