@@ -55,7 +55,7 @@ class ImageWorkshop
      */
     public static function initFromPath($path, $fixOrientation = false)
     {
-        if (!file_exists($path)) {
+        if (false === filter_var($path, FILTER_VALIDATE_URL) && !file_exists($path)) {
             throw new ImageWorkshopException(sprintf('File "%s" not exists.', $path), static::ERROR_IMAGE_NOT_FOUND);
         }
 
