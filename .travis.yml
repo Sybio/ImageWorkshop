@@ -12,6 +12,7 @@ matrix:
     - php: 7.0
 
 before_script:
+  - php -S localhost:8000 -t fixtures/ &> /dev/null &
   - composer self-update
   - composer install --prefer-source
 
