@@ -11,6 +11,14 @@ http://phpimageworkshop.com/
 
 ### Latest updates
 
+**Version 2.0.9 - 2015-07-05**
+
+- Fix ImageWorkshop::initFromPath with remote URL
+
+**Version 2.0.8 - 2015-06-01**
+
+- Fix exception code when file not found
+
 **Version 2.0.7 - 2015-03-22**
 
 - Allow `ImageWorkshop::initFromPath` factory working with remote URL
