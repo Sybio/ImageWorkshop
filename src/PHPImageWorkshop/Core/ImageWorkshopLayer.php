@@ -8,6 +8,7 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
 
 // If no autoloader, uncomment these lines:
+//require_once(__DIR__.'/../Exif/ExifOrientations.php');
 //require_once(__DIR__.'/../ImageWorkshop.php');
 //require_once(__DIR__.'/ImageWorkshopLib.php');
 //require_once(__DIR__.'/Exception/ImageWorkshopLayerException.php');
