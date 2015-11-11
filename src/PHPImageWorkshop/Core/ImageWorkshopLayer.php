@@ -1559,8 +1559,13 @@ class ImageWorkshopLayer
 
         } elseif ($extension == 'png') {
 
-            $imageQuality = $imageQuality / 10;
-            $imageQuality -= 1;
+            if ($imageQuality >= 100) {
+                $imageQuality = 0;
+            } elseif ($imageQuality <= 0) {
+                $imageQuality = 10;
+            } else {
+                $imageQuality = round((100 - $imageQuality) / 10);
+            }
 
             $isSaved = imagepng($image, $filename, intval($imageQuality));
 
