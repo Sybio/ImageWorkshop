@@ -73,8 +73,9 @@ class ImageWorkshop
         switch ($mimeContentType) {
             case 'jpeg':
                 $image = imageCreateFromJPEG($path);
-                if (false === ($exif = @read_exif_data($path))) {
-                    $exif = array();
+
+                if (function_exists('read_exif_data') && false !== ($data = @read_exif_data($path))) {
+                    $exif = $data;
                 }
             break;
 
