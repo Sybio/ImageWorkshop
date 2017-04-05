@@ -51,6 +51,7 @@ class ImageWorkshop
      * @param bool $fixOrientation
      * 
      * @return ImageWorkshopLayer
+     * @throws Exception\ImageWorkshopException
      */
     public static function initFromPath($path, $fixOrientation = false)
     {
