@@ -131,7 +131,8 @@ class ImageWorkshopLib
      * @param $fontFile
      * @param $text
      *
-     * @return array or boolean
+     * @return array|bool
+     * @throws Exception\ImageWorkshopLibException
      */
     public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)
     {
@@ -236,13 +237,7 @@ class ImageWorkshopLib
                         $destAlpha = 1 - ($destPixel['alpha'] / 127);
                         $opacity = $srcAlpha * $pct / 100;
     
-                        if ($destAlpha >= $opacity) {
-    						$alpha = $destAlpha;
-    					}
-    
-                        if ($destAlpha < $opacity) {
-    						$alpha = $opacity;
-    					}
+                        $alpha = $destAlpha >= $opacity ? $destAlpha : $opacity;
     
                         if ($alpha > 1) {
     						$alpha = 1;
