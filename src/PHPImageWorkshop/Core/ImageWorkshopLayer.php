@@ -532,7 +532,7 @@ class ImageWorkshopLayer
             $positionY = round(($positionY / 100) * $this->height);
         }
 
-        imagecopy($this->image, $image, $positionX, $positionY, 0, 0, $image->getWidth(), $image->getHeight());
+        imagecopy($this->image, $image, $positionX, $positionY, 0, 0, imagesx($image), imagesy($image));
     }
     
     // Change sublayer positions
