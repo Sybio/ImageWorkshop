@@ -2,7 +2,7 @@
 # ImageWorkshop class
 # ================================
 
-[![Test status](https://secure.travis-ci.org/Sybio/ImageWorkshop.png)](https://travis-ci.org/Sybio/ImageWorkshop)
+[![Test status](https://secure.travis-ci.org/Sybio/ImageWorkshop.png?branch=master)](https://travis-ci.org/Sybio/ImageWorkshop)
 
 ### Summary and features
 Really flexible and easy-to-use PHP class to work with images using the GD Library
