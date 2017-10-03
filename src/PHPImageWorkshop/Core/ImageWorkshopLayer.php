@@ -1569,6 +1569,13 @@ class ImageWorkshopLayer
 
             $isSaved = imagepng($image, $filename, intval($imageQuality));
 
+        } elseif ($extension == 'webp') {
+	    if (!function_exists('imagewebp')) {
+		throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported by PHP version', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
+	    }
+
+            $isSaved = imagewebp($image, $filename, $imageQuality);
+
         } else {
 
             throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported.', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
