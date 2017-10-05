@@ -1525,21 +1525,22 @@ class ImageWorkshopLayer
             throw new ImageWorkshopLayerException(sprintf('Destination folder "%s" not writable.', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
         }
 
+        $extension = explode('.', $imageName);
+        $extension = strtolower($extension[count($extension) - 1]);
+
+        $filename = sprintf('%s/%s', rtrim($folder, '/'), ltrim($imageName, '/'));
+
         // Creating the folders if they don't exist
-        if (!is_dir($folder) && $createFolders) {
-            if (!mkdir($folder, 0777, true)) {
-                throw new ImageWorkshopLayerException(sprintf('Unable to create destination folder "%s".', $folder), self::ERROR_NOT_WRITABLE_FOLDER);
+        $dirname = dirname($filename);
+        if (!is_dir($dirname) && $createFolders) {
+            if (!mkdir($dirname, 0777, true)) {
+                throw new ImageWorkshopLayerException(sprintf('Unable to create destination folder "%s".', $dirname), self::ERROR_NOT_WRITABLE_FOLDER);
             }
 
             $oldUmask = umask(0);
             umask($oldUmask);
-            chmod($folder, 0777);
+            chmod($dirname, 0777);
         }
-
-        $extension = explode('.', $imageName);
-        $extension = strtolower($extension[count($extension) - 1]);
-
-        $filename = $folder.'/'.$imageName;
 
         if (($extension == 'jpg' || $extension == 'jpeg' || $extension == 'gif') && (!$backgroundColor || $backgroundColor == 'transparent')) {
             $backgroundColor = 'ffffff';
