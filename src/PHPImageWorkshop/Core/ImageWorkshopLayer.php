@@ -1435,6 +1435,67 @@ class ImageWorkshopLayer
     
     // Manage the result
     // =========================================================
+
+    /**
+     * Return a merged resource image as a JPG raw image stream which can be saved into a file or served on the fly by
+     * printing the result with the proper headers:
+     *    header('Content-type: image/png');
+     *    header('Content-Disposition: filename="myfile.png"');
+     *
+     * @param string $backgroundColor [optional]
+     * @param int $quality [optional] quality is optional, and ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file). Defaults to 75.
+     *
+     * @return string
+     */
+    public function getResultAsPNG($backgroundColor = null, $quality = 75)
+    {
+        $quality = floor(($quality >= 100 ? 99:$quality) / 10);
+        ob_start();
+        imagepng($this->getResult($backgroundColor), null, $quality);
+        return ob_get_clean();
+    }
+
+    /**
+     * Return a merged resource image as a JPG raw image stream which can be saved into a file or served on the fly by
+     * printing the result with the proper headers:
+     *    header('Content-type: image/jpeg');
+     *    header('Content-Disposition: filename="myfile.jpg"');
+     *
+     * $backgroundColor is really usefull because the transparency of the background would be removed for a colored background, so you should choose a color like "ffffff" (white)
+     *
+     * @param string $backgroundColor [optional]
+     * @param int $quality [optional] quality is optional, and ranges from 0 (worst quality, smaller file) to 100 (best quality, biggest file). Defaults to 75.
+     * @param bool $interlace [optional] enables interlace, defaults to false
+     *
+     * @return string
+     */
+    public function getResultAsJPG($backgroundColor = null, $quality = 75, $interlace = false)
+    {
+        $result = $this->getResult($backgroundColor);
+        imageinterlace($result, (int)$interlace);
+        ob_start();
+        imagejpeg($result, null, $quality);
+        return ob_get_clean();
+    }
+
+    /**
+     * Return a merged resource image as a GIF raw image stream which can be saved into a file or served on the fly by
+     * printing the result with the proper headers:
+     *    header('Content-type: image/gif');
+     *    header('Content-Disposition: filename="myfile.gif"');
+     *
+     * $backgroundColor is really usefull because the transparency of the background would be removed for a colored background, so you should choose a color like "ffffff" (white)
+     *
+     * @param string $backgroundColor [optional]
+     *
+     * @return string
+     */
+    public function getResultAsGIF($backgroundColor = null)
+    {
+        ob_start();
+        imagegif($this->getResult($backgroundColor), null);
+        return ob_get_clean();
+    }
     
     /**
      * Return a merged resource image
