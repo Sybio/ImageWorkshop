@@ -6,14 +6,14 @@ require_once(__DIR__.'/../autoload.php');
  
 /**
  * ImageWorkshopLayerTest class
- * 
+ *
  * Tests ImageWorkshopLayer class
- * 
+ *
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
  * @copyright Clément Guillemain
- * 
+ *
  */
 class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,9 +39,9 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @todo
-     * 
+     *
      * Test pasteImage
-     * 
+     *
      */
     /*public function testPasteImage()
     {
@@ -50,9 +50,9 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @todo
-     * 
+     *
      * Test addLayer
-     * 
+     *
      */
     /*public function testAddLayer()
     {
@@ -63,7 +63,7 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
      * Test mergeDown
      */
     public function testMergeDown()
-    {       
+    {
         // Test mergeDown on a sublayer not positionned at level 1
         
         $layer = $this->initializeLayer(2);
@@ -631,7 +631,7 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * Test moveDown
-     * 
+     *
      */
     public function testMoveDown()
     {
@@ -741,9 +741,9 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @todo
-     * 
+     *
      * Test getLayerLevel
-     * 
+     *
      */
     /*public function testGetLayerLevel()
     {
@@ -763,9 +763,9 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * @todo
-     * 
+     *
      * Test generateImage
-     * 
+     *
      */
     /*public function testGenerateImage()
     {
@@ -1489,7 +1489,7 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     
     /**
      * Initialize a layer
-     * 
+     *
      * @param integer $method
      */
     protected function initializeLayer($method = 1)

@@ -12,7 +12,7 @@ use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
 
 /**
  * ImageWorkshop class
- * 
+ *
  * Use this class as a factory to initialize ImageWorkshop layers
  *
  * @link http://phpimageworkshop.com
@@ -44,12 +44,12 @@ class ImageWorkshop
       
     /**
      * Initialize a layer from a given image path
-     * 
+     *
      * From an upload form, you can give the "tmp_name" path
-     * 
+     *
      * @param string $path
      * @param bool $fixOrientation
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromPath($path, $fixOrientation = false)
@@ -107,14 +107,14 @@ class ImageWorkshop
     
     /**
      * Initialize a text layer
-     * 
+     *
      * @param string $text
      * @param string $fontPath
      * @param integer $fontSize
      * @param string $fontColor
      * @param integer $textRotation
      * @param integer $backgroundColor
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initTextLayer($text, $fontPath, $fontSize = 13, $fontColor = 'ffffff', $textRotation = 0, $backgroundColor = null)
@@ -129,11 +129,11 @@ class ImageWorkshop
     
     /**
      * Initialize a new virgin layer
-     * 
+     *
      * @param integer $width
      * @param integer $height
      * @param string $backgroundColor
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initVirginLayer($width = 100, $height = 100, $backgroundColor = null)
@@ -150,9 +150,9 @@ class ImageWorkshop
     
     /**
      * Initialize a layer from a resource image var
-     * 
+     *
      * @param \resource $image
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromResourceVar($image)
@@ -162,11 +162,11 @@ class ImageWorkshop
     
     /**
      * Initialize a layer from a string (obtains with file_get_contents, cURL...)
-     * 
+     *
      * This not recommanded to initialize JPEG string with this method, GD displays bugs !
-     * 
+     *
      * @param string $imageString
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromString($imageString)

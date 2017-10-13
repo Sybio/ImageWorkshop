@@ -43,38 +43,23 @@ class ImageWorkshopLib
         $position = strtolower($position);
 
         if ($position == 'rt') {
-
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
-
         } elseif ($position == 'lb') {
-
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-
         } elseif ($position == 'rb') {
-
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-
         } elseif ($position == 'mm') {
-
             $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
             $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
-
         } elseif ($position == 'mt') {
-
             $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
-
         } elseif ($position == 'mb') {
-
             $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-
         } elseif ($position == 'lm') {
-
             $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
-
         } elseif ($position == 'rm') {
-
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
             $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
         }
@@ -141,10 +126,9 @@ class ImageWorkshopLib
         
         $box = imagettfbbox($fontSize, $fontAngle, $fontFile, $text);
 
-		if (!$box) {
-
-			return false;
-		}
+        if (!$box) {
+            return false;
+        }
 
         $minX = min(array($box[0], $box[2], $box[4], $box[6]));
         $maxX = max(array($box[0], $box[2], $box[4], $box[6]));
@@ -171,18 +155,15 @@ class ImageWorkshopLib
         $rtop = $h4 = $height<<2;
 
         for ($x = 0; $x < $w4; $x++) {
-
-			for ($y = 0; $y < $h4; $y++) {
-
-				if (imagecolorat($img, $x, $y)) {
-
-					$rleft = min($rleft, $x);
-					$rright = max($rright, $x);
-					$rtop = min($rtop, $y);
-					$rbottom = max($rbottom, $y);
-				}
-			}
-		}
+            for ($y = 0; $y < $h4; $y++) {
+                if (imagecolorat($img, $x, $y)) {
+                    $rleft = min($rleft, $x);
+                    $rright = max($rright, $x);
+                    $rtop = min($rtop, $y);
+                    $rbottom = max($rbottom, $y);
+                }
+            }
+        }
 
         imagedestroy($img);
 
@@ -220,16 +201,12 @@ class ImageWorkshopLib
         $destH = imageSY($destImg);
 
         for ($y = 0; $y < $srcH + $srcY; $y++) {
-
             for ($x = 0; $x < $srcW + $srcX; $x++) {
-
                 if ($x + $destX >= 0 && $x + $destX < $destW && $x + $srcX >= 0 && $x + $srcX < $srcW && $y + $destY >= 0 && $y + $destY < $destH && $y + $srcY >= 0 && $y + $srcY < $srcH) {
-
                     $destPixel = imageColorsForIndex($destImg, imageColorat($destImg, $x + $destX, $y + $destY));
                     $srcImgColorat = imageColorat($srcImg, $x + $srcX, $y + $srcY);
                     
                     if ($srcImgColorat >= 0) {
-                    
                         $srcPixel = imageColorsForIndex($srcImg, $srcImgColorat);
     
                         $srcAlpha = 1 - ($srcPixel['alpha'] / 127);
@@ -237,40 +214,39 @@ class ImageWorkshopLib
                         $opacity = $srcAlpha * $pct / 100;
     
                         if ($destAlpha >= $opacity) {
-    						$alpha = $destAlpha;
-    					}
+                            $alpha = $destAlpha;
+                        }
     
                         if ($destAlpha < $opacity) {
-    						$alpha = $opacity;
-    					}
+                            $alpha = $opacity;
+                        }
     
                         if ($alpha > 1) {
-    						$alpha = 1;
-    					}
+                            $alpha = 1;
+                        }
     
                         if ($opacity > 0) {
-                            
                             $destRed = round((($destPixel['red'] * $destAlpha * (1 - $opacity))));
                             $destGreen = round((($destPixel['green'] * $destAlpha * (1 - $opacity))));
                             $destBlue = round((($destPixel['blue'] * $destAlpha * (1 - $opacity))));
                             $srcRed = round((($srcPixel['red'] * $opacity)));
                             $srcGreen = round((($srcPixel['green'] * $opacity)));
                             $srcBlue = round((($srcPixel['blue'] * $opacity)));
-                            $red = round(($destRed + $srcRed  ) / ($destAlpha * (1 - $opacity) + $opacity));
+                            $red = round(($destRed + $srcRed) / ($destAlpha * (1 - $opacity) + $opacity));
                             $green = round(($destGreen + $srcGreen) / ($destAlpha * (1 - $opacity) + $opacity));
-                            $blue = round(($destBlue + $srcBlue ) / ($destAlpha * (1 - $opacity) + $opacity));
+                            $blue = round(($destBlue + $srcBlue) / ($destAlpha * (1 - $opacity) + $opacity));
     
                             if ($red   > 255) {
-    							$red   = 255;
-    						}
-    
-                            if ($green > 255) {
-    							$green = 255;
+                                $red   = 255;
                             }
     
-    						if ($blue  > 255) {
-    							$blue  = 255;
-    						}
+                            if ($green > 255) {
+                                $green = 255;
+                            }
+    
+                            if ($blue  > 255) {
+                                $blue  = 255;
+                            }
     
                             $alpha = round((1 - $alpha) * 127);
                             $color = imageColorAllocateAlpha($destImg, $red, $green, $blue, $alpha);

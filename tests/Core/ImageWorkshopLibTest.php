@@ -6,14 +6,14 @@ require_once(__DIR__.'/../autoload.php');
 
 /**
  * ImageWorkshopLibTest class
- * 
+ *
  * Tests ImageWorkshopLib class
- * 
+ *
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
  * @copyright Clément Guillemain
- * 
+ *
  */
 class ImageWorkshopLibTest extends \PHPUnit_Framework_TestCase
 {
