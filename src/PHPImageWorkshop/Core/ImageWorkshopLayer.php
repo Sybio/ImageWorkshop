@@ -101,7 +101,7 @@ class ImageWorkshopLayer
     
     /**
      * @var string
-     */    
+     */
     const UNIT_PERCENT = 'percent';
     
     /**
@@ -161,7 +161,7 @@ class ImageWorkshopLayer
         if (!extension_loaded('gd')) {
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
         }
-    	
+        
         if (gettype($image) != 'resource' && gettype($image) != '\resource') {
             throw new ImageWorkshopLayerException('You must give a php image var to initialize a layer.', static::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
@@ -291,7 +291,6 @@ class ImageWorkshopLayer
     {
         // if the sublayer exists in stack
         if ($this->isLayerInIndex($layerId)) {
-
             $layerOldLevel = $this->getLayerLevel($layerId);
 
             if ($level < 1) {
@@ -300,14 +299,12 @@ class ImageWorkshopLayer
             }
 
             if ($level > $this->highestLayerLevel) {
-
                 $level = $this->highestLayerLevel;
                 $insertUnderTargetedLayer = false;
             }
 
             // Not the same level than the current level
             if ($layerOldLevel != $level) {
-
                 $isUnderAndNewLevelHigher = $isUnderAndNewLevelLower = $isOnTopAndNewLevelHigher = $isOnTopAndNewLevelLower = false;
 
                 if ($insertUnderTargetedLayer) { // Under level
@@ -317,14 +314,12 @@ class ImageWorkshopLayer
                         $incrementorStartingValue = $layerOldLevel;
                         $stopLoopWhenSmallerThan = $level;
                         $isUnderAndNewLevelHigher = true;
-
                     } else { // new level lower
 
                         $incrementorStartingValue = $level;
                         $stopLoopWhenSmallerThan = $layerOldLevel;
                         $isUnderAndNewLevelLower = true;
                     }
-
                 } else { // on the top
 
                     if ($level > $layerOldLevel) { // new level higher
@@ -332,7 +327,6 @@ class ImageWorkshopLayer
                         $incrementorStartingValue = $layerOldLevel;
                         $stopLoopWhenSmallerThan = $level;
                         $isOnTopAndNewLevelHigher = true;
-
                     } else { // new level lower
 
                         $incrementorStartingValue = $level;
@@ -349,13 +343,9 @@ class ImageWorkshopLayer
                 }
 
                 for ($i = $incrementorStartingValue; $i < $stopLoopWhenSmallerThan; $i++) {
-
                     if ($isUnderAndNewLevelHigher || $isOnTopAndNewLevelHigher) {
-
                         $this->layerLevels[$i] = $layerLevelsTmp[$i + 1];
-
                     } else {
-
                         $this->layerLevels[$i + 1] = $layerLevelsTmp[$i];
                     }
                 }
@@ -369,7 +359,6 @@ class ImageWorkshopLayer
                 $this->layerLevels[$level] = $layerId;
 
                 return $level;
-
             } else {
                 return $level;
             }
@@ -430,7 +419,6 @@ class ImageWorkshopLayer
     {
         // if the layer exists in document
         if ($this->isLayerInIndex($layerId)) {
-
             $layerLevel = $this->getLayerLevel($layerId);
             $layerPositions = $this->getLayerPositions($layerId);
             $layer = $this->getLayer($layerId);
@@ -440,7 +428,6 @@ class ImageWorkshopLayer
             $layerPositionY = $this->layerPositions[$layerId]['y'];
 
             if ($layerLevel > 1) {
-
                 $underLayerId = $this->layerLevels[$layerLevel - 1];
                 $underLayer = $this->getLayer($underLayerId);
                 $underLayerWidth = $underLayer->getWidth();
@@ -487,9 +474,7 @@ class ImageWorkshopLayer
                 $layerTmp->mergeAll();
                 $this->layers[$underLayerId] = clone $layerTmp;
                 $this->changePosition($underLayerId, $minLayerPositionX, $minLayerPositionX);
-
             } else {
-
                 $layerTmp = ImageWorkshop::initFromResourceVar($this->image);
                 $layerTmp->addLayer(1, $layer, $layerPositionX, $layerPositionY);
 
@@ -527,7 +512,6 @@ class ImageWorkshopLayer
     public function pasteImage($unit = self::UNIT_PIXEL, $image, $positionX = 0, $positionY = 0)
     {
         if ($unit == self::UNIT_PERCENT) {
-
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
         }
@@ -551,7 +535,6 @@ class ImageWorkshopLayer
     {
         // if the sublayer exists in the stack
         if ($this->isLayerInIndex($layerId)) {
-            
             if ($newPosX !== null) {
                 $this->layerPositions[$layerId]['x'] = $newPosX;
             }
@@ -579,7 +562,6 @@ class ImageWorkshopLayer
     {
         // if the sublayer exists in the stack
         if ($this->isLayerInIndex($layerId)) {
-            
             if ($addedPosX !== null) {
                 $this->layerPositions[$layerId]['x'] += $addedPosX;
             }
@@ -608,7 +590,6 @@ class ImageWorkshopLayer
     {
         // if the layer exists in document
         if ($this->isLayerInIndex($layerId)) {
-
             $layerToDeleteLevel = $this->getLayerLevel($layerId);
 
             // delete
@@ -619,14 +600,12 @@ class ImageWorkshopLayer
 
             // One or plural layers are sub of the deleted layer
             if (array_key_exists(($layerToDeleteLevel + 1), $this->layerLevels)) {
-
                 ksort($this->layerLevels);
 
                 $layerLevelsTmp = $this->layerLevels;
 
                 $maxOldestLevel = 1;
                 foreach ($layerLevelsTmp as $levelTmp => $layerIdTmp) {
-
                     if ($levelTmp > $layerToDeleteLevel) {
                         $this->layerLevels[($levelTmp - 1)] = $layerIdTmp;
                     }
@@ -647,7 +626,7 @@ class ImageWorkshopLayer
     
     /**
      * Reset the layer stack
-     * 
+     *
      * @boolean $deleteSubImgVar Delete sublayers image resource var
      */
     public function clearStack($deleteSubImgVar = true)
@@ -681,9 +660,9 @@ class ImageWorkshopLayer
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
-     * 
+     *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     * 
+     *
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
     public function resizeInPixel($newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
@@ -700,9 +679,9 @@ class ImageWorkshopLayer
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
-     * 
+     *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     * 
+     *
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
     public function resizeInPercent($percentWidth = null, $percentHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
@@ -741,17 +720,15 @@ class ImageWorkshopLayer
      * @param mixed $positionX (integer or float)
      * @param mixed $positionY (integer or float)
      * @param string $position
-     * 
+     *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
-     * 
+     *
      * $positionX, $positionY, $position can be ignored unless you choose a new width AND a new height AND to conserve proportion.
      */
     public function resize($unit = self::UNIT_PIXEL, $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
-    {   
+    {
         if (is_numeric($newWidth) || is_numeric($newHeight)) {
-            
             if ($unit == self::UNIT_PERCENT) {
-                
                 if ($newWidth) {
                     $newWidth = round(($newWidth / 100) * $this->width);
                 }
@@ -774,15 +751,12 @@ class ImageWorkshopLayer
                 if ($newWidth && $newHeight) { // Proportions + $newWidth + $newHeight
                     
                     if ($this->getWidth() > $this->getHeight()) {
-                        
                         $this->resizeInPixel($newWidth, null, true);
                         
                         if ($this->getHeight() > $newHeight) {
                             $this->resizeInPixel(null, $newHeight, true);
                         }
-                        
                     } else {
-                        
                         $this->resizeInPixel(null, $newHeight, true);
                         
                         if ($this->getWidth() > $newWidth) {
@@ -791,7 +765,6 @@ class ImageWorkshopLayer
                     }
                     
                     if ($converseProportion !== 2 && ($this->getWidth() != $newWidth || $this->getHeight() != $newHeight)) {
-                        
                         $layerTmp = ImageWorkshop::initVirginLayer($newWidth, $newHeight);
                         
                         $layerTmp->addLayer(1, $this, $positionX, $positionY, $position);
@@ -825,35 +798,26 @@ class ImageWorkshopLayer
                     }
                     
                     return;
-                    
                 } elseif ($newWidth) {
-
                     $widthResizePercent = $newWidth / ($this->width / 100);
                     $newHeight = round(($widthResizePercent / 100) * $this->height);
                     $heightResizePercent = $widthResizePercent;
-
                 } elseif ($newHeight) {
-
                     $heightResizePercent = $newHeight / ($this->height / 100);
                     $newWidth = round(($heightResizePercent / 100) * $this->width);
                     $widthResizePercent = $heightResizePercent;
                 }
-
             } elseif (($newWidth && !$newHeight) || (!$newWidth && $newHeight)) { // New width OR new height is given
 
                 if ($newWidth) {
-
                     $widthResizePercent = $newWidth / ($this->width / 100);
                     $heightResizePercent = 100;
                     $newHeight = $this->height;
-
                 } else {
-
                     $heightResizePercent = $newHeight / ($this->height / 100);
                     $widthResizePercent = 100;
                     $newWidth = $this->width;
                 }
-
             } else { // New width AND new height are given
 
                 $widthResizePercent = $newWidth / ($this->width / 100);
@@ -863,7 +827,6 @@ class ImageWorkshopLayer
             // Update the layer positions in the stack
 
             foreach ($this->layerPositions as $layerId => $layerPosition) {
-
                 $newPosX = round(($widthResizePercent / 100) * $layerPosition['x']);
                 $newPosY = round(($heightResizePercent / 100) * $layerPosition['y']);
 
@@ -1021,7 +984,6 @@ class ImageWorkshopLayer
         }
         
         if ($unit == self::UNIT_PERCENT) {
-
             $width = round(($width / 100) * $this->width);
             $height = round(($height / 100) * $this->height);
 
@@ -1030,7 +992,6 @@ class ImageWorkshopLayer
         }
         
         if (($width != $this->width || $positionX == 0) || ($height != $this->height || $positionY == 0)) {
-            
             if ($width == 0) {
                 $width = 1;
             }
@@ -1206,7 +1167,6 @@ class ImageWorkshopLayer
     public function rotate($degrees)
     {
         if ($degrees != 0) {
-
             if ($degrees < -360 || $degrees > 360) {
                 $degrees = $degrees % 360;
             }
@@ -1234,7 +1194,6 @@ class ImageWorkshopLayer
             $this->height = imagesy($this->image);
 
             foreach ($this->layers as $layerId => $layer) {
-
                 $layerSelfOldCenterPosition = array(
                     'x' => $layer->width / 2,
                     'y' => $layer->height / 2,
@@ -1255,22 +1214,15 @@ class ImageWorkshopLayer
                 $b = $ro * sin(($teta + $degrees) * pi() / 180);
 
                 if ($degrees > 0 && $degrees <= 90) {
-
                     $newPositionX = $a - ($this->layers[$layerId]->width / 2) + $oldHeight * sin(($degrees * pi()) / 180);
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2);
-
                 } elseif ($degrees > 90 && $degrees <= 180) {
-
                     $newPositionX = $a - ($this->layers[$layerId]->width / 2) + $this->width;
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2) + $oldHeight * (-cos(($degrees) * pi() / 180));
-
                 } elseif ($degrees > 180 && $degrees <= 270) {
-
                     $newPositionX = $a - ($this->layers[$layerId]->width / 2) + $oldWidth * (-cos(($degrees) * pi() / 180));
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2) + $this->height;
-
                 } else {
-
                     $newPositionX = $a - ($this->layers[$layerId]->width / 2);
                     $newPositionY = $b - ($this->layers[$layerId]->height / 2) + $oldWidth * (-sin(($degrees) * pi() / 180));
                 }
@@ -1293,7 +1245,6 @@ class ImageWorkshopLayer
     public function opacity($opacity, $recursive = true)
     {
         if ($recursive) {
-
             $layers = $this->layers;
 
             foreach ($layers as $key => $layer) {
@@ -1335,10 +1286,9 @@ class ImageWorkshopLayer
         }
 
         if ($recursive) {
-
             $layers = $this->layers;
 
-            foreach($layers as $layerId => $layer) {
+            foreach ($layers as $layerId => $layer) {
                 $this->layers[$layerId]->applyFilter($filterType, $arg1, $arg2, $arg3, $arg4, true);
             }
         }
@@ -1346,7 +1296,7 @@ class ImageWorkshopLayer
     
     /**
      * Apply horizontal or vertical flip (Transformation)
-     * 
+     *
      * @param string $type
      */
     public function flip($type = 'horizontal')
@@ -1354,7 +1304,6 @@ class ImageWorkshopLayer
         $layers = $this->layers;
 
         foreach ($layers as $key => $layer) {
-
             $layer->flip($type);
             $this->layers[$key] = $layer;
         }
@@ -1362,22 +1311,17 @@ class ImageWorkshopLayer
         $temp = ImageWorkshopLib::generateImage($this->width, $this->height);
         
         if ($type == 'horizontal') {
-            
             imagecopyresampled($temp, $this->image, 0, 0, $this->width - 1, 0, $this->width, $this->height, -$this->width, $this->height);
             $this->image = $temp;
             
             foreach ($this->layerPositions as $layerId => $layerPositions) {
-    
                 $this->changePosition($layerId, $this->width - $this->layers[$layerId]->getWidth() - $layerPositions['x'], $layerPositions['y']);
             }
-            
         } elseif ($type == 'vertical') {
-            
             imagecopyresampled($temp, $this->image, 0, 0, 0, $this->height - 1, $this->width, $this->height, $this->width, -$this->height);
             $this->image = $temp;
             
             foreach ($this->layerPositions as $layerId => $layerPositions) {
-    
                 $this->changePosition($layerId, $layerPositions['x'], $this->height - $this->layers[$layerId]->getHeight() - $layerPositions['y']);
             }
         }
@@ -1452,12 +1396,10 @@ class ImageWorkshopLayer
         ksort($this->layerLevels);
 
         foreach ($this->layerLevels as $layerLevel => $layerId) {
-
             $imagesToMerge[$layerLevel] = $this->layers[$layerId]->getResult();
 
             // Layer positions
             if ($this->layerPositions[$layerId]['x'] != 0 || $this->layerPositions[$layerId]['y'] != 0) {
-                
                 $virginLayoutImageTmp = ImageWorkshopLib::generateImage($this->width, $this->height);
                 ImageWorkshopLib::mergeTwoImages($virginLayoutImageTmp, $imagesToMerge[$layerLevel], $this->layerPositions[$layerId]['x'], $this->layerPositions[$layerId]['y'], 0, 0);
                 $imagesToMerge[$layerLevel] = $virginLayoutImageTmp;
@@ -1551,15 +1493,10 @@ class ImageWorkshopLayer
         imageinterlace($image, (int) $interlace);
 
         if ($extension == 'jpg' || $extension == 'jpeg') {
-
             $isSaved = imagejpeg($image, $filename, $imageQuality);
-
         } elseif ($extension == 'gif') {
-
             $isSaved = imagegif($image, $filename);
-
         } elseif ($extension == 'png') {
-
             if ($imageQuality >= 100) {
                 $imageQuality = 0;
             } elseif ($imageQuality <= 0) {
@@ -1569,18 +1506,14 @@ class ImageWorkshopLayer
             }
 
             $isSaved = imagepng($image, $filename, intval($imageQuality));
-
         } elseif ($extension == 'webp') {
-	    if (!function_exists('imagewebp')) {
-		throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported by PHP version', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
-	    }
+            if (!function_exists('imagewebp')) {
+                throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported by PHP version', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
+            }
 
             $isSaved = imagewebp($image, $filename, $imageQuality);
-
         } else {
-
             throw new ImageWorkshopLayerException(sprintf('Image format "%s" not supported.', $extension), self::ERROR_NOT_SUPPORTED_FORMAT);
-
         }
 
         if (!$isSaved) {
@@ -1726,20 +1659,18 @@ class ImageWorkshopLayer
 
     /**
      * Getter layerPositions
-     * 
+     *
      * Get all the positions of the sublayers,
      * or when specifying $layerId, get the position of this sublayer
      *
      * @param integer $layerId
-     * 
+     *
      * @return mixed (array or boolean)
      */
     public function getLayerPositions($layerId = null)
     {
         if (!$layerId) {
-            
             return $this->layerPositions;
-            
         } elseif ($this->isLayerInIndex($layerId)) { // if the sublayer exists in the stack
             
             return $this->layerPositions[$layerId];
@@ -1795,7 +1726,7 @@ class ImageWorkshopLayer
 
         $layers = $this->layers;
 
-        foreach($layers as $layerId => $layer) {
+        foreach ($layers as $layerId => $layer) {
             $this->layers[$layerId] = clone $this->layers[$layerId];
         }
     }
@@ -1862,7 +1793,6 @@ class ImageWorkshopLayer
             }
 
             unset($layerLevelsTmp);
-
         } else { // Level isn't taken
             if ($this->highestLayerLevel < $layerLevel) { // If given level is too high, proceed adjustement
                 $layerLevel = $this->highestLayerLevel + 1;
@@ -1884,7 +1814,6 @@ class ImageWorkshopLayer
     public function updateLayerPositionsAfterCropping($positionX, $positionY)
     {
         foreach ($this->layers as $layerId => $layer) {
-
             $oldLayerPosX = $this->layerPositions[$layerId]['x'];
             $oldLayerPosY = $this->layerPositions[$layerId]['y'];
 
@@ -1965,38 +1894,38 @@ class ImageWorkshopLayer
     // =========================================================
     
     /**
-	 * @deprecated
+     * @deprecated
      */
     public function resizeInPourcent($percentWidth = null, $percentHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
     {
-		throw new ImageWorkshopLayerException('Method resizeInPourcent() was renamed resizeInPercent(). Use resizeInPercent() instead.', static::METHOD_DEPRECATED);
+        throw new ImageWorkshopLayerException('Method resizeInPourcent() was renamed resizeInPercent(). Use resizeInPercent() instead.', static::METHOD_DEPRECATED);
     }
-	
-	/**
+    
+    /**
      * @deprecated
      */
     public function resizeByLargestSideInPourcent($newLargestSideWidth, $converseProportion = false)
     {
         throw new ImageWorkshopLayerException('Method resizeByLargestSideInPourcent() was renamed resizeByLargestSideInPercent(). Use resizeByLargestSideInPercent() instead.', static::METHOD_DEPRECATED);
     }
-	
-	/**
+    
+    /**
      * @deprecated
      */
     public function resizeByNarrowSideInPourcent($newNarrowSideWidth, $converseProportion = false)
     {
         throw new ImageWorkshopLayerException('Method resizeByNarrowSideInPourcent() was renamed resizeByNarrowSideInPercent(). Use resizeByNarrowSideInPercent() instead.', static::METHOD_DEPRECATED);
     }
-	
-	/**
+    
+    /**
      * @deprecated
      */
     public function cropInPourcent($percentWidth = 0, $percentHeight = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
     {
-		throw new ImageWorkshopLayerException('Method cropInPourcent() was renamed cropInPercent(). Use cropInPercent() instead.', static::METHOD_DEPRECATED);
-	}
-	
-	/**
+        throw new ImageWorkshopLayerException('Method cropInPourcent() was renamed cropInPercent(). Use cropInPercent() instead.', static::METHOD_DEPRECATED);
+    }
+    
+    /**
      * @deprecated
      */
     public function cropMaximumInPourcent($positionXPercent = 0, $positionYPercent = 0, $position = 'LT')

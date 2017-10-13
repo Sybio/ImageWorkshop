@@ -9,9 +9,9 @@ use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseEx
 
 /**
  * ImageWorkshopLayerException
- * 
+ *
  * Manage ImageWorkshopLayer exceptions
- * 
+ *
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
