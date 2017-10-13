@@ -19,4 +19,6 @@ before_script:
   - composer self-update
   - composer install --prefer-source
 
-script: phpunit
+script:
+  - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+  - phpunit
