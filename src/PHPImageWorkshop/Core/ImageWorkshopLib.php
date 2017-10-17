@@ -102,7 +102,7 @@ class ImageWorkshopLib
      *
      * @param integer $width
      * @param integer $height
-     * @param string $color
+     * @param string  $color
      * @param integer $opacity
      *
      * @return \resource
@@ -274,10 +274,10 @@ class ImageWorkshopLib
      *
      * @param resource $destinationImage
      * @param resource $sourceImage
-     * @param integer $destinationPosX
-     * @param integer $destinationPosY
-     * @param integer $sourcePosX
-     * @param integer $sourcePosY
+     * @param integer  $destinationPosX
+     * @param integer  $destinationPosY
+     * @param integer  $sourcePosX
+     * @param integer  $sourcePosY
      */
     public static function mergeTwoImages(&$destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
     {

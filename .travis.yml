@@ -1,19 +1,24 @@
+dist: precise
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
+  - 7.2
+  - nightly
 
 matrix:
   allow_failures:
-    - php: 7.0
+    - php: nightly
 
 before_script:
   - php -S localhost:8000 -t fixtures/ &> /dev/null &
   - composer self-update
   - composer install --prefer-source
 
-script: phpunit
+script:
+  - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+  - phpunit
