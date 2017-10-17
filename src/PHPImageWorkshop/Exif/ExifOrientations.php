@@ -1,9 +1,25 @@
 <?php
+/**
+ * ExifOrientations
+ *
+ * Constants for EXIF image orientations
+ *
+ * @link http://phpimageworkshop.com
+ * @author Bjørn Børresen | Sybio (Clément Guillemain  / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
+ */
 
 namespace PHPImageWorkshop\Exif;
 
 /**
  * Container for all EXIF orientations.
+ *
+ * @package PHPImageWorkshop/Exif
+ * @link http://phpimageworkshop.com
+ * @author Bjørn Børresen | Sybio (Clément Guillemain  / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
  */
 final class ExifOrientations
 {

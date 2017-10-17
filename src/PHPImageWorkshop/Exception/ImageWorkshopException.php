@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * ImageWorkshopException
+ *
+ * The inherited exception class
+ *
+ * @link http://phpimageworkshop.com
+ * @author Bjørn Børresen | Sybio (Clément Guillemain  / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
+ */
 namespace PHPImageWorkshop\Exception;
 
 use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseException;
@@ -9,9 +18,10 @@ use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseEx
 
 /**
  * ImageWorkshopException
- * 
+ *
  * Manage ImageWorkshop exceptions
- * 
+ *
+ * @package PHPImageWorkshop/Exception
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License

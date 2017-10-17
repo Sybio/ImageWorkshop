@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * ImageWorkshop class
+ *
+ * Use this class as a factory to initialize ImageWorkshop layers
+ *
+ * @link http://phpimageworkshop.com
+ * @author Sybio (Clément Guillemain / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
+ */
 namespace PHPImageWorkshop;
 
 use PHPImageWorkshop\Core\ImageWorkshopLayer as ImageWorkshopLayer;
@@ -12,9 +21,10 @@ use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
 
 /**
  * ImageWorkshop class
- * 
+ *
  * Use this class as a factory to initialize ImageWorkshop layers
  *
+ * @package PHPImageWorkshop
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
@@ -26,30 +36,56 @@ class ImageWorkshop
      * @var integer
      */
     const ERROR_NOT_AN_IMAGE_FILE = 1;
-    
+
     /**
      * @var integer
      */
     const ERROR_IMAGE_NOT_FOUND = 2;
-    
+
     /**
      * @var integer
      */
     const ERROR_NOT_READABLE_FILE = 3;
-    
+
     /**
      * @var integer
      */
     const ERROR_CREATE_IMAGE_FROM_STRING = 4;
-      
+
+    /**
+    * @var string
+    */
+    const DEFAULT_BG_COLOR = 'ffffff';
+
+    /**
+    * @var string
+    */
+    const DEFAULT_FONT_COLOR = 'ffffff';
+
+    /**
+    * @var string
+    */
+    const DEFAULT_WIDTH = 100;
+
+    /**
+    * @var string
+    */
+    const DEFAULT_HEIGHT = 100;
+
+    /**
+    * @var string
+    */
+    const DEFAULT_FONT_SIZE = 12;
+
     /**
      * Initialize a layer from a given image path
-     * 
+     *
      * From an upload form, you can give the "tmp_name" path
-     * 
+     *
      * @param string $path
-     * @param bool $fixOrientation
-     * 
+     * @param bool   $fixOrientation
+     * @throws \ImageWorkshopException
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromPath($path, $fixOrientation = false)
@@ -63,6 +99,7 @@ class ImageWorkshop
         }
 
         $mimeContentType = explode('/', $imageSizeInfos['mime']);
+
         if (!$mimeContentType || !isset($mimeContentType[1])) {
             throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
         }
@@ -76,19 +113,16 @@ class ImageWorkshop
                 if (false === ($exif = @read_exif_data($path))) {
                     $exif = array();
                 }
-            break;
-
+                break;
             case 'gif':
                 $image = imageCreateFromGIF($path);
-            break;
-
+                break;
             case 'png':
                 $image = imageCreateFromPNG($path);
-            break;
-
+                break;
             default:
                 throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
-            break;
+                break;
         }
 
         if (false === $image) {
@@ -103,69 +137,70 @@ class ImageWorkshop
 
         return $layer;
     }
-    
+
     /**
      * Initialize a text layer
-     * 
-     * @param string $text
-     * @param string $fontPath
+     *
+     * @param string  $text
+     * @param string  $fontPath
      * @param integer $fontSize
-     * @param string $fontColor
+     * @param string  $fontColor
      * @param integer $textRotation
      * @param integer $backgroundColor
-     * 
+     *
      * @return ImageWorkshopLayer
      */
-    public static function initTextLayer($text, $fontPath, $fontSize = 13, $fontColor = 'ffffff', $textRotation = 0, $backgroundColor = null)
+    public static function initTextLayer($text, $fontPath, $fontSize = DEFAULT_FONT_SIZE, $fontColor = DEFAULT_FONT_COLOR, $textRotation = 0, $backgroundColor = null)
     {
         $textDimensions = ImageWorkshopLib::getTextBoxDimension($fontSize, $textRotation, $fontPath, $text);
 
         $layer = static::initVirginLayer($textDimensions['width'], $textDimensions['height'], $backgroundColor);
         $layer->write($text, $fontPath, $fontSize, $fontColor, $textDimensions['left'], $textDimensions['top'], $textRotation);
-        
+
         return $layer;
     }
-    
+
     /**
      * Initialize a new virgin layer
-     * 
+     *
      * @param integer $width
      * @param integer $height
-     * @param string $backgroundColor
-     * 
+     * @param string  $backgroundColor
+     *
      * @return ImageWorkshopLayer
      */
-    public static function initVirginLayer($width = 100, $height = 100, $backgroundColor = null)
+    public static function initVirginLayer($width = DEFAULT_WIDTH, $height = DEFAULT_HEIGHT, $backgroundColor = null)
     {
         $opacity = 0;
-        
+
         if (null === $backgroundColor || $backgroundColor == 'transparent') {
             $opacity = 127;
-            $backgroundColor = 'ffffff';
+            $backgroundColor = DEFAULT_BG_COLOR;
         }
-        
+
         return new ImageWorkshopLayer(ImageWorkshopLib::generateImage($width, $height, $backgroundColor, $opacity));
     }
-    
+
     /**
      * Initialize a layer from a resource image var
-     * 
+     *
      * @param \resource $image
-     * 
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromResourceVar($image)
     {
         return new ImageWorkshopLayer($image);
     }
-    
+
     /**
      * Initialize a layer from a string (obtains with file_get_contents, cURL...)
-     * 
+     *
      * This not recommanded to initialize JPEG string with this method, GD displays bugs !
-     * 
+     *
      * @param string $imageString
-     * 
+     * @throws \ImageWorkshopException
+     *
      * @return ImageWorkshopLayer
      */
     public static function initFromString($imageString)
@@ -173,7 +208,7 @@ class ImageWorkshop
         if (!$image = @imageCreateFromString($imageString)) {
             throw new ImageWorkshopException('Can\'t generate an image from the given string.', static::ERROR_CREATE_IMAGE_FROM_STRING);
         }
-        
+
         return new ImageWorkshopLayer($image);
     }
 }

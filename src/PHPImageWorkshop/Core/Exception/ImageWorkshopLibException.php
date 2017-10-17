@@ -1,5 +1,14 @@
 <?php
-
+/**
+ * ImageWorkshopLibException
+ *
+ * Manage ImageWorkshopLib exceptions
+ *
+ * @link http://phpimageworkshop.com
+ * @author Bjørn Børresen | Sybio (Clément Guillemain  / @Sybio01)
+ * @license http://en.wikipedia.org/wiki/MIT_License
+ * @copyright Clément Guillemain
+ */
 namespace PHPImageWorkshop\Core\Exception;
 
 use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseException;
@@ -9,9 +18,10 @@ use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseEx
 
 /**
  * ImageWorkshopLibException
- * 
+ *
  * Manage ImageWorkshopLib exceptions
- * 
+ *
+ * @package PHPImageWorkshop/Core/Exceptions
  * @link http://phpimageworkshop.com
  * @author Sybio (Clément Guillemain  / @Sybio01)
  * @license http://en.wikipedia.org/wiki/MIT_License
