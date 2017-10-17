@@ -150,8 +150,16 @@ class ImageWorkshop
      *
      * @return ImageWorkshopLayer
      */
-    public static function initTextLayer($text, $fontPath, $fontSize = static::DEFAULT_FONT_SIZE, $fontColor = static::DEFAULT_FONT_COLOR, $textRotation = 0, $backgroundColor = null)
+    public static function initTextLayer($text, $fontPath, $fontSize = null, $fontColor = null, $textRotation = 0, $backgroundColor = null)
     {
+        if (empty($fontSize)) {
+          $fontSize = static::DEFAULT_FONT_SIZE;
+        }
+
+        if (empty($fontColor)) {
+          $fontColor = static::DEFAULT_FONT_COLOR;
+        }
+
         $textDimensions = ImageWorkshopLib::getTextBoxDimension($fontSize, $textRotation, $fontPath, $text);
 
         $layer = static::initVirginLayer($textDimensions['width'], $textDimensions['height'], $backgroundColor);
@@ -169,8 +177,16 @@ class ImageWorkshop
      *
      * @return ImageWorkshopLayer
      */
-    public static function initVirginLayer($width = static::DEFAULT_WIDTH, $height = static::DEFAULT_HEIGHT, $backgroundColor = null)
+    public static function initVirginLayer($width = null, $height = null, $backgroundColor = null)
     {
+        if (empty($width)) {
+          $width = static::DEFAULT_WIDTH;
+        }
+
+        if (empty($height)) {
+          $height = static::DEFAULT_HEIGHT;
+        }
+
         $opacity = 0;
 
         if (null === $backgroundColor || $backgroundColor == 'transparent') {
