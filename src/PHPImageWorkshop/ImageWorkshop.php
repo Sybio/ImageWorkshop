@@ -6,10 +6,6 @@ use PHPImageWorkshop\Core\ImageWorkshopLayer as ImageWorkshopLayer;
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
 
-// If no autoloader, uncomment these lines:
-//require_once(__DIR__.'/Core/ImageWorkshopLayer.php');
-//require_once(__DIR__.'/Exception/ImageWorkshopException.php');
-
 /**
  * ImageWorkshop class
  *

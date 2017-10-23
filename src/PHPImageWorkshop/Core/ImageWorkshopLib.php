@@ -4,9 +4,6 @@ namespace PHPImageWorkshop\Core;
 
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLibException as ImageWorkshopLibException;
 
-// If no autoloader, uncomment these lines:
-//require_once(__DIR__.'/Exception/ImageWorkshopLibException.php');
-
 /**
  * ImageWorkshopLib class
  *
