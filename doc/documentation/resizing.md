@@ -7,7 +7,7 @@ Read the tutorial "[Creating thumbnails](../tutorials/creating-thumbnails.md)" t
 ### 1. Classical resizing
 
 If you choose the resize both sides (width and height) of a layer, and also to conserve proportion, it will result to place the layer in a new transparent box !
-You can choose the placement of the layer in this box thanks to `$positionX`, `$positionY` and `$position` parameters: see the Corners / positions schema of an image.
+You can choose the placement of the layer in this box thanks to `$positionX`, `$positionY` and `$position` parameters: see the [Corners / positions schema of an image](corners-schema-image.md).
 Otherwise, you can ignore these 3 parameters (just don't use them) !
 
 Classical resize in pixel:

@@ -58,9 +58,9 @@ These layers are created from pictures: they have now the images as a background
 $norwayLayer->addLayerOnTop($watermarkLayer, 12, 12, "LB");
 ```
 
-**$norwayLayer** is used like a **group**: you can superimpose multiple layers on its stack, each layer is leveled on the top of its background image. Here, we just add $watermarkLayer on its stack.
+`$norwayLayer` is used like a **group**: you can superimpose multiple layers on its stack, each layer is leveled on the top of its background image. Here, we just add `$watermarkLayer` on its stack.
 
-We chose the $watermarkLayer position thanks to the 4rth parameter "**LB**" ("**Left Bottom**") and we applied translations of 12px from the left and the bottom of $norwayLayer borders.
+We chose the `$watermarkLayer` position thanks to the 4rth parameter "**LB**" ("**Left Bottom**") and we applied translations of 12px from the left and the bottom of $norwayLayer borders.
 
 ### Manage the result:
 
@@ -74,7 +74,7 @@ imagejpeg($image, null, 95); // We choose to show a JPG with a quality of 95%
 exit;
 ```
 
-Here we choose to [show](TODO) the final image in the navigator, but you can call different methods to generate the image, like [save()](TODO) method to save the image in a folder.
+Here we choose to [show](documentation/showing.md) the final image in the navigator, but you can call different methods to generate the image, like [save()](documentation/saving.md) method to save the image in a folder.
 
 And the result:
 

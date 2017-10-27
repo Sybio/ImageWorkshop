@@ -2,7 +2,7 @@
 
 ## Cropping
 
-You can crop a layer and place the crop on the layer background where you want thanks to the argument `$position`: see the [Corners / positions schema of an image](TODO).
+You can crop a layer and place the crop on the layer background where you want thanks to the argument `$position`: see the [Corners / positions schema of an image](corners-schema-image.md).
 Read the tutorial [Creating thumbnails](../tutorials/creating-thumbnails.md) to see examples.
 
 ### 1. Cropping

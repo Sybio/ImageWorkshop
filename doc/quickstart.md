@@ -25,7 +25,7 @@ In our example, we suppose that Pingu picture dimensions are 640px for 480px in 
 
 ![Pingu](img/quickstart/xpingu.jpg)
 
-You can see all the methods to initialize a layer (from an upload form, a PHP var...) at the [initialization chapter](TODO).
+You can see all the methods to initialize a layer (from an upload form, a PHP var...) at the [initialization chapter](documentation.md#2-initialization-of-a-layer).
 
 ### Apply an action
 
@@ -37,7 +37,7 @@ $pinguLayer->resizeInPixel(400, null, true);
 
 Here I choose to resize the layer to have a width of 400px, and also to auto-resize the height to conserve proportions.
 
-There are many actions (rotate, crop...), learn them at the [actions chapter](TODO).
+There are many actions (rotate, crop...), learn them at the [actions chapter](documentation.md#4-actions-on-layers).
 
 Here what the layer seems after the resize:
 
@@ -62,12 +62,12 @@ $pinguLayer->addLayerOnTop($tuxLayer, 20, 10, 'RT');
 ```
 
 You can place the layers at the position you want on pingu layer:
-* $wwfLogoLayer is placed at the left bottom position on the top of pingu layer thanks to the 4rth parameter, with the string value '**LB**' to say "**Left Bottom**". Also, it has a translation of **20px from the left** and **10px from the bottom** of pingu layer !
-* $tuxLayer is placed at the **Right Top** ('**RT**') position on the pingu layer, with a translation of **20px from the right** and **10px from the top**.
+* `$wwfLogoLayer` is placed at the left bottom position on the top of pingu layer thanks to the 4rth parameter, with the string value '**LB**' to say "**Left Bottom**". Also, it has a translation of **20px from the left** and **10px from the bottom** of pingu layer !
+* `$tuxLayer` is placed at the **Right Top** ('**RT**') position on the pingu layer, with a translation of **20px from the right** and **10px from the top**.
 
-You can see all the possible positions to place layers thanks to the [Corners / positions schema of an image](TODO).
+You can see all the possible positions to place layers thanks to the [Corners / positions schema of an image](documentation/corners-schema-image.md).
 
-And you can also learn more [about superimposition](TODO), which is very similar with Photoshop principle !
+And you can also learn more [about superimposition](documentation.md#1-layer-notion), which is very similar with Photoshop principle !
 
 Here what the layer seems after we added the 2 logo layers in its stack:
 
@@ -92,7 +92,7 @@ We choose to save the image as a PNG, even the original was a JPEG, by specifyin
 
 If the folders don't exist, not a problem: by setting the third parameter true, ImageWorkshop will create them for you !
 
-Of course, you can also show the result in the navigator, or get the image variable to work without ImageWorkshop, see here to [manage the result](TODO).
+Of course, you can also show the result in the navigator, or get the image variable to work without ImageWorkshop, see here to [manage the result](documentation.md#3-manage-the-result).
 
 ### All the code of the quickstart tutorial
 
@@ -117,6 +117,6 @@ $pinguLayer->save(__DIR__."/../web/uploads/2012", "pingu_edited.png", true, null
 
 ImageWorkshop is really intuitive and simple to use, despite its high flexibility !
 
-To finish, I invite you to read an important chapter of good pratices to [avoid some bugs](TODO).
+To finish, I invite you to read an important chapter of good pratices to [avoid some bugs](documentation.md#5-good-practices).
 
 Now, you are able to play with the class !

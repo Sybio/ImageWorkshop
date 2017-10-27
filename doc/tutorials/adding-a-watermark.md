@@ -83,7 +83,7 @@ $image = $norwayLayer->getResult();
 
 Don't forget that you can choose the position of your watermark thanks to the fifth parameter of addLayer() method !
 
-See the [Corners / positions schema of an image](TODO) to choose the position you want.
+See the [Corners / positions schema of an image](../documentation/corners-schema-image.md) to choose the position you want.
 
 ```php
 // "RT": Right Top position, translation of 30px from right and 10px from top

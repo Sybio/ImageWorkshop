@@ -24,9 +24,9 @@ $sublayerInfos = $group->addLayer($level, $sublayer, $positionX, $positionY, $po
 
 If you choose a too high level, the sublayer will be placed at the highest level possible (for example, if you add a sublayer at level 3 in the stack, but there is no sublayer at level 2, this sublayer will be replaced at level 2 and not 3).
 
-Also, if you add a sublayer at a level already taken by another sublayer, it will be added at this level, but the old sublayer and all highest placed sublayers will be shift of one level (*For example, if you have $sublayer1 at level 1 in the stack, $sublayer2 at level 2, $sublayer3 at level 3 and you add $sublayer4 at level 1, $sublayer1 will be shift at level 2, $sublayer2 at level 3 and $sublayer3 at level 4*).
+Also, if you add a sublayer at a level already taken by another sublayer, it will be added at this level, but the old sublayer and all highest placed sublayers will be shift of one level (*For example, if you have `$sublayer1` at level 1 in the stack, `$sublayer2` at level 2, `$sublayer3` at level 3 and you add `$sublayer4` at level 1, `$sublayer1` will be shift at level 2, `$sublayer2` at level 3 and `$sublayer3` at level 4*).
 
-`$position` is the position where to place the sublayer background on the group background, see the [Corners / positions schema of an image](TODO) to choose a position. The default `$position` is "LT" (from left top).
+`$position` is the position where to place the sublayer background on the group background, see the [Corners / positions schema of an image](corners-schema-image.md) to choose a position. The default `$position` is "LT" (from left top).
 
 `$positionX` and `$positionY` represent translations in pixel from `$position` to place the sublayer background.
 

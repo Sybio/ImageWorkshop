@@ -6,7 +6,7 @@ You can merge plural sublayers in the stack of a group. Layers would be merged i
 
 ### 1. Merge down
 
-You can apply mergeDown() method to merge a sublayer having the id $sublayerId at level x+1 with the sublayer at level x in a group stack:
+You can apply `mergeDown()` method to merge a sublayer having the id `$sublayerId` at level x+1 with the sublayer at level x in a group stack:
 
 ```php
 $sublayerId = 2;

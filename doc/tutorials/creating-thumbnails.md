@@ -4,7 +4,7 @@
 
 ### The purpose of the tutorial
 
-There are many ways to generate a thumbnail thanks to [resize](TODO) and [crop](TODO) methods...
+There are many ways to generate a thumbnail thanks to [resize](../documentation/resizing.md) and [crop](../documentation/cropping.md) methods...
 We will see 3 cases particularly that could be used.
 
 We suppose in these methods that we want to generate thumbnails with fixed width and height, which is usually the case.
@@ -13,7 +13,7 @@ We suppose in these methods that we want to generate thumbnails with fixed width
 
 In this case, we want to conserve all the image, and not to crop a part of it.
 
-We have to used the [4th possibility of use](TODO) of `resizeInPixel()` (or Percent) method:
+We have to used the [4th possibility of use](../documentation/resizing.md#4th-possibility-resize-with-proportion-and-based-on-both-sides-since-12-version) of `resizeInPixel()` (or Percent) method:
 
 ```php
 // Resize to get the thumbnail

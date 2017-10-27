@@ -21,7 +21,7 @@ If you don't use an autoloader, this is a little more tricky but still easy to i
 
 #### Include dependencies
 
-You have to **load** classes at the beginning of each **class files** that are dependant, with include() or require_once() functions.
+You have to **load** classes at the beginning of each **class files** that are dependant, with `include()` or `require_once()` functions.
 
 To do that, just **uncomment //require_once()** call at the beginning of each class file, an example for ImageWorkshop.php file:
 

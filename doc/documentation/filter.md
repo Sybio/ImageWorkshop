@@ -23,4 +23,5 @@ $layer->applyFilter(IMG_FILTER_NEGATE); // With this filter, we can ignore other
 Our filter in image:
 
 ![Filter result](img/xfilter-1.jpg)
+
 [<< Cropping](cropping.md) - [Flip >>](flip.md)
