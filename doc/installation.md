@@ -6,6 +6,12 @@ The class is designed for **PHP version 5.4+**, it includes new specifications l
 
 ### PHP with an autoloader
 
+The PHPImageWorkshop can be installed with [Composer](https://getcomposer.org/). Run this command:
+
+```sh
+composer require sybio/image-workshop
+```
+
 The PHPImageWorkshop folder added in your lib directory, just use the class namespace in your main script and that's it:
 
 ```php
