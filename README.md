@@ -3,6 +3,10 @@
 # ================================
 
 [![Test status](https://secure.travis-ci.org/Sybio/ImageWorkshop.png?branch=master)](https://travis-ci.org/Sybio/ImageWorkshop)
+[![Latest Stable Version](https://poser.pugx.org/sybio/image-workshop/v/stable)](https://packagist.org/packages/sybio/image-workshop)
+[![Total Downloads](https://poser.pugx.org/sybio/image-workshop/downloads)](https://packagist.org/packages/sybio/image-workshop)
+[![Monthly Downloads](https://poser.pugx.org/sybio/image-workshop/d/monthly)](https://packagist.org/packages/sybio/image-workshop)
+[![License](https://poser.pugx.org/sybio/image-workshop/license)](https://packagist.org/packages/sybio/image-workshop)
 
 ### Summary and features
 Really flexible and easy-to-use PHP class to work with images using the GD Library
