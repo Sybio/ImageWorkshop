@@ -1,0 +1,7 @@
+* text=auto
+*.sh text eol=lf
+
+/doc  export-ignore
+/examples export-ignore
+/fixtures export-ignore
+/tests export-ignore
