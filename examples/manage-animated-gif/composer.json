@@ -1,0 +1,11 @@
+{
+    "name": "image-workshop/example-animated-gif",
+    "description": "Source code for \"Manage animated GIF with ImageWorkshop\"",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "sybio/gif-creator": "^1.0",
+        "sybio/gif-frame-extractor": "^1.0",
+        "sybio/image-workshop": "^2.0"
+    }
+}
