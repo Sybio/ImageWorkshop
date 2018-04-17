@@ -21,4 +21,4 @@ before_script:
 
 script:
   - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
-  - phpunit
+  - vendor/bin/phpunit
