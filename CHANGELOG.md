@@ -3,6 +3,13 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes).
 
+**Version 2.1.0 - 2018-04-17**
+
+* Add WebP support
+* Set Exiff PHP extension as optional
+* Fix PNG quality ratio
+* Fix image size detectio in `pasteImage` method
+
 **Version 2.0.9 - 2015-07-05**
 
 - Fix ImageWorkshop::initFromPath with remote URL
