@@ -70,7 +70,7 @@ class ImageWorkshop
             case 'jpeg':
                 $image = imageCreateFromJPEG($path);
 
-                if (function_exists('read_exif_data') && false !== ($data = @read_exif_data($path))) {
+                if (function_exists('exif_read_data') && false !== ($data = @exif_read_data($path))) {
                     $exif = $data;
                 }
             break;
