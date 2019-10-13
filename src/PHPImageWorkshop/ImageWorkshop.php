@@ -4,7 +4,7 @@ namespace PHPImageWorkshop;
 
 use PHPImageWorkshop\Core\ImageWorkshopLayer as ImageWorkshopLayer;
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
-use PHPImageWorkshop\Exception\ImageWorkshopException as ImageWorkshopException;
+use PHPImageWorkshop\Exception\ImageWorkshopException;
 
 /**
  * ImageWorkshop class
@@ -47,21 +47,27 @@ class ImageWorkshop
      * @param bool $fixOrientation
      *
      * @return ImageWorkshopLayer
+     *
+     * @throws ImageWorkshopException
      */
     public static function initFromPath($path, $fixOrientation = false)
     {
-        $isRemoteFile = false !== filter_var($path, FILTER_VALIDATE_URL);
-        if (!$isRemoteFile && !file_exists($path)) {
+        if (false === filter_var($path, FILTER_VALIDATE_URL) && !file_exists($path)) {
             throw new ImageWorkshopException(sprintf('File "%s" not exists.', $path), static::ERROR_IMAGE_NOT_FOUND);
         }
 
-        if (!$isRemoteFile && false === is_readable($path)) {
-            throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
+        if (false === ($imageSizeInfos = @getImageSize($path))) {
+            if (version_compare(PHP_VERSION, '7.1', '>=')) {
+                throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
+            }
+
+            $imageSizeInfos = array('mime' => mime_content_type($path));
         }
 
-        $mimeContentType = explode('/', mime_content_type($path));
+        $mimeContentType = explode('/', $imageSizeInfos['mime']);
         if (!$mimeContentType || !isset($mimeContentType[1])) {
-            throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
+            $givenType = isset($mimeContentType[1]) ? $mimeContentType[1] : 'none';
+            throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$givenType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
         }
 
         $mimeContentType = $mimeContentType[1];
@@ -89,7 +95,7 @@ class ImageWorkshop
             break;
 
             default:
-                throw new ImageWorkshopException('Not an image file (jpeg/png/gif/webp) at "'.$path.'" (given format: "'.$mimeContentType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
+                throw new ImageWorkshopException('Not an image file (jpeg/png/gif/webp) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
             break;
         }
 
