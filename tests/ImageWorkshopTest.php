@@ -61,6 +61,14 @@ class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
         $layer = ImageWorkshop::initFromPath('fakePath');
     }
 
+    public function testInitFromPathWebpImage()
+    {
+        $layer = ImageWorkshop::initFromPath(__DIR__.'/Resources/images/sample.webp');
+
+        $this->assertTrue(is_object($layer) === true, 'Expect $layer to be an object');
+        $this->assertTrue(get_class($layer) === 'PHPImageWorkshop\Core\ImageWorkshopLayer', 'Expect $layer to be an ImageWorkshopLayer object');
+    }
+
     /**
      * Test initTextLayer
      */

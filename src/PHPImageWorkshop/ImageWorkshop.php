@@ -83,8 +83,11 @@ class ImageWorkshop
                 $image = imageCreateFromPNG($path);
             break;
 
+            case 'webp':
+                $image = imagecreatefromwebp($path);
+            break;
             default:
-                throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
+                throw new ImageWorkshopException('Not an image file (jpeg/png/gif/webp) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
             break;
         }
 
