@@ -54,11 +54,11 @@ class ImageWorkshop
             throw new ImageWorkshopException(sprintf('File "%s" not exists.', $path), static::ERROR_IMAGE_NOT_FOUND);
         }
 
-        if (false === ($imageSizeInfos = @getImageSize($path))) {
-            throw new ImageWorkshopException('Can\'t open the file at "'.$path.'" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
+        if (false === is_readable($path)) {
+            throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
         }
 
-        $mimeContentType = explode('/', $imageSizeInfos['mime']);
+        $mimeContentType = explode('/', mime_content_type($path));
         if (!$mimeContentType || !isset($mimeContentType[1])) {
             throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
         }
@@ -86,6 +86,7 @@ class ImageWorkshop
             case 'webp':
                 $image = imagecreatefromwebp($path);
             break;
+
             default:
                 throw new ImageWorkshopException('Not an image file (jpeg/png/gif/webp) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
             break;
