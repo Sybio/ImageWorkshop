@@ -25,7 +25,7 @@ class ImageWorkshopBaseException extends \Exception
     {
         parent::__construct($message, $code, $previous);
     }
-    
+
     /**
      * __toString method
      *
