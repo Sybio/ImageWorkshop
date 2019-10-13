@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes).
 
+**Next release**
+
+* Allow to open WebP image with `ImageWorkshop::initFromPath`
+
 **Version 2.1.0 - 2018-04-17**
 
 * Add WebP support
