@@ -22,22 +22,22 @@ class ImageWorkshop
      * @var integer
      */
     const ERROR_NOT_AN_IMAGE_FILE = 1;
-    
+
     /**
      * @var integer
      */
     const ERROR_IMAGE_NOT_FOUND = 2;
-    
+
     /**
      * @var integer
      */
     const ERROR_NOT_READABLE_FILE = 3;
-    
+
     /**
      * @var integer
      */
     const ERROR_CREATE_IMAGE_FROM_STRING = 4;
-      
+
     /**
      * Initialize a layer from a given image path
      *
@@ -100,7 +100,7 @@ class ImageWorkshop
 
         return $layer;
     }
-    
+
     /**
      * Initialize a text layer
      *
@@ -119,10 +119,10 @@ class ImageWorkshop
 
         $layer = static::initVirginLayer($textDimensions['width'], $textDimensions['height'], $backgroundColor);
         $layer->write($text, $fontPath, $fontSize, $fontColor, $textDimensions['left'], $textDimensions['top'], $textRotation);
-        
+
         return $layer;
     }
-    
+
     /**
      * Initialize a new virgin layer
      *
@@ -135,15 +135,15 @@ class ImageWorkshop
     public static function initVirginLayer($width = 100, $height = 100, $backgroundColor = null)
     {
         $opacity = 0;
-        
+
         if (null === $backgroundColor || $backgroundColor == 'transparent') {
             $opacity = 127;
             $backgroundColor = 'ffffff';
         }
-        
+
         return new ImageWorkshopLayer(ImageWorkshopLib::generateImage($width, $height, $backgroundColor, $opacity));
     }
-    
+
     /**
      * Initialize a layer from a resource image var
      *
@@ -155,7 +155,7 @@ class ImageWorkshop
     {
         return new ImageWorkshopLayer($image);
     }
-    
+
     /**
      * Initialize a layer from a string (obtains with file_get_contents, cURL...)
      *
@@ -170,7 +170,7 @@ class ImageWorkshop
         if (!$image = @imageCreateFromString($imageString)) {
             throw new ImageWorkshopException('Can\'t generate an image from the given string.', static::ERROR_CREATE_IMAGE_FROM_STRING);
         }
-        
+
         return new ImageWorkshopLayer($image);
     }
 }
