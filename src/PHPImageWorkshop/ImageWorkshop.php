@@ -50,11 +50,12 @@ class ImageWorkshop
      */
     public static function initFromPath($path, $fixOrientation = false)
     {
-        if (false === filter_var($path, FILTER_VALIDATE_URL) && !file_exists($path)) {
+        $isRemoteFile = false !== filter_var($path, FILTER_VALIDATE_URL);
+        if (!$isRemoteFile && !file_exists($path)) {
             throw new ImageWorkshopException(sprintf('File "%s" not exists.', $path), static::ERROR_IMAGE_NOT_FOUND);
         }
 
-        if (false === is_readable($path)) {
+        if (!$isRemoteFile && false === is_readable($path)) {
             throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
         }
 
