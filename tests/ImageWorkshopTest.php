@@ -63,6 +63,10 @@ class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
 
     public function testInitFromPathWebpImage()
     {
+        if (!function_exists('imagecreatefromwebp')) {
+            $this->markTestSkipped('WebP support is not enable');
+        }
+
         $layer = ImageWorkshop::initFromPath(__DIR__.'/Resources/images/sample.webp');
 
         $this->assertTrue(is_object($layer) === true, 'Expect $layer to be an object');
