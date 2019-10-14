@@ -95,7 +95,7 @@ class ImageWorkshop
             break;
 
             default:
-                throw new ImageWorkshopException('Not an image file (jpeg/png/gif/webp) at "'.$path.'"', static::ERROR_NOT_AN_IMAGE_FILE);
+                throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$mimeContentType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
             break;
         }
 
