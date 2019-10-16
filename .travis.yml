@@ -22,4 +22,5 @@ before_script:
 
 script:
   - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+  - vendor/bin/phpstan analyse src -c phpstan.neon -l 1
   - vendor/bin/phpunit
