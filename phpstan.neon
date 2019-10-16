@@ -1,0 +1,2 @@
+parameters:
+    bootstrap: %currentWorkingDirectory%/vendor/autoload.php
