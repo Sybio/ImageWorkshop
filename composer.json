@@ -29,6 +29,8 @@
         "ext-exif": "Allows to read and keep images EXIF data"
     },
     "autoload": {
-        "psr-0": { "PHPImageWorkshop": "src" }
+        "psr-4": {
+            "PHPImageWorkshop\\": "src/"
+        }
     }
 }

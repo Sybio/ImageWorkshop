@@ -2,8 +2,6 @@
 
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 
-require_once(__DIR__.'/../autoload.php');
-
 /**
  * ImageWorkshopLibTest class
  *
