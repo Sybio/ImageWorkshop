@@ -212,9 +212,7 @@ class ImageWorkshopLib
 
                         if ($destAlpha >= $opacity) {
                             $alpha = $destAlpha;
-                        }
-
-                        if ($destAlpha < $opacity) {
+                        } else {
                             $alpha = $opacity;
                         }
 
