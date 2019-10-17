@@ -1,5 +1,7 @@
 <?php
 
+namespace PHPImageWorkshop\Tests\Core;
+
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
 use PHPUnit\Framework\TestCase;
 

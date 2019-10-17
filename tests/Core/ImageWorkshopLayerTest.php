@@ -1,5 +1,7 @@
 <?php
 
+namespace PHPImageWorkshop\Tests\Core;
+
 use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException;
 use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
 use PHPUnit\Framework\TestCase;
