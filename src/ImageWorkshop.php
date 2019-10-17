@@ -57,11 +57,7 @@ class ImageWorkshop
         }
 
         if (false === ($imageSizeInfos = @getImageSize($path))) {
-            if (version_compare(PHP_VERSION, '7.1', '>=')) {
-                throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
-            }
-
-            $imageSizeInfos = array('mime' => mime_content_type($path));
+            throw new ImageWorkshopException('Can\'t open the file at "' . $path . '" : file is not readable, did you check permissions (755 / 777) ?', static::ERROR_NOT_READABLE_FILE);
         }
 
         $mimeContentType = explode('/', $imageSizeInfos['mime']);
