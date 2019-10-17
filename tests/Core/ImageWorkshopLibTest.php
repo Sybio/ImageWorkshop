@@ -1,6 +1,7 @@
 <?php
 
 use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ImageWorkshopLibTest class
@@ -13,7 +14,7 @@ use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
  * @copyright Clément Guillemain
  *
  */
-class ImageWorkshopLibTest extends \PHPUnit_Framework_TestCase
+class ImageWorkshopLibTest extends TestCase
 {
     // Tests
     // ===================================================================================

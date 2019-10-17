@@ -1,6 +1,8 @@
 <?php
 
+use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException;
 use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ImageWorkshopLayerTest class
@@ -13,12 +15,12 @@ use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
  * @copyright Clément Guillemain
  *
  */
-class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
+class ImageWorkshopLayerTest extends TestCase
 {
     /** @var string */
     protected $workspace = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->umask = umask(0);
         $this->workspace = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR.time().rand(0, 1000);
@@ -26,7 +28,7 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
         $this->workspace = realpath($this->workspace);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->clean($this->workspace);
         umask($this->umask);
@@ -1159,7 +1161,8 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 
         $layer = $this->initializeLayer(1);
 
-        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $this->expectException(ImageWorkshopLayerException::class);
+
         $layer->cropInPixel(-1, -1, 0, 0, 'LT');
     }
 
@@ -1204,7 +1207,8 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 
         $layer = $this->initializeLayer(1);
 
-        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $this->expectException(ImageWorkshopLayerException::class);
+
         $layer->cropInPercent(-1, -1, 0, 0, 'LT');
     }
 
@@ -1263,7 +1267,8 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 
         $layer = $this->initializeLayer(1);
 
-        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $this->expectException(ImageWorkshopLayerException::class);
+
         $layer->cropToAspectRatioInPixel(-1, -1, 0, 0, 'LT');
     }
 
@@ -1322,7 +1327,8 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 
         $layer = $this->initializeLayer(1);
 
-        $this->setExpectedException('PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException');
+        $this->expectException(ImageWorkshopLayerException::class);
+
         $layer->cropToAspectRatioInPercent(-1, -1, 0, 0, 'LT');
     }
 
@@ -1444,15 +1450,14 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     {
         $destinationFolder = $this->workspace.DIRECTORY_SEPARATOR.'fileDestination';
 
-        $this->setExpectedException(
-            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
-            'Destination folder "'.$destinationFolder.'" is a file.',
-            6
-        );
-
         touch($destinationFolder);
 
         $layer = $this->initializeLayer();
+
+        $this->expectException(ImageWorkshopLayerException::class);
+        $this->expectExceptionMessage('Destination folder "'.$destinationFolder.'" is a file.');
+        $this->expectExceptionCode(6);
+
         $layer->save($destinationFolder, 'test.png', false);
     }
 
@@ -1460,11 +1465,9 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
     {
         $destinationFolder = $this->workspace.DIRECTORY_SEPARATOR.'nonExistFolder';
 
-        $this->setExpectedException(
-            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
-            'Destination folder "'.$destinationFolder.'" not exists.',
-            6
-        );
+        $this->expectException(ImageWorkshopLayerException::class);
+        $this->expectExceptionMessage('Destination folder "'.$destinationFolder.'" not exists.');
+        $this->expectExceptionCode(6);
 
         $layer = $this->initializeLayer();
         $layer->save($destinationFolder, 'test.png', false);
@@ -1472,13 +1475,12 @@ class ImageWorkshopLayerTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveWithNonSupportedFileExtension()
     {
-        $this->setExpectedException(
-            'PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException',
-            'Image format "tif" not supported.',
-            7
-        );
-
         $layer = $this->initializeLayer();
+
+        $this->expectException(ImageWorkshopLayerException::class);
+        $this->expectExceptionMessage('Image format "tif" not supported.');
+        $this->expectExceptionCode(7);
+
         $layer->save($this->workspace, 'test.tif', false);
     }
 
