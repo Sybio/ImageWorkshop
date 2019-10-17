@@ -1,6 +1,8 @@
 <?php
 
+use PHPImageWorkshop\Exception\ImageWorkshopException;
 use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ImageWorkshopTest class
@@ -13,7 +15,7 @@ use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
  * @copyright Clément Guillemain
  *
  */
-class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
+class ImageWorkshopTest extends TestCase
 {
     // Properties
     // ===================================================================================
@@ -55,7 +57,10 @@ class ImageWorkshopTest extends \PHPUnit_Framework_TestCase
 
         // test 4
 
-        $this->setExpectedException('PHPImageWorkshop\Exception\ImageWorkshopException', 'File "fakePath" not exists.', ImageWorkshop::ERROR_IMAGE_NOT_FOUND);
+        $this->expectException(ImageWorkshopException::class);
+        $this->expectExceptionMessage('File "fakePath" not exists.');
+        $this->expectExceptionCode(ImageWorkshop::ERROR_IMAGE_NOT_FOUND);
+
         $layer = ImageWorkshop::initFromPath('fakePath');
     }
 
