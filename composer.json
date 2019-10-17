@@ -32,5 +32,10 @@
         "psr-4": {
             "PHPImageWorkshop\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PHPImageWorkshop\\Tests\\": "tests/"
+        }
     }
 }
