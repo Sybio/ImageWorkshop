@@ -148,7 +148,7 @@ class ImageWorkshopLayer
     /**
      * Constructor
      *
-     * @param \resource $image
+     * @param resource $image
      */
     public function __construct($image, array $exif = array())
     {
@@ -722,6 +722,9 @@ class ImageWorkshopLayer
     public function resize($unit = self::UNIT_PIXEL, $newWidth = null, $newHeight = null, $converseProportion = false, $positionX = 0, $positionY = 0, $position = 'MM')
     {
         if (is_numeric($newWidth) || is_numeric($newHeight)) {
+            $widthResizePercent = 100;
+            $heightResizePercent = 100;
+
             if ($unit == self::UNIT_PERCENT) {
                 if ($newWidth) {
                     $newWidth = round(($newWidth / 100) * $this->width);
