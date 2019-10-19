@@ -188,10 +188,10 @@ class ImageWorkshopLayer
      *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $layerLevel
+     * @param int $layerLevel
      * @param ImageWorkshopLayer $layer
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * @return array
@@ -209,8 +209,8 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param ImageWorkshopLayer $layer
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * @return array
@@ -228,8 +228,8 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param ImageWorkshopLayer $layer
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * @return array
@@ -246,7 +246,7 @@ class ImageWorkshopLayer
      * Move a sublayer on the top of a group stack
      * Return new sublayer level if success or false otherwise
      *
-     * @param integer $layerId
+     * @param int $layerId
      * @return mixed
      */
     public function moveTop($layerId)
@@ -258,7 +258,7 @@ class ImageWorkshopLayer
      * Move a sublayer to the level 1 of a group stack
      * Return new sublayer level if success or false otherwise
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return mixed
      */
@@ -364,7 +364,7 @@ class ImageWorkshopLayer
      * Move up a sublayer in the stack (level +1)
      * Return new sublayer level if success, false otherwise
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return mixed
      */
@@ -382,7 +382,7 @@ class ImageWorkshopLayer
      * Move down a sublayer in the stack (level -1)
      * Return new sublayer level if success, false otherwise
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return mixed
      */
@@ -404,7 +404,7 @@ class ImageWorkshopLayer
      * Note: the result layer will conserve the given id
      * Return true if success or false if layer isn't found or doesn't have a layer under it in the stack
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return boolean
      */
@@ -499,8 +499,8 @@ class ImageWorkshopLayer
      *
      * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
      * @param resource $image
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      */
     public function pasteImage($unit = self::UNIT_PIXEL, $image, $positionX = 0, $positionY = 0)
     {
@@ -518,9 +518,9 @@ class ImageWorkshopLayer
     /**
      * Change the position of a sublayer for new positions
      *
-     * @param integer $layerId
-     * @param integer $newPosX
-     * @param integer $newPosY
+     * @param int $layerId
+     * @param int $newPosX
+     * @param int $newPosY
      *
      * @return boolean
      */
@@ -545,9 +545,9 @@ class ImageWorkshopLayer
     /**
      * Apply a translation on a sublayer that change its positions
      *
-     * @param integer $layerId
-     * @param integer $addedPosX
-     * @param integer $addedPosY
+     * @param int $layerId
+     * @param int $addedPosX
+     * @param int $addedPosY
      *
      * @return mixed (array of new positions or false if fail)
      */
@@ -575,7 +575,7 @@ class ImageWorkshopLayer
     /**
      * Delete a layer (return true if success, false if no sublayer is found)
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return boolean
      */
@@ -647,11 +647,11 @@ class ImageWorkshopLayer
     /**
      * Resize the layer by specifying pixel
      *
-     * @param integer $newWidth
-     * @param integer $newHeight
+     * @param int $newWidth
+     * @param int $newHeight
      * @param boolean $converseProportion
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
@@ -669,8 +669,8 @@ class ImageWorkshopLayer
      * @param float $percentWidth
      * @param float $percentHeight
      * @param boolean $converseProportion
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
@@ -685,8 +685,8 @@ class ImageWorkshopLayer
     /**
      * Resize the layer to fit a bounding box by specifying pixel
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param boolean $converseProportion
      */
     public function resizeToFit($width, $height, $converseProportion = false)
@@ -823,8 +823,8 @@ class ImageWorkshopLayer
             // Update the layer positions in the stack
 
             foreach ($this->layerPositions as $layerId => $layerPosition) {
-                $newPosX = round(($widthResizePercent / 100) * $layerPosition['x']);
-                $newPosY = round(($heightResizePercent / 100) * $layerPosition['y']);
+                $newPosX = (int) round(($widthResizePercent / 100) * $layerPosition['x']);
+                $newPosY = (int) round(($heightResizePercent / 100) * $layerPosition['y']);
 
                 $this->changePosition($layerId, $newPosX, $newPosY);
             }
@@ -845,7 +845,7 @@ class ImageWorkshopLayer
     /**
      * Resize the layer by its largest side by specifying pixel
      *
-     * @param integer $newLargestSideWidth
+     * @param int $newLargestSideWidth
      * @param boolean $converseProportion
      */
     public function resizeByLargestSideInPixel($newLargestSideWidth, $converseProportion = false)
@@ -856,7 +856,7 @@ class ImageWorkshopLayer
     /**
      * Resize the layer by its largest side by specifying percent
      *
-     * @param integer $newLargestSideWidth percent
+     * @param int $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
     public function resizeByLargestSideInPercent($newLargestSideWidth, $converseProportion = false)
@@ -868,7 +868,7 @@ class ImageWorkshopLayer
      * Resize the layer by its largest side
      *
      * @param string $unit
-     * @param integer $newLargestSideWidth percent
+     * @param int $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
     public function resizeByLargestSide($unit = self::UNIT_PIXEL, $newLargestSideWidth, $converseProportion = false)
@@ -887,7 +887,7 @@ class ImageWorkshopLayer
     /**
      * Resize the layer by its narrow side by specifying pixel
      *
-     * @param integer $newNarrowSideWidth
+     * @param int $newNarrowSideWidth
      * @param boolean $converseProportion
      */
     public function resizeByNarrowSideInPixel($newNarrowSideWidth, $converseProportion = false)
@@ -898,7 +898,7 @@ class ImageWorkshopLayer
     /**
      * Resize the layer by its narrow side by specifying percent
      *
-     * @param integer $newNarrowSideWidth percent
+     * @param int $newNarrowSideWidth percent
      * @param boolean $converseProportion
      */
     public function resizeByNarrowSideInPercent($newNarrowSideWidth, $converseProportion = false)
@@ -910,7 +910,7 @@ class ImageWorkshopLayer
      * Resize the layer by its narrow side
      *
      * @param string $unit
-     * @param integer $newNarrowSideWidth
+     * @param int $newNarrowSideWidth
      * @param boolean $converseProportion
      */
     public function resizeByNarrowSide($unit = self::UNIT_PIXEL, $newNarrowSideWidth, $converseProportion = false)
@@ -932,10 +932,10 @@ class ImageWorkshopLayer
      * $backgroundColor: can be set transparent (The script will be longer to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $width
+     * @param int $height
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      */
     public function cropInPixel($width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
@@ -1025,10 +1025,10 @@ class ImageWorkshopLayer
      * $backgroundColor: can be set transparent (The script will be longer to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $width
-     * @param integer $height
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $width
+     * @param int $height
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      */
     public function cropToAspectRatioInPixel($width = 0, $height = 0, $positionX = 0, $positionY = 0, $position = 'LT')
@@ -1042,8 +1042,8 @@ class ImageWorkshopLayer
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param float $positionXPercent
      * @param float $positionYPercent
      * @param string $position
@@ -1060,8 +1060,8 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param string $unit
-     * @param integer $width (integer or float)
-     * @param integer $height (integer or float)
+     * @param int $width (integer or float)
+     * @param int $height (integer or float)
      * @param mixed $positionX (integer or float)
      * @param mixed $positionY (integer or float)
      * @param string $position
@@ -1102,8 +1102,8 @@ class ImageWorkshopLayer
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      */
     public function cropMaximumInPixel($positionX = 0, $positionY = 0, $position = 'LT')
@@ -1117,8 +1117,8 @@ class ImageWorkshopLayer
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $positionXPercent
-     * @param integer $positionYPercent
+     * @param int $positionXPercent
+     * @param int $positionYPercent
      * @param string $position
      */
     public function cropMaximumInPercent($positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
@@ -1133,8 +1133,8 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param string $unit
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      */
     public function cropMaximum($unit = self::UNIT_PIXEL, $positionX = 0, $positionY = 0, $position = 'LT')
@@ -1229,7 +1229,7 @@ class ImageWorkshopLayer
      * Change the opacity of the layer
      * $recursive: apply it on sublayers
      *
-     * @param integer $opacity
+     * @param int $opacity
      * @param boolean $recursive
      */
     public function opacity($opacity, $recursive = true)
@@ -1323,10 +1323,10 @@ class ImageWorkshopLayer
      * Add a text on the background image of the layer using a default font registered in GD
      *
      * @param string $text
-     * @param integer $font
+     * @param int $font
      * @param string $color
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $align
      */
     public function writeText($text, $font = 1, $color = 'ffffff', $positionX = 0, $positionY = 0, $align = 'horizontal')
@@ -1346,12 +1346,12 @@ class ImageWorkshopLayer
      * Return the text coordonates
      *
      * @param string $text
-     * @param integer $fontPath
-     * @param integer $fontSize
+     * @param string $fontPath
+     * @param int $fontSize
      * @param string $color
-     * @param integer $positionX
-     * @param integer $positionY
-     * @param integer $fontRotation
+     * @param int $positionX
+     * @param int $positionY
+     * @param int $fontRotation
      *
      * @return array
      */
@@ -1440,7 +1440,7 @@ class ImageWorkshopLayer
      * @param string $imageName
      * @param boolean $createFolders
      * @param string $backgroundColor
-     * @param integer $imageQuality
+     * @param int $imageQuality
      * @param boolean $interlace
      */
     public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = false)
@@ -1519,7 +1519,7 @@ class ImageWorkshopLayer
     /**
      * Check if a sublayer exists in the stack for a given id
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return boolean
      */
@@ -1571,7 +1571,7 @@ class ImageWorkshopLayer
      * Get the level of a sublayer
      * Return sublayer level if success or false if layer isn't found
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return mixed (integer or boolean)
      */
@@ -1588,7 +1588,7 @@ class ImageWorkshopLayer
      * Get a sublayer in the stack
      * Don't forget to use clone method: $b = clone $a->getLayer(3);
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return self
      */
@@ -1653,7 +1653,7 @@ class ImageWorkshopLayer
      * Get all the positions of the sublayers,
      * or when specifying $layerId, get the position of this sublayer
      *
-     * @param integer $layerId
+     * @param int $layerId
      *
      * @return mixed (array or boolean)
      */
@@ -1726,10 +1726,10 @@ class ImageWorkshopLayer
      * Return an array containing the generated sublayer id and its final level:
      * array("layerLevel" => integer, "id" => integer)
      *
-     * @param integer $layerLevel
+     * @param int $layerLevel
      * @param ImageWorkshopLayer $layer
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      * @param string $position
      *
      * @return array
@@ -1764,8 +1764,8 @@ class ImageWorkshopLayer
      * Index a layer level and update the layers levels in the document
      * Return the corrected level of the layer
      *
-     * @param integer $layerLevel
-     * @param integer $layerId
+     * @param int $layerLevel
+     * @param int $layerId
      *
      * @return integer
      */
@@ -1798,8 +1798,8 @@ class ImageWorkshopLayer
     /**
      * Update the positions of layers in the stack after cropping
      *
-     * @param integer $positionX
-     * @param integer $positionY
+     * @param int $positionX
+     * @param int $positionY
      */
     public function updateLayerPositionsAfterCropping($positionX, $positionY)
     {
@@ -1817,8 +1817,8 @@ class ImageWorkshopLayer
     /**
      * Resize the background of a layer
      *
-     * @param integer $newWidth
-     * @param integer $newHeight
+     * @param int $newWidth
+     * @param int $newHeight
      */
     public function resizeBackground($newWidth, $newHeight)
     {

@@ -25,12 +25,12 @@ class ImageWorkshopLib
      * Calculate the left top positions of a layer inside a parent layer container
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $containerWidth
-     * @param integer $containerHeight
-     * @param integer $layerWidth
-     * @param integer $layerHeight
-     * @param integer $layerPositionX
-     * @param integer $layerPositionY
+     * @param int $containerWidth
+     * @param int $containerHeight
+     * @param int $layerWidth
+     * @param int $layerHeight
+     * @param int $layerPositionX
+     * @param int $layerPositionY
      * @param string $position
      *
      * @return array
@@ -86,10 +86,10 @@ class ImageWorkshopLib
     /**
      * Generate a new image resource var
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param string $color
-     * @param integer $opacity
+     * @param int $opacity
      *
      * @return resource
      */
@@ -177,13 +177,13 @@ class ImageWorkshopLib
      *
      * @param resource $destImg
      * @param resource $srcImg
-     * @param integer $destX
-     * @param integer $destY
-     * @param integer $srcX
-     * @param integer $srcY
-     * @param integer $srcW
-     * @param integer $srcH
-     * @param integer $pct
+     * @param int $destX
+     * @param int $destY
+     * @param int $srcX
+     * @param int $srcY
+     * @param int $srcW
+     * @param int $srcH
+     * @param int $pct
      */
     public static function imageCopyMergeAlpha(&$destImg, &$srcImg, $destX, $destY, $srcX, $srcY, $srcW, $srcH, $pct = 0)
     {
@@ -247,7 +247,7 @@ class ImageWorkshopLib
                             }
 
                             $alpha = round((1 - $alpha) * 127);
-                            $color = imageColorAllocateAlpha($destImg, $red, $green, $blue, $alpha);
+                            $color = imageColorAllocateAlpha($destImg, $red, $green, $blue, (int) $alpha);
                             imageSetPixel($destImg, $x + $destX, $y + $destY, $color);
                         }
                     }
@@ -261,10 +261,10 @@ class ImageWorkshopLib
      *
      * @param resource $destinationImage
      * @param resource $sourceImage
-     * @param integer $destinationPosX
-     * @param integer $destinationPosY
-     * @param integer $sourcePosX
-     * @param integer $sourcePosY
+     * @param int $destinationPosX
+     * @param int $destinationPosY
+     * @param int $sourcePosX
+     * @param int $sourcePosY
      */
     public static function mergeTwoImages(&$destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
     {
