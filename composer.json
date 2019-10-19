@@ -23,7 +23,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.0",
-        "phpunit/phpunit": "^8.4"
+        "phpunit/phpunit": "^8.4",
+        "phpstan/phpstan": "^0.11.16"
     },
     "suggest": {
         "ext-exif": "Allows to read and keep images EXIF data"
