@@ -113,10 +113,10 @@ class ImageWorkshop
      *
      * @param string $text
      * @param string $fontPath
-     * @param integer $fontSize
+     * @param int $fontSize
      * @param string $fontColor
-     * @param integer $textRotation
-     * @param integer $backgroundColor
+     * @param int $textRotation
+     * @param string $backgroundColor
      *
      * @return ImageWorkshopLayer
      */
@@ -133,8 +133,8 @@ class ImageWorkshop
     /**
      * Initialize a new virgin layer
      *
-     * @param integer $width
-     * @param integer $height
+     * @param int $width
+     * @param int $height
      * @param string $backgroundColor
      *
      * @return ImageWorkshopLayer
