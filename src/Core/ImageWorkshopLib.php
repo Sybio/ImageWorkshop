@@ -196,6 +196,7 @@ class ImageWorkshopLib
         $pct = (int) $pct;
         $destW = imageSX($destImg);
         $destH = imageSY($destImg);
+        $alpha = 0;
 
         for ($y = 0; $y < $srcH + $srcY; $y++) {
             for ($x = 0; $x < $srcW + $srcX; $x++) {

@@ -154,7 +154,7 @@ class ImageWorkshop
     /**
      * Initialize a layer from a resource image var
      *
-     * @param \resource $image
+     * @param resource $image
      *
      * @return ImageWorkshopLayer
      */
