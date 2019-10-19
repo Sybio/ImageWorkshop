@@ -113,7 +113,7 @@ class ImageWorkshopLib
      * @param string $fontFile
      * @param string $text
      *
-     * @return array or boolean
+     * @return array|false
      */
     public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)
     {
