@@ -1672,7 +1672,7 @@ class ImageWorkshopLayer
     /**
      * Getter highestLayerLevel
      *
-     * @return array
+     * @return int
      */
     public function getHighestLayerLevel()
     {
@@ -1682,7 +1682,7 @@ class ImageWorkshopLayer
     /**
      * Getter lastLayerId
      *
-     * @return array
+     * @return int
      */
     public function getLastLayerId()
     {
