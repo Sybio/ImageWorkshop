@@ -24,7 +24,7 @@ class ImageWorkshopLayer
     // ===================================================================================
 
     /**
-     * @var width
+     * @var int
      *
      * Width of the group model
      * Default: 800
@@ -32,7 +32,7 @@ class ImageWorkshopLayer
     protected $width;
 
     /**
-     * @var height
+     * @var int
      *
      * Height of the group model
      * Default: 600
@@ -40,42 +40,42 @@ class ImageWorkshopLayer
     protected $height;
 
     /**
-     * @var layers
+     * @var self[]
      *
      * Layers (and groups)
      */
     public $layers;
 
     /**
-     * @var layerLevels
+     * @var int[]
      *
      * Levels of the sublayers in the stack
      */
     protected $layerLevels;
 
     /**
-     * @var layerPositions
+     * @var array
      *
      * Positions (x and y) of the sublayers in the stack
      */
     protected $layerPositions;
 
     /**
-     * @var lastLayerId
+     * @var int
      *
      * Id of the last indexed sublayer in the stack
      */
     protected $lastLayerId;
 
     /**
-     * @var highestLayerLevel
+     * @var int
      *
      * The highest sublayer level
      */
     protected $highestLayerLevel;
 
     /**
-     * @var image
+     * @var resource
      *
      * Background Image
      */
@@ -259,7 +259,6 @@ class ImageWorkshopLayer
      * Return new sublayer level if success or false otherwise
      *
      * @param integer $layerId
-     * @param integer $level
      *
      * @return mixed
      */
@@ -275,8 +274,8 @@ class ImageWorkshopLayer
      * Set $insertUnderTargetedLayer true if you want to move the sublayer under the other sublayer at the targeted level,
      * or false to insert it on the top of the other sublayer at the targeted level
      *
-     * @param integer $layerId
-     * @param integer $level
+     * @param int $layerId
+     * @param int $level
      * @param boolean $insertUnderTargetedLayer
      *
      * @return mixed
@@ -956,7 +955,7 @@ class ImageWorkshopLayer
      * @param float $positionYPercent
      * @param string $position
      */
-    public function cropInPercent($percentWidth = 0, $percentHeight = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
+    public function cropInPercent($percentWidth = 0.0, $percentHeight = 0.0, $positionXPercent = 0.0, $positionYPercent = 0.0, $position = 'LT')
     {
         $this->crop(self::UNIT_PERCENT, $percentWidth, $percentHeight, $positionXPercent, $positionYPercent, $position);
     }
@@ -1049,7 +1048,7 @@ class ImageWorkshopLayer
      * @param float $positionYPercent
      * @param string $position
      */
-    public function cropToAspectRatioInPercent($width = 0, $height = 0, $positionXPercent = 0, $positionYPercent = 0, $position = 'LT')
+    public function cropToAspectRatioInPercent($width = 0, $height = 0, $positionXPercent = 0.0, $positionYPercent = 0.0, $position = 'LT')
     {
         $this->cropToAspectRatio(self::UNIT_PERCENT, $width, $height, $positionXPercent, $positionYPercent, $position);
     }
@@ -1103,8 +1102,6 @@ class ImageWorkshopLayer
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $width
-     * @param integer $height
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
@@ -1120,8 +1117,6 @@ class ImageWorkshopLayer
      * $backgroundColor can be set transparent (but script could be long to execute)
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param integer $width
-     * @param integer $height
      * @param integer $positionXPercent
      * @param integer $positionYPercent
      * @param string $position
@@ -1138,8 +1133,6 @@ class ImageWorkshopLayer
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
      * @param string $unit
-     * @param integer $width
-     * @param integer $height
      * @param integer $positionX
      * @param integer $positionY
      * @param string $position
@@ -1315,7 +1308,7 @@ class ImageWorkshopLayer
                 $this->changePosition($layerId, $this->width - $this->layers[$layerId]->getWidth() - $layerPositions['x'], $layerPositions['y']);
             }
         } elseif ($type == 'vertical') {
-            imagecopyresampled($temp, $this->image, 0, 0, 0, $this->height - 1, $this->width, $this->height, $this->width, -$this->height);
+            imagecopyresampled($temp, $this->image, 0, 0, 0, $this->height - 1, $this->width, $this->height, $this->width, -1 * $this->height);
             $this->image = $temp;
 
             foreach ($this->layerPositions as $layerId => $layerPositions) {
@@ -1597,7 +1590,7 @@ class ImageWorkshopLayer
      *
      * @param integer $layerId
      *
-     * @return ImageWorkshop
+     * @return self
      */
     public function getLayer($layerId)
     {
