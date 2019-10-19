@@ -108,10 +108,10 @@ class ImageWorkshopLib
     /**
      * Return dimension of a text
      *
-     * @param $fontSize
-     * @param $fontAngle
-     * @param $fontFile
-     * @param $text
+     * @param float $fontSize
+     * @param float $fontAngle
+     * @param string $fontFile
+     * @param string $text
      *
      * @return array or boolean
      */
