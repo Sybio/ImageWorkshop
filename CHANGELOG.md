@@ -3,7 +3,7 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes).
 
-**Next release**
+**Version 2.1.1 - 2019-10-20**
 
 * Allow to open WebP image with `ImageWorkshop::initFromPath`
 
