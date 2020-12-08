@@ -75,7 +75,7 @@ class ImageWorkshopLayer
     protected $highestLayerLevel;
 
     /**
-     * @var resource
+     * @var resource|object
      *
      * Background Image
      */
@@ -148,7 +148,7 @@ class ImageWorkshopLayer
     /**
      * Constructor
      *
-     * @param resource $image
+     * @param resource|object  $image
      */
     public function __construct($image, array $exif = array())
     {
@@ -498,7 +498,7 @@ class ImageWorkshopLayer
      * Otherwise, it will be set at 0 and 0
      *
      * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
-     * @param resource $image
+     * @param resource|object $image
      * @param int $positionX
      * @param int $positionY
      */
@@ -1387,7 +1387,7 @@ class ImageWorkshopLayer
      *
      * @param string $backgroundColor
      *
-     * @return resource
+     * @return resource|object
      */
     public function getResult($backgroundColor = null)
     {
@@ -1489,7 +1489,7 @@ class ImageWorkshopLayer
 
         $image = $this->getResult($backgroundColor);
 
-        imageinterlace($image, (int) $interlace);
+        imageinterlace($image, $interlace);
 
         if ($extension == 'jpg' || $extension == 'jpeg') {
             $isSaved = imagejpeg($image, $filename, $imageQuality);
@@ -1629,7 +1629,7 @@ class ImageWorkshopLayer
     /**
      * Getter image
      *
-     * @return resource
+     * @return resource|object
      */
     public function getImage()
     {

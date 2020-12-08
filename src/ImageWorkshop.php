@@ -61,7 +61,7 @@ class ImageWorkshop
         }
 
         $mimeContentType = explode('/', $imageSizeInfos['mime']);
-        if (!$mimeContentType || !isset($mimeContentType[1])) {
+        if (!isset($mimeContentType[1])) {
             $givenType = isset($mimeContentType[1]) ? $mimeContentType[1] : 'none';
             throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$givenType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
         }
@@ -92,7 +92,6 @@ class ImageWorkshop
 
             default:
                 throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$mimeContentType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
-            break;
         }
 
         if (false === $image) {
