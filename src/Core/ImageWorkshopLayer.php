@@ -502,8 +502,11 @@ class ImageWorkshopLayer
      * @param int $positionX
      * @param int $positionY
      */
-    public function pasteImage($unit = self::UNIT_PIXEL, $image, $positionX = 0, $positionY = 0)
+    public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
+        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            $unit = self::UNIT_PIXEL;
+        }
         if ($unit == self::UNIT_PERCENT) {
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
@@ -871,8 +874,11 @@ class ImageWorkshopLayer
      * @param int $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
-    public function resizeByLargestSide($unit = self::UNIT_PIXEL, $newLargestSideWidth, $converseProportion = false)
+    public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
+        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            $unit = self::UNIT_PIXEL;
+        }
         if ($unit == self::UNIT_PERCENT) {
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
         }
@@ -913,8 +919,11 @@ class ImageWorkshopLayer
      * @param int $newNarrowSideWidth
      * @param boolean $converseProportion
      */
-    public function resizeByNarrowSide($unit = self::UNIT_PIXEL, $newNarrowSideWidth, $converseProportion = false)
+    public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
+        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            $unit = self::UNIT_PIXEL;
+        }
         if ($unit == self::UNIT_PERCENT) {
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
         }
@@ -1734,7 +1743,7 @@ class ImageWorkshopLayer
      *
      * @return array
      */
-    protected function indexLayer($layerLevel, $layer, $positionX = 0, $positionY = 0, $position)
+    protected function indexLayer($layerLevel, $layer, $positionX, $positionY, $position)
     {
         // Choose an id for the added layer
         $layerId = $this->lastLayerId + 1;
