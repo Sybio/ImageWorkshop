@@ -1450,7 +1450,7 @@ class ImageWorkshopLayer
      * @param boolean $createFolders
      * @param string $backgroundColor
      * @param int $imageQuality
-     * @param boolean $interlace
+     * @param boolean|int $interlace
      */
     public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = false)
     {

@@ -9,6 +9,7 @@ php:
 
 matrix:
   allow_failures:
+    - php: 8.0
     - php: 7.4
     - php: nightly
 
