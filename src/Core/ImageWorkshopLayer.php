@@ -156,7 +156,7 @@ class ImageWorkshopLayer
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
         }
 
-        if (!in_array(gettype($image),array('object','resource','\resource'))) {
+        if (!in_array(gettype($image), array('object','resource','\resource'))) {
             throw new ImageWorkshopLayerException('You must give a php image var to initialize a layer.', static::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
 
@@ -504,7 +504,7 @@ class ImageWorkshopLayer
      */
     public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
-        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
             $unit = self::UNIT_PIXEL;
         }
         if ($unit == self::UNIT_PERCENT) {
@@ -876,7 +876,7 @@ class ImageWorkshopLayer
      */
     public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
             $unit = self::UNIT_PIXEL;
         }
         if ($unit == self::UNIT_PERCENT) {
@@ -921,7 +921,7 @@ class ImageWorkshopLayer
      */
     public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit,[self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
             $unit = self::UNIT_PIXEL;
         }
         if ($unit == self::UNIT_PERCENT) {

@@ -1,2 +1,4 @@
 parameters:
-    bootstrap: %rootDir%/../../../vendor/autoload.php
+    level: 5
+    bootstrapFiles:
+        - %rootDir%/../../../vendor/autoload.php
