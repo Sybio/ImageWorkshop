@@ -156,7 +156,10 @@ class ImageWorkshopLayer
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
         }
 
-        if (!in_array(gettype($image), array('object','resource','\resource'))) {
+        if (
+            !in_array(gettype($image), array('resource', '\resource'))
+            && (PHP_VERSION_ID >= 80000 && gettype($image) !=='object') // GD return an object since PHP 8.0
+        ) {
             throw new ImageWorkshopLayerException('You must give a php image var to initialize a layer.', static::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
 
