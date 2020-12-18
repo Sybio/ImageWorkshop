@@ -505,7 +505,7 @@ class ImageWorkshopLayer
     public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
         if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            $unit = self::UNIT_PIXEL;
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
         }
         if ($unit == self::UNIT_PERCENT) {
             $positionX = round(($positionX / 100) * $this->width);
@@ -877,7 +877,7 @@ class ImageWorkshopLayer
     public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
         if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            $unit = self::UNIT_PIXEL;
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
         }
         if ($unit == self::UNIT_PERCENT) {
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
@@ -922,7 +922,7 @@ class ImageWorkshopLayer
     public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
         if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            $unit = self::UNIT_PIXEL;
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
         }
         if ($unit == self::UNIT_PERCENT) {
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
