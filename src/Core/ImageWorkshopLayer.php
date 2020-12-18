@@ -2,10 +2,10 @@
 
 namespace PHPImageWorkshop\Core;
 
+use PHPImageWorkshop\Exception\ImageWorkshopException;
 use PHPImageWorkshop\Exif\ExifOrientations;
-use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
-use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
-use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
+use PHPImageWorkshop\ImageWorkshop;
+use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException;
 
 /**
  * ImageWorkshopLayer class
@@ -504,9 +504,10 @@ class ImageWorkshopLayer
      */
     public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
@@ -876,9 +877,10 @@ class ImageWorkshopLayer
      */
     public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
         }
@@ -921,9 +923,10 @@ class ImageWorkshopLayer
      */
     public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
         }

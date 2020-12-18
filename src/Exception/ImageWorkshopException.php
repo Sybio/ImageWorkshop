@@ -16,4 +16,8 @@ use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseEx
  */
 class ImageWorkshopException extends ImageWorkshopBaseException
 {
+    public static function invalidUnitArgument()
+    {
+        return new self("Invalid unit value: should be ImageWorkshopLayer::UNIT_PIXEL or ImageWorkshopLayer::UNIT_PERCENT");
+    }
 }
