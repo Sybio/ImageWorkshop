@@ -9,7 +9,6 @@ php:
 
 matrix:
   allow_failures:
-    - php: 8.0
     - php: nightly
 
 before_script:
@@ -18,6 +17,6 @@ before_script:
   - composer install --prefer-source
 
 script:
-  - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+  - PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
   - vendor/bin/phpstan analyse src -c phpstan.neon
   - vendor/bin/phpunit

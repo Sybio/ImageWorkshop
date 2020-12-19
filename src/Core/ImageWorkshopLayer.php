@@ -2,10 +2,10 @@
 
 namespace PHPImageWorkshop\Core;
 
+use PHPImageWorkshop\Exception\ImageWorkshopException;
 use PHPImageWorkshop\Exif\ExifOrientations;
-use PHPImageWorkshop\ImageWorkshop as ImageWorkshop;
-use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
-use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException as ImageWorkshopLayerException;
+use PHPImageWorkshop\ImageWorkshop;
+use PHPImageWorkshop\Core\Exception\ImageWorkshopLayerException;
 
 /**
  * ImageWorkshopLayer class
@@ -156,7 +156,10 @@ class ImageWorkshopLayer
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
         }
 
-        if (!in_array(gettype($image), array('object','resource','\resource'))) {
+        if (
+            !in_array(gettype($image), array('resource', '\resource'))
+            && (PHP_VERSION_ID >= 80000 && gettype($image) !=='object') // GD return an object since PHP 8.0
+        ) {
             throw new ImageWorkshopLayerException('You must give a php image var to initialize a layer.', static::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
 
@@ -504,9 +507,10 @@ class ImageWorkshopLayer
      */
     public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
@@ -876,9 +880,10 @@ class ImageWorkshopLayer
      */
     public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
         }
@@ -921,9 +926,10 @@ class ImageWorkshopLayer
      */
     public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
-        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
-            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        if (!in_array($unit, [self::UNIT_PIXEL, self::UNIT_PERCENT])) {
+            throw ImageWorkshopException::invalidUnitArgument();
         }
+
         if ($unit == self::UNIT_PERCENT) {
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
         }
