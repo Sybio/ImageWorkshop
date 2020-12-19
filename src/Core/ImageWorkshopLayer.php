@@ -75,7 +75,7 @@ class ImageWorkshopLayer
     protected $highestLayerLevel;
 
     /**
-     * @var resource
+     * @var resource|object
      *
      * Background Image
      */
@@ -148,7 +148,7 @@ class ImageWorkshopLayer
     /**
      * Constructor
      *
-     * @param resource $image
+     * @param resource|object  $image
      */
     public function __construct($image, array $exif = array())
     {
@@ -156,7 +156,7 @@ class ImageWorkshopLayer
             throw new ImageWorkshopLayerException('PHPImageWorkshop requires the GD extension to be loaded.', static::ERROR_GD_NOT_INSTALLED);
         }
 
-        if (gettype($image) != 'resource' && gettype($image) != '\resource') {
+        if (!in_array(gettype($image), array('object','resource','\resource'))) {
             throw new ImageWorkshopLayerException('You must give a php image var to initialize a layer.', static::ERROR_PHP_IMAGE_VAR_NOT_USED);
         }
 
@@ -498,12 +498,15 @@ class ImageWorkshopLayer
      * Otherwise, it will be set at 0 and 0
      *
      * @param string $unit Use one of `UNIT_*` constants, "UNIT_PIXEL" by default
-     * @param resource $image
+     * @param resource|object $image
      * @param int $positionX
      * @param int $positionY
      */
-    public function pasteImage($unit = self::UNIT_PIXEL, $image, $positionX = 0, $positionY = 0)
+    public function pasteImage($unit, $image, $positionX = 0, $positionY = 0)
     {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        }
         if ($unit == self::UNIT_PERCENT) {
             $positionX = round(($positionX / 100) * $this->width);
             $positionY = round(($positionY / 100) * $this->height);
@@ -871,8 +874,11 @@ class ImageWorkshopLayer
      * @param int $newLargestSideWidth percent
      * @param boolean $converseProportion
      */
-    public function resizeByLargestSide($unit = self::UNIT_PIXEL, $newLargestSideWidth, $converseProportion = false)
+    public function resizeByLargestSide($unit, $newLargestSideWidth, $converseProportion = false)
     {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        }
         if ($unit == self::UNIT_PERCENT) {
             $newLargestSideWidth = round(($newLargestSideWidth / 100) * $this->getLargestSideWidth());
         }
@@ -913,8 +919,11 @@ class ImageWorkshopLayer
      * @param int $newNarrowSideWidth
      * @param boolean $converseProportion
      */
-    public function resizeByNarrowSide($unit = self::UNIT_PIXEL, $newNarrowSideWidth, $converseProportion = false)
+    public function resizeByNarrowSide($unit, $newNarrowSideWidth, $converseProportion = false)
     {
+        if (!in_array($unit, [self::UNIT_PIXEL,self::UNIT_PERCENT])) {
+            throw new \InvalidArgumentException("Incorrect unit '$unit' parameter.");
+        }
         if ($unit == self::UNIT_PERCENT) {
             $newNarrowSideWidth = round(($newNarrowSideWidth / 100) * $this->getNarrowSideWidth());
         }
@@ -1378,7 +1387,7 @@ class ImageWorkshopLayer
      *
      * @param string $backgroundColor
      *
-     * @return resource
+     * @return resource|object
      */
     public function getResult($backgroundColor = null)
     {
@@ -1441,7 +1450,7 @@ class ImageWorkshopLayer
      * @param boolean $createFolders
      * @param string $backgroundColor
      * @param int $imageQuality
-     * @param boolean $interlace
+     * @param boolean|int $interlace
      */
     public function save($folder, $imageName, $createFolders = true, $backgroundColor = null, $imageQuality = 75, $interlace = false)
     {
@@ -1480,7 +1489,7 @@ class ImageWorkshopLayer
 
         $image = $this->getResult($backgroundColor);
 
-        imageinterlace($image, (int) $interlace);
+        imageinterlace($image, $interlace);
 
         if ($extension == 'jpg' || $extension == 'jpeg') {
             $isSaved = imagejpeg($image, $filename, $imageQuality);
@@ -1620,7 +1629,7 @@ class ImageWorkshopLayer
     /**
      * Getter image
      *
-     * @return resource
+     * @return resource|object
      */
     public function getImage()
     {
@@ -1734,7 +1743,7 @@ class ImageWorkshopLayer
      *
      * @return array
      */
-    protected function indexLayer($layerLevel, $layer, $positionX = 0, $positionY = 0, $position)
+    protected function indexLayer($layerLevel, $layer, $positionX, $positionY, $position)
     {
         // Choose an id for the added layer
         $layerId = $this->lastLayerId + 1;

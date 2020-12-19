@@ -3,12 +3,13 @@ language: php
 php:
   - 7.2
   - 7.3
-  - 7.4snapshot
+  - 7.4
+  - 8.0
   - nightly
 
 matrix:
   allow_failures:
-    - php: 7.4snapshot
+    - php: 8.0
     - php: nightly
 
 before_script:
@@ -18,5 +19,5 @@ before_script:
 
 script:
   - vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
-  - vendor/bin/phpstan analyse src -c phpstan.neon -l 5
+  - vendor/bin/phpstan analyse src -c phpstan.neon
   - vendor/bin/phpunit

@@ -91,7 +91,7 @@ class ImageWorkshopLib
      * @param string $color
      * @param int $opacity
      *
-     * @return resource
+     * @return resource|object
      */
     public static function generateImage($width = 100, $height = 100, $color = 'ffffff', $opacity = 127)
     {
@@ -175,8 +175,8 @@ class ImageWorkshopLib
     /**
      * Copy an image on another one and converse transparency
      *
-     * @param resource $destImg
-     * @param resource $srcImg
+     * @param resource|object $destImg
+     * @param resource|object $srcImg
      * @param int $destX
      * @param int $destY
      * @param int $srcX
@@ -259,8 +259,8 @@ class ImageWorkshopLib
     /**
      * Merge two image var
      *
-     * @param resource $destinationImage
-     * @param resource $sourceImage
+     * @param resource|object $destinationImage
+     * @param resource|object $sourceImage
      * @param int $destinationPosX
      * @param int $destinationPosY
      * @param int $sourcePosX
