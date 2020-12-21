@@ -1,0 +1,104 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+    phpunit:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest]
+                php-version: ['7.2', '7.3', '7.4', '8.0']
+        name: 'PHPUnit - PHP/${{ matrix.php-version }} - OS/${{ matrix.os }}'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  coverage: xdebug
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v2
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install Dependencies
+              run: composer install --no-progress
+            - name: Starting Web server
+              run: php -S localhost:8000 -t fixtures/ &> /dev/null &
+            - name: PHPUnit
+              run: vendor/bin/phpunit
+
+    cs:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ ubuntu-latest ]
+                php-version: [ '7.4' ]
+        name: 'Coding style'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  coverage: xdebug
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v2
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install Dependencies
+              run: composer install --no-progress
+            - name: PHPUnit
+              run: vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+
+    phpstan:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ ubuntu-latest ]
+                php-version: [ '7.4', '8.0' ]
+        name: 'PHPStan - PHP/${{ matrix.php-version }} - OS/${{ matrix.os }}'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: ${{ matrix.php-version }}
+                  coverage: xdebug
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+            - name: Cache dependencies
+              uses: actions/cache@v2
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                  restore-keys: ${{ runner.os }}-composer-
+            - name: Install Dependencies
+              run: composer install --no-progress
+            - name: PHPStan
+              run: vendor/bin/phpstan analyse src -c phpstan.neon
+
+    roave_bc_check:
+        name: Roave BC Check
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@master
+            - name: fetch tags
+              run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+            - name: Roave BC Check
+              uses: docker://nyholm/roave-bc-check-ga
+              continue-on-error: true
