@@ -3,6 +3,10 @@ CHANGELOG
 
 This changelog references the relevant changes (bug and security fixes).
 
+**Version 2.2.0 - 2021-01-11**
+
+* PHP 8 compatibility
+
 **Version 2.1.1 - 2019-10-20**
 
 * Allow to open WebP image with `ImageWorkshop::initFromPath`
