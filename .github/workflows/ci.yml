@@ -61,7 +61,7 @@ jobs:
             - name: Install Dependencies
               run: composer install --no-progress
             - name: PHPUnit
-              run: vendor/bin/php-cs-fixer fix --config=.php_cs -v --dry-run .
+              run: vendor/bin/php-cs-fixer fix -v --dry-run .
 
     phpstan:
         runs-on: ${{ matrix.os }}

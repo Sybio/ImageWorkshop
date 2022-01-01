@@ -22,7 +22,7 @@
         "ext-gd": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^v2.17.1",
+        "friendsofphp/php-cs-fixer": "^3.4",
         "phpunit/phpunit": "^8.5.13",
         "phpstan/phpstan": "^1.3"
     },
