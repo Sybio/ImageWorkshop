@@ -8,7 +8,7 @@ jobs:
         strategy:
             matrix:
                 os: [ubuntu-latest]
-                php-version: ['7.2', '7.3', '7.4', '8.0']
+                php-version: ['7.2', '7.3', '7.4', '8.0', '8.1']
         name: 'PHPUnit - PHP/${{ matrix.php-version }} - OS/${{ matrix.os }}'
         steps:
             - name: Checkout
@@ -39,7 +39,7 @@ jobs:
         strategy:
             matrix:
                 os: [ ubuntu-latest ]
-                php-version: [ '7.4' ]
+                php-version: [ '8.1' ]
         name: 'Coding style'
         steps:
             - name: Checkout
@@ -68,7 +68,7 @@ jobs:
         strategy:
             matrix:
                 os: [ ubuntu-latest ]
-                php-version: [ '7.4', '8.0' ]
+                php-version: [ '8.0', '8.1' ]
         name: 'PHPStan - PHP/${{ matrix.php-version }} - OS/${{ matrix.os }}'
         steps:
             - name: Checkout
