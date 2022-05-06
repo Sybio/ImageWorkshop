@@ -70,7 +70,7 @@ class ImageWorkshopLib
     /**
      * Convert Hex color to RGB color format
      *
-     * @param string $hex
+     * @param string|null $hex
      *
      * @return array
      */
