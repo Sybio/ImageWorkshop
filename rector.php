@@ -8,33 +8,32 @@ use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Set\ValueObject\LevelSetList;
+use Rector\Set\ValueObject\SetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
-use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
 
-return static function(RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return static function(RectorConfig $config): void {
+    $config->paths([
         __DIR__ . '/src'
     ]);
 
+    $config->import(SetList::DEAD_CODE);
+    $config->import(SetList::TYPE_DECLARATION_STRICT);
+    $config->import(SetList::TYPE_DECLARATION);
+    $config->import(SetList::PHP_80);
+    $config->import(SetList::PHP_74);
+    $config->import(SetList::PHP_73);
+    $config->import(SetList::EARLY_RETURN);
+    $config->import(SetList::CODE_QUALITY);
+
     // register a single rule
-    $rectorConfig->rule(InlineConstructorDefaultToPropertyRector::class);
-    $rectorConfig->rule(NullCoalescingOperatorRector::class);
-    $rectorConfig->rule(RemoveExtraParametersRector::class);
-
-    $rectorConfig->rule(AddMethodCallBasedStrictParamTypeRector::class);
-    $rectorConfig->rule(AddVoidReturnTypeWhereNoReturnRector::class);
-
-    $rectorConfig->ruleWithConfiguration(TypedPropertyRector::class, [
-        TypedPropertyRector::INLINE_PUBLIC => true,
-    ]);
+    $config->rule(InlineConstructorDefaultToPropertyRector::class);
+    $config->rule(RemoveExtraParametersRector::class);
 
     // define sets of rules
-    $rectorConfig->sets([
+    $config->sets([
         LevelSetList::UP_TO_PHP_80
     ]);
 
-    $rectorConfig->phpstanConfig(__DIR__ . '/phpstan.neon');
+    $config->phpstanConfig(__DIR__ . '/phpstan.neon');
 };
