@@ -17,7 +17,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2.0",
+        "php": "^8.0",
         "ext-fileinfo": "*",
         "ext-gd": "*"
     },
