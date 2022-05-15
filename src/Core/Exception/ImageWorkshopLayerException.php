@@ -2,7 +2,7 @@
 
 namespace PHPImageWorkshop\Core\Exception;
 
-use PHPImageWorkshop\Exception\ImageWorkshopBaseException as ImageWorkshopBaseException;
+use PHPImageWorkshop\Exception\ImageWorkshopBaseException;
 
 /**
  * ImageWorkshopLayerException

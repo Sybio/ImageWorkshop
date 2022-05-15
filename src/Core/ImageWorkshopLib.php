@@ -2,7 +2,8 @@
 
 namespace PHPImageWorkshop\Core;
 
-use PHPImageWorkshop\Core\Exception\ImageWorkshopLibException as ImageWorkshopLibException;
+use GdImage;
+use PHPImageWorkshop\Core\Exception\ImageWorkshopLibException;
 
 /**
  * ImageWorkshopLib class
@@ -17,48 +18,40 @@ use PHPImageWorkshop\Core\Exception\ImageWorkshopLibException as ImageWorkshopLi
 class ImageWorkshopLib
 {
     /**
-     * @var integer
+     * @var int
      */
-    const ERROR_FONT_NOT_FOUND = 3;
+    public const ERROR_FONT_NOT_FOUND = 3;
 
     /**
      * Calculate the left top positions of a layer inside a parent layer container
      * $position: http://phpimageworkshop.com/doc/22/corners-positions-schema-of-an-image.html
      *
-     * @param int $containerWidth
-     * @param int $containerHeight
-     * @param int $layerWidth
-     * @param int $layerHeight
-     * @param int $layerPositionX
-     * @param int $layerPositionY
-     * @param string $position
-     *
-     * @return array
+     * @return array{x: int, y: int}
      */
-    public static function calculatePositions($containerWidth, $containerHeight, $layerWidth, $layerHeight, $layerPositionX, $layerPositionY, $position = 'LT')
+    public static function calculatePositions(int $containerWidth, int $containerHeight, int $layerWidth, int $layerHeight, int $layerPositionX, int $layerPositionY, string $position = 'LT'): array
     {
         $position = strtolower($position);
 
-        if ($position == 'rt') {
+        if ($position === 'rt') {
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
-        } elseif ($position == 'lb') {
+        } elseif ($position === 'lb') {
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-        } elseif ($position == 'rb') {
+        } elseif ($position === 'rb') {
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-        } elseif ($position == 'mm') {
-            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
-            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
-        } elseif ($position == 'mt') {
-            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
-        } elseif ($position == 'mb') {
-            $layerPositionX = (($containerWidth - $layerWidth) / 2) + $layerPositionX;
+        } elseif ($position === 'mm') {
+            $layerPositionX = (int) ((($containerWidth - $layerWidth) / 2) + $layerPositionX);
+            $layerPositionY = (int) ((($containerHeight - $layerHeight) / 2) + $layerPositionY);
+        } elseif ($position === 'mt') {
+            $layerPositionX = (int) ((($containerWidth - $layerWidth) / 2) + $layerPositionX);
+        } elseif ($position === 'mb') {
+            $layerPositionX = (int) ((($containerWidth - $layerWidth) / 2) + $layerPositionX);
             $layerPositionY = $containerHeight - $layerHeight - $layerPositionY;
-        } elseif ($position == 'lm') {
-            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
-        } elseif ($position == 'rm') {
+        } elseif ($position === 'lm') {
+            $layerPositionY = (int) ((($containerHeight - $layerHeight) / 2) + $layerPositionY);
+        } elseif ($position === 'rm') {
             $layerPositionX = $containerWidth - $layerWidth - $layerPositionX;
-            $layerPositionY = (($containerHeight - $layerHeight) / 2) + $layerPositionY;
+            $layerPositionY = (int) ((($containerHeight - $layerHeight) / 2) + $layerPositionY);
         }
 
         return array(
@@ -70,11 +63,9 @@ class ImageWorkshopLib
     /**
      * Convert Hex color to RGB color format
      *
-     * @param string|null $hex
-     *
-     * @return array
+     * @return array{R: int, G: int, B: int}
      */
-    public static function convertHexToRGB($hex)
+    public static function convertHexToRGB(?string $hex): array
     {
         return array(
             'R' => (int) base_convert(substr($hex ?? '', 0, 2), 16, 10),
@@ -84,16 +75,9 @@ class ImageWorkshopLib
     }
 
     /**
-     * Generate a new image resource var
-     *
-     * @param int $width
-     * @param int $height
-     * @param string $color
-     * @param int $opacity
-     *
-     * @return resource|object
+     * Generate a new image
      */
-    public static function generateImage($width = 100, $height = 100, $color = 'ffffff', $opacity = 127)
+    public static function generateImage(int $width = 100, int $height = 100, string $color = 'ffffff', int $opacity = 127): GdImage
     {
         $RGBColors = ImageWorkshopLib::convertHexToRGB($color);
 
@@ -108,14 +92,9 @@ class ImageWorkshopLib
     /**
      * Return dimension of a text
      *
-     * @param float $fontSize
-     * @param float $fontAngle
-     * @param string $fontFile
-     * @param string $text
-     *
-     * @return array|false
+     * @return array{left: int, top: int, width: int, height: int}|false
      */
-    public static function getTextBoxDimension($fontSize, $fontAngle, $fontFile, $text)
+    public static function getTextBoxDimension(float $fontSize, float $fontAngle, string $fontFile, string $text): array|bool
     {
         if (!file_exists($fontFile)) {
             throw new ImageWorkshopLibException('Can\'t find a font file at this path : "'.$fontFile.'".', static::ERROR_FONT_NOT_FOUND);
@@ -174,26 +153,9 @@ class ImageWorkshopLib
 
     /**
      * Copy an image on another one and converse transparency
-     *
-     * @param resource|object $destImg
-     * @param resource|object $srcImg
-     * @param int $destX
-     * @param int $destY
-     * @param int $srcX
-     * @param int $srcY
-     * @param int $srcW
-     * @param int $srcH
-     * @param int $pct
      */
-    public static function imageCopyMergeAlpha(&$destImg, &$srcImg, $destX, $destY, $srcX, $srcY, $srcW, $srcH, $pct = 0)
+    public static function imageCopyMergeAlpha(GdImage $destImg, GdImage $srcImg, int $destX, int $destY, int $srcX, int $srcY, int $srcW, int $srcH, int $pct = 0): void
     {
-        $destX = (int) $destX;
-        $destY = (int) $destY;
-        $srcX = (int) $srcX;
-        $srcY = (int) $srcY;
-        $srcW = (int) $srcW;
-        $srcH = (int) $srcH;
-        $pct = (int) $pct;
         $destW = imageSX($destImg);
         $destH = imageSY($destImg);
         $alpha = 0;
@@ -258,15 +220,8 @@ class ImageWorkshopLib
 
     /**
      * Merge two image var
-     *
-     * @param resource|object $destinationImage
-     * @param resource|object $sourceImage
-     * @param int $destinationPosX
-     * @param int $destinationPosY
-     * @param int $sourcePosX
-     * @param int $sourcePosY
      */
-    public static function mergeTwoImages(&$destinationImage, $sourceImage, $destinationPosX = 0, $destinationPosY = 0, $sourcePosX = 0, $sourcePosY = 0)
+    public static function mergeTwoImages(GdImage $destinationImage, GdImage $sourceImage, int $destinationPosX = 0, int $destinationPosY = 0, int $sourcePosX = 0, int $sourcePosY = 0): void
     {
         imageCopy($destinationImage, $sourceImage, $destinationPosX, $destinationPosY, $sourcePosX, $sourcePosY, imageSX($sourceImage), imageSY($sourceImage));
     }

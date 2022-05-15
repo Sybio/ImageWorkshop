@@ -2,8 +2,9 @@
 
 namespace PHPImageWorkshop;
 
-use PHPImageWorkshop\Core\ImageWorkshopLayer as ImageWorkshopLayer;
-use PHPImageWorkshop\Core\ImageWorkshopLib as ImageWorkshopLib;
+use GdImage;
+use PHPImageWorkshop\Core\ImageWorkshopLayer;
+use PHPImageWorkshop\Core\ImageWorkshopLib;
 use PHPImageWorkshop\Exception\ImageWorkshopException;
 
 /**
@@ -19,38 +20,33 @@ use PHPImageWorkshop\Exception\ImageWorkshopException;
 class ImageWorkshop
 {
     /**
-     * @var integer
+     * @var int
      */
-    const ERROR_NOT_AN_IMAGE_FILE = 1;
+    public const ERROR_NOT_AN_IMAGE_FILE = 1;
 
     /**
-     * @var integer
+     * @var int
      */
-    const ERROR_IMAGE_NOT_FOUND = 2;
+    public const ERROR_IMAGE_NOT_FOUND = 2;
 
     /**
-     * @var integer
+     * @var int
      */
-    const ERROR_NOT_READABLE_FILE = 3;
+    public const ERROR_NOT_READABLE_FILE = 3;
 
     /**
-     * @var integer
+     * @var int
      */
-    const ERROR_CREATE_IMAGE_FROM_STRING = 4;
+    public const ERROR_CREATE_IMAGE_FROM_STRING = 4;
 
     /**
      * Initialize a layer from a given image path
      *
      * From an upload form, you can give the "tmp_name" path
      *
-     * @param string $path
-     * @param bool $fixOrientation
-     *
-     * @return ImageWorkshopLayer
-     *
      * @throws ImageWorkshopException
      */
-    public static function initFromPath($path, $fixOrientation = false)
+    public static function initFromPath(string $path, bool $fixOrientation = false): ImageWorkshopLayer
     {
         if (false === filter_var($path, FILTER_VALIDATE_URL) && !file_exists($path)) {
             throw new ImageWorkshopException(sprintf('File "%s" not exists.', $path), static::ERROR_IMAGE_NOT_FOUND);
@@ -62,7 +58,7 @@ class ImageWorkshop
 
         $mimeContentType = explode('/', $imageSizeInfos['mime']);
         if (!isset($mimeContentType[1])) {
-            $givenType = isset($mimeContentType[1]) ? $mimeContentType[1] : 'none';
+            $givenType = $mimeContentType[1] ?? 'none';
             throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$givenType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
         }
 
@@ -87,7 +83,7 @@ class ImageWorkshop
             break;
 
             case 'webp':
-                $image = imagecreatefromwebp($path);
+                $image = imageCreateFromWebp($path);
             break;
 
             default:
@@ -109,17 +105,8 @@ class ImageWorkshop
 
     /**
      * Initialize a text layer
-     *
-     * @param string $text
-     * @param string $fontPath
-     * @param int $fontSize
-     * @param string $fontColor
-     * @param int $textRotation
-     * @param string $backgroundColor
-     *
-     * @return ImageWorkshopLayer
      */
-    public static function initTextLayer($text, $fontPath, $fontSize = 13, $fontColor = 'ffffff', $textRotation = 0, $backgroundColor = null)
+    public static function initTextLayer(string $text, string $fontPath, int $fontSize = 13, string $fontColor = 'ffffff', int $textRotation = 0, string $backgroundColor = null): ImageWorkshopLayer
     {
         $textDimensions = ImageWorkshopLib::getTextBoxDimension($fontSize, $textRotation, $fontPath, $text);
 
@@ -131,18 +118,12 @@ class ImageWorkshop
 
     /**
      * Initialize a new virgin layer
-     *
-     * @param int $width
-     * @param int $height
-     * @param string $backgroundColor
-     *
-     * @return ImageWorkshopLayer
      */
-    public static function initVirginLayer($width = 100, $height = 100, $backgroundColor = null)
+    public static function initVirginLayer(int $width = 100, int $height = 100, string $backgroundColor = null): ImageWorkshopLayer
     {
         $opacity = 0;
 
-        if (null === $backgroundColor || $backgroundColor == 'transparent') {
+        if (null === $backgroundColor || $backgroundColor === 'transparent') {
             $opacity = 127;
             $backgroundColor = 'ffffff';
         }
@@ -152,12 +133,8 @@ class ImageWorkshop
 
     /**
      * Initialize a layer from a resource image var
-     *
-     * @param resource $image
-     *
-     * @return ImageWorkshopLayer
      */
-    public static function initFromResourceVar($image)
+    public static function initFromResourceVar(GdImage $image): ImageWorkshopLayer
     {
         return new ImageWorkshopLayer($image);
     }
@@ -165,13 +142,9 @@ class ImageWorkshop
     /**
      * Initialize a layer from a string (obtains with file_get_contents, cURL...)
      *
-     * This not recommanded to initialize JPEG string with this method, GD displays bugs !
-     *
-     * @param string $imageString
-     *
-     * @return ImageWorkshopLayer
+     * This not recommended to initialize JPEG string with this method, GD displays bugs !
      */
-    public static function initFromString($imageString)
+    public static function initFromString(string $imageString): ImageWorkshopLayer
     {
         if (!$image = @imageCreateFromString($imageString)) {
             throw new ImageWorkshopException('Can\'t generate an image from the given string.', static::ERROR_CREATE_IMAGE_FROM_STRING);

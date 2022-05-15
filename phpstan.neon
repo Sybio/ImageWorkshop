@@ -2,3 +2,8 @@ parameters:
     level: 5
     bootstrapFiles:
         - %rootDir%/../../../vendor/autoload.php
+
+    ignoreErrors:
+        -
+            message: '#Left side of && is always true#'
+            path: src/Core/ImageWorkshopLayer.php
