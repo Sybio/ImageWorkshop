@@ -60,7 +60,7 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
             - name: Install Dependencies
               run: composer install --no-progress
-            - name: PHPUnit
+            - name: PHP CS Fixer
               run: vendor/bin/php-cs-fixer fix -v --dry-run .
 
     phpstan:
