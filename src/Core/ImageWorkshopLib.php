@@ -95,11 +95,17 @@ class ImageWorkshopLib
      */
     public static function generateImage($width = 100, $height = 100, $color = 'ffffff', $opacity = 127)
     {
-        $RGBColors = ImageWorkshopLib::convertHexToRGB($color);
-
         $image = imagecreatetruecolor($width, $height);
         imagesavealpha($image, true);
+
+        if ($color === 'transparent') {
+            $color = 'ffffff';
+            $opacity = 127;
+        }
+
+        $RGBColors = ImageWorkshopLib::convertHexToRGB($color);
         $color = imagecolorallocatealpha($image, $RGBColors['R'], $RGBColors['G'], $RGBColors['B'], $opacity);
+
         imagefill($image, 0, 0, $color);
 
         return $image;
