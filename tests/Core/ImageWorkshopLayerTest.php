@@ -1502,7 +1502,7 @@ class ImageWorkshopLayerTest extends TestCase
 
             case 1:
 
-            break;
+                break;
 
             case 2: // Add 4 sublayers in $layer stack
 
@@ -1511,7 +1511,7 @@ class ImageWorkshopLayerTest extends TestCase
                 $layer->addLayer(3, $layer);
                 $layer->addLayer(4, $layer);
 
-            break;
+                break;
 
             case 3: // Add 5 sublayers in $layer stack
 
@@ -1521,7 +1521,7 @@ class ImageWorkshopLayerTest extends TestCase
                 $layer->addLayer(4, $layer);
                 $layer->addLayer(5, $layer);
 
-            break;
+                break;
         }
 
         return $layer;

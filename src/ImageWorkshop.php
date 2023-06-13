@@ -76,19 +76,19 @@ class ImageWorkshop
                 if (function_exists('exif_read_data') && false !== ($data = @exif_read_data($path))) {
                     $exif = $data;
                 }
-            break;
+                break;
 
             case 'gif':
                 $image = imageCreateFromGIF($path);
-            break;
+                break;
 
             case 'png':
                 $image = imageCreateFromPNG($path);
-            break;
+                break;
 
             case 'webp':
                 $image = imagecreatefromwebp($path);
-            break;
+                break;
 
             default:
                 throw new ImageWorkshopException('Not an image file (jpeg/png/gif) at "'.$path.'" (given format: "'.$mimeContentType.'")', static::ERROR_NOT_AN_IMAGE_FILE);
