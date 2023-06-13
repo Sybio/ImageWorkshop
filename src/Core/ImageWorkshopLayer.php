@@ -1863,33 +1863,33 @@ class ImageWorkshopLayer
         switch ($this->exif['Orientation']) {
             case ExifOrientations::TOP_RIGHT:
                 $this->flip('horizontal');
-            break;
+                break;
 
             case ExifOrientations::BOTTOM_RIGHT:
                 $this->rotate(180);
-            break;
+                break;
 
             case ExifOrientations::BOTTOM_LEFT:
                 $this->flip('vertical');
-            break;
+                break;
 
             case ExifOrientations::LEFT_TOP:
                 $this->rotate(-90);
                 $this->flip('vertical');
-            break;
+                break;
 
             case ExifOrientations::RIGHT_TOP:
                 $this->rotate(90);
-            break;
+                break;
 
             case ExifOrientations::RIGHT_BOTTOM:
                 $this->rotate(90);
                 $this->flip('horizontal');
-            break;
+                break;
 
             case ExifOrientations::LEFT_BOTTOM:
                 $this->rotate(-90);
-            break;
+                break;
         }
 
         $this->exif['Orientation'] = ExifOrientations::TOP_LEFT;
